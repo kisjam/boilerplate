@@ -31,8 +31,8 @@
 | T-114 | npm scriptsの統合とテスト | 完了 | 高 |
 | T-115 | productionビルドの追加 | 完了 | 高 |
 | T-116 | CSSソースマップの設定 | 未着手 | 中 |
-| T-117 | gulp-changed相当の最適化 | 未着手 | 中 |
-| T-118 | sass-glob対応の追加 | 未着手 | 中 |
+| T-117 | gulp-changed相当の最適化 | 完了 | 中 |
+| T-118 | sass-glob対応の追加 | 完了 | 中 |
 | T-119 | PostCSS/Autoprefixerの設定 | 完了 | 中 |
 | T-120 | Gulp関連ファイルの削除 | 未着手 | 中 |
 
