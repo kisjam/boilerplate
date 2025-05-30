@@ -15,6 +15,8 @@ new NavManager({
 	menuSelector: ".site-header__nav",
 });
 
+console.log("message");
+
 const accordionEls = document.querySelectorAll("[data-accordion]");
 accordionEls.forEach((accordionEl) => {
 	if (accordionEl instanceof HTMLButtonElement) {

@@ -1,5 +1,4 @@
 import { defineConfig } from 'vite';
-import legacy from '@vitejs/plugin-legacy';
 import { resolve } from 'path';
 
 export default defineConfig({
@@ -14,13 +13,9 @@ export default defineConfig({
         assetFileNames: '[name].[ext]'
       }
     },
-    sourcemap: true
+    sourcemap: true,
+    target: 'es2020'
   },
-  plugins: [
-    legacy({
-      targets: ['defaults', 'not IE 11']
-    })
-  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
