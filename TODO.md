@@ -15,7 +15,7 @@
 - [x] Sass コンパイルのnpm script化
 - [x] Nunjucksテンプレート処理のnpm script化
 - [x] 静的ファイルコピーのnpm script化
-- [ ] ファイル監視（watch）機能の実装
+- [x] ファイル監視（watch）機能の実装
 - [ ] 開発サーバー（BrowserSync）の設定
 - [ ] npm scriptsの統合とテスト
 - [ ] Gulp関連ファイルの削除

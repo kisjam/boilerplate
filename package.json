@@ -11,7 +11,13 @@
 		"build:css": "sass src/assets/sass:dist/assets/css --style=expanded",
 		"build:images": "npx cpx2 'src/assets/images/**/*' dist/assets/images",
 		"build:images-webp": "node scripts/images-webp.js",
-		"build:html": "node scripts/build-html.js"
+		"build:html": "node scripts/build-html.js",
+		"watch:js": "webpack --mode development --watch",
+		"watch:css": "chokidar 'src/assets/sass/**/*.scss' -c 'npm run build:css'",
+		"watch:html": "chokidar 'src/assets/html/**/*.njk' 'src/assets/html/_config/*.json' -c 'npm run build:html'",
+		"watch:images": "chokidar 'src/assets/images/**/*' -c 'npm run build:images && npm run build:images-webp'",
+		"watch:copy": "chokidar 'src/public/**/*' -c 'npm run build:copy'",
+		"watch": "npm-run-all -p watch:*"
 	},
 	"author": "",
 	"license": "ISC",
