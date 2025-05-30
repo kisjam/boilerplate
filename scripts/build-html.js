@@ -43,9 +43,14 @@ async function buildHTML() {
     
     try {
       // Prepare template data
+      const filenameParts = file
+        .replace('pages/', '')
+        .replace('.njk', '')
+        .split('/');
+      
       const data = {
         ...siteData,
-        filename: path.basename(file, '.njk')
+        filename: filenameParts
       };
 
       // Render template

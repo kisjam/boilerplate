@@ -10,7 +10,8 @@
 		"build:js": "webpack --mode development",
 		"build:css": "sass src/assets/sass:dist/assets/css --style=expanded",
 		"build:images": "npx cpx2 'src/assets/images/**/*' dist/assets/images",
-		"build:images-webp": "node scripts/images-webp.js"
+		"build:images-webp": "node scripts/images-webp.js",
+		"build:html": "node scripts/build-html.js"
 	},
 	"author": "",
 	"license": "ISC",
@@ -37,6 +38,7 @@
 		"imagemin-webp": "^8.0.0",
 		"jsdom": "^21.1.2",
 		"npm-run-all": "^4.1.5",
+		"nunjucks": "^3.2.4",
 		"nunjucks-cli": "^1.0.0",
 		"postcss": "^8.5.4",
 		"postcss-cli": "^11.0.1",
