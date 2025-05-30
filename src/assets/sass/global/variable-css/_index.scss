@@ -1,4 +1,5 @@
-@use "global/mixin/" as *;
+@use "../mixin/" as *;
+@use "../variable-sass/" as v;
 
 :root {
 	--padding-side: 80px;

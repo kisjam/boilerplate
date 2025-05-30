@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "global/variable-sass/" as v;
+@use "../variable-sass/" as v;
 
 @mixin leading-trim {
 	&::before,

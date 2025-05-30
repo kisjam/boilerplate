@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "global/variable-sass/" as v;
+@use "../variable-sass/" as v;
 
 @function rem($font-size) {
 	@return #{math.div($font-size, v.$base-font-size)}rem;

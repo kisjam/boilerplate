@@ -1,4 +1,4 @@
-@use 'global/variable-sass/' as var;
+@use '../variable-sass/' as var;
 
 @mixin sa-transition() {
 	opacity: 0;

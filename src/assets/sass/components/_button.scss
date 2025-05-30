@@ -1,5 +1,4 @@
-@use "global" as *;
-@use "smart-svg";
+@use "../global" as *;
 
 .button {
 	position: relative;
@@ -25,11 +24,11 @@
 		cursor: pointer;
 
 		&::after {
-			@include smart-svg.show-with-pseudo(
-				"https://cdn.svgporn.com/logos/react.svg",
-				2em,
-				var(--fill-color)
-			);
+			// @include smart-svg.show-with-pseudo(
+			// 	"https://cdn.svgporn.com/logos/react.svg",
+			// 	2em,
+			// 	var(--fill-color)
+			// );
 			position: absolute;
 			right: 16px;
 			top: 50%;
