@@ -17,7 +17,11 @@
 		"watch:html": "chokidar 'src/assets/html/**/*.njk' 'src/assets/html/_config/*.json' -c 'npm run build:html'",
 		"watch:images": "chokidar 'src/assets/images/**/*' -c 'npm run build:images && npm run build:images-webp'",
 		"watch:copy": "chokidar 'src/public/**/*' -c 'npm run build:copy'",
-		"watch": "npm-run-all -p watch:*"
+		"watch": "npm-run-all -p watch:*",
+		"serve": "browser-sync start --server dist --files 'dist/**/*' --open external",
+		"build": "npm-run-all clean -p build:*",
+		"dev": "npm-run-all build -p watch serve",
+		"start": "npm run dev"
 	},
 	"author": "",
 	"license": "ISC",

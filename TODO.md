@@ -16,8 +16,8 @@
 - [x] Nunjucksテンプレート処理のnpm script化
 - [x] 静的ファイルコピーのnpm script化
 - [x] ファイル監視（watch）機能の実装
-- [ ] 開発サーバー（BrowserSync）の設定
-- [ ] npm scriptsの統合とテスト
+- [x] 開発サーバー（BrowserSync）の設定
+- [x] npm scriptsの統合とテスト
 - [ ] Gulp関連ファイルの削除
 
 ## Phase 2: 新スタック移行
