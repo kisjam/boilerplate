@@ -1,0 +1,44 @@
+@use "global" as *;
+$step-padding: 4;
+
+@mixin padding {
+	@for $i from 0 through 50 {
+		&t-#{$i * $step-padding} {
+			padding-top: #{$i * $step-padding}px;
+		}
+
+		&r-#{$i * $step-padding} {
+			padding-right: #{$i * $step-padding}px;
+		}
+
+		&b-#{$i * $step-padding} {
+			padding-bottom: #{$i * $step-padding}px;
+		}
+
+		&l-#{$i * $step-padding} {
+			padding-left: #{$i * $step-padding}px;
+		}
+	}
+}
+
+.p {
+	@include padding;
+}
+
+@include mq(md, true) {
+	.pc\:p {
+		@include padding;
+	}
+}
+
+@include mq(md) {
+	.md\:p {
+		@include padding;
+	}
+}
+
+@include mq(sm) {
+	.sm\:p {
+		@include padding;
+	}
+}

@@ -1,0 +1,26 @@
+@use "global" as *;
+
+.tab {
+	&__list {
+	}
+
+	&__list-item {
+	}
+
+	&__list-button {
+		appearance: none;
+		background: #eef;
+
+		&.-is-active {
+			background: #ccf;
+		}
+	}
+
+	&__content {
+		display: none;
+
+		&.-is-open {
+			display: block;
+		}
+	}
+}

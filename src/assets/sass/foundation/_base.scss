@@ -1,0 +1,24 @@
+@use "global" as *;
+
+body {
+	font-family: $ff-noto-sans;
+	color: $color-black;
+	font-size: rem(16);
+	text-size-adjust: none;
+	-webkit-text-size-adjust: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-feature-settings: "palt";
+	overflow-wrap: anywhere;
+	word-break: normal;
+	line-break: strict;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+a {
+	color: $color-black;
+}

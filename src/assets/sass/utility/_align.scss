@@ -1,0 +1,37 @@
+@use "global" as *;
+
+@mixin align {
+	&-c {
+		text-align: center;
+	}
+
+	&-l {
+		text-align: left;
+	}
+
+	&-r {
+		text-align: right;
+	}
+}
+
+.align {
+	@include align;
+}
+
+@include mq(md, true) {
+	.pc\:align {
+		@include align;
+	}
+}
+
+@include mq(md) {
+	.md\:align {
+		@include align;
+	}
+}
+
+@include mq(sm) {
+	.sm\:align {
+		@include align;
+	}
+}

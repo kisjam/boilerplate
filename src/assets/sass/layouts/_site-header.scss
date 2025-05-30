@@ -1,0 +1,26 @@
+@use "global" as *;
+
+.site-header {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	background-color: #eee;
+	padding: 0 40px;
+
+	&__inner {
+		display: flex;
+		justify-content: space-between;
+		height: var(--height-header);
+	}
+
+	&__menu-button {
+		position: absolute;
+		right: 0;
+		top: 0;
+
+		@include mq(md, true) {
+			display: none;
+		}
+	}
+}

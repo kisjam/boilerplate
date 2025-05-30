@@ -1,0 +1,29 @@
+@use "global" as *;
+
+@mixin whitespace {
+	&-nowrap {
+		white-space: nowrap;
+	}
+}
+
+.whitespace {
+	@include whitespace;
+}
+
+@include mq(md, true) {
+	.pc\:whitespace {
+		@include whitespace;
+	}
+}
+
+@include mq(md) {
+	.md\:whitespace {
+		@include whitespace;
+	}
+}
+
+@include mq(sm) {
+	.sm\:whitespace {
+		@include whitespace;
+	}
+}

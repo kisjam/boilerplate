@@ -1,0 +1,29 @@
+@use "global" as *;
+
+@mixin color {
+	&-red {
+		color: #f00;
+	}
+}
+
+.color {
+	@include color;
+}
+
+@include mq(md, true) {
+	.pc\:color {
+		@include color;
+	}
+}
+
+@include mq(md) {
+	.md\:color {
+		@include color;
+	}
+}
+
+@include mq(sm) {
+	.sm\:color {
+		@include color;
+	}
+}

@@ -1,0 +1,74 @@
+{% extends '_layouts/_default.njk' %}
+{% set pageTitle = 'Boilerplate for static website' %}
+{% set pageDescription = '' %}
+{% set pagekeywords = '' %}
+
+{% block css -%}{% endblock %}
+
+{% block contents -%}
+
+<main class="main">
+	<p class="sample">hoge</p>
+
+	<div class="accordion-item">
+		<button type="button" id="faq-01" data-accordion="faq-01-panel">
+			Accordion 1
+		</button>
+
+		<div id="faq-01-panel">
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<button type="button" data-accordion-close>
+				閉じるボタン
+			</button>
+		</div>
+	</div>
+	<div class="accordion-item">
+		<button type="button" id="faq-02" data-accordion="faq-02-panel">
+			Accordion 2
+		</button>
+
+		<div id="faq-02-panel">
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<button type="button" data-accordion-close>
+				閉じるボタン
+			</button>
+		</div>
+	</div>
+	<div class="accordion-item">
+		<button type="button" id="faq-03" data-accordion="faq-03-panel">
+			Accordion 3
+		</button>
+
+		<div id="faq-03-panel">
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<p>Panel 1</p>
+			<button type="button" data-accordion-close>
+				閉じるボタン
+			</button>
+		</div>
+	</div>
+
+	<p>
+		<label class="input-checkbox">
+			<input type="checkbox" class="input-checkbox__input" name="piyo">
+			<span class="input-checkbox__label">チェックボックスのサンプル</span>
+		</label>
+	</p>
+</main>
+{%- endblock %}
+
+{% block js -%}{% endblock %}

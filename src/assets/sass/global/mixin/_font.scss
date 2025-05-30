@@ -1,0 +1,27 @@
+@use "sass:math";
+@use "global/variable-sass/" as v;
+
+@function rem($font-size) {
+	@return #{math.div($font-size, v.$base-font-size)}rem;
+}
+
+@function vw($font-size, $viewport) {
+	@return math.div(100, $viewport) * $font-size * 1vw;
+}
+
+@mixin paragraph($font-size, $line-height: 28, $letter-spacing: null) {
+	font-size: #{math.div($font-size, var.$base-font-size)}rem;
+	line-height: math.div($line-height, $font-size);
+
+	@if $letter-spacing {
+		letter-spacing: ls($letter-spacing);
+	}
+}
+
+@function ls($letter-spacing) {
+	@return #{math.div($letter-spacing, 1000)}em;
+}
+
+@function lh($line-height, $font-size) {
+	@return #{math.div($line-height, $font-size)};
+}

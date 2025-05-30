@@ -1,0 +1,93 @@
+@use "global" as *;
+$step-margin: 4;
+
+@mixin margin {
+	@for $i from 0 through 50 {
+		&t-#{$i * $step-margin} {
+			margin-top: #{$i * $step-margin}px !important;
+		}
+
+		&r-#{$i * $step-margin} {
+			margin-right: #{$i * $step-margin}px !important;
+		}
+
+		&b-#{$i * $step-margin} {
+			margin-bottom: #{$i * $step-margin}px !important;
+		}
+
+		&l-#{$i * $step-margin} {
+			margin-left: #{$i * $step-margin}px !important;
+		}
+	}
+
+	&x-auto {
+		margin-left: auto !important;
+		margin-right: auto !important;
+	}
+
+	&l-auto {
+		margin-left: auto !important;
+	}
+
+	&r-auto {
+		margin-right: auto !important;
+	}
+}
+
+@mixin margin-negative {
+	@for $i from -50 through -1 {
+		&t-#{$i * $step-margin * -1} {
+			margin-top: #{$i * $step-margin}px !important;
+		}
+
+		&r-#{$i * $step-margin * -1} {
+			margin-right: #{$i * $step-margin}px !important;
+		}
+
+		&b-#{$i * $step-margin * -1} {
+			margin-bottom: #{$i * $step-margin}px !important;
+		}
+
+		&l-#{$i * $step-margin * -1} {
+			margin-left: #{$i * $step-margin}px !important;
+		}
+	}
+}
+
+.m {
+	@include margin;
+}
+
+.-m {
+	@include margin-negative;
+}
+
+@include mq(md, true) {
+	.pc\:m {
+		@include margin;
+	}
+
+	.pc\:-m {
+		@include margin-negative;
+	}
+}
+
+@include mq(md) {
+	.md\:m {
+		@include margin;
+	}
+
+	.md\:-m {
+		@include margin-negative;
+	}
+}
+
+@include mq(sm) {
+	.sm\:m {
+		@include margin;
+	}
+
+	.sm\:-m {
+		@include margin-negative;
+	}
+}

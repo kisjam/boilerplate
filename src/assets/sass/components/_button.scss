@@ -1,0 +1,46 @@
+@use "global" as *;
+@use "smart-svg";
+
+.button {
+	position: relative;
+
+	a,
+	button {
+		--fill-color: #fff;
+		appearance: none;
+		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 60px;
+		width: 100%;
+		text-decoration: none;
+		background: $color-black;
+		color: $color-white;
+		border: none;
+		max-width: 200px;
+		margin-left: auto;
+		margin-right: auto;
+		transition: color 0.3s ease;
+		cursor: pointer;
+
+		&::after {
+			@include smart-svg.show-with-pseudo(
+				"https://cdn.svgporn.com/logos/react.svg",
+				2em,
+				var(--fill-color)
+			);
+			position: absolute;
+			right: 16px;
+			top: 50%;
+			transform: translateY(-50%);
+			transition: background-color 0.3s ease;
+		}
+
+		&:hover {
+			&::after {
+				--fill-color: #f00;
+			}
+		}
+	}
+}
