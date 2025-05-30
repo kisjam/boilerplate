@@ -8,7 +8,8 @@
 		"clean": "rimraf dist",
 		"build:copy": "npx cpx2 'src/public/**/*' dist",
 		"build:js": "webpack --mode development",
-		"build:css": "sass src/assets/sass:dist/assets/css --style=expanded"
+		"build:css": "sass src/assets/sass:dist/assets/css --style=expanded",
+		"build:images": "npx cpx2 'src/assets/images/**/*' dist/assets/images"
 	},
 	"author": "",
 	"license": "ISC",
