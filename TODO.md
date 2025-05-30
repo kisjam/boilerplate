@@ -10,9 +10,9 @@
 
 ## Phase 1: npm scriptへの移行
 - [x] 必要なパッケージのインストール
-- [ ] 画像処理（WebP変換）のnpm script化
+- [x] 画像処理（WebP変換）のnpm script化
 - [x] TypeScript/WebpackビルドのScript化
-- [ ] Sass コンパイルのnpm script化
+- [x] Sass コンパイルのnpm script化
 - [ ] Nunjucksテンプレート処理のnpm script化
 - [x] 静的ファイルコピーのnpm script化
 - [ ] ファイル監視（watch）機能の実装
