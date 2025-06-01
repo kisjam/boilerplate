@@ -1,11 +1,9 @@
-{% extends '_layouts/_default.njk' %}
-{% set pageTitle = 'Boilerplate for static website' %}
-{% set pageDescription = '' %}
-{% set pagekeywords = '' %}
-
-{% block css -%}{% endblock %}
-
-{% block contents -%}
+---
+layout: _layouts/_default.liquid
+pageTitle: 'Boilerplate for static website'
+pageDescription: ''
+pageKeywords: ''
+---
 
 <main class="main">
 	<p class="sample">hoge</p>
@@ -70,6 +68,3 @@
 		</label>
 	</p>
 </main>
-{%- endblock %}
-
-{% block js -%}{% endblock %}

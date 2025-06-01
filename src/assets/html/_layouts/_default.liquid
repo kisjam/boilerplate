@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html lang="ja" id="top">
+	<head>
+		{% include '_partials/_head.liquid' %}
+		{{ css }}
+	</head>
+
+	<body class="{{ filename | join: '-' }}">
+		<div class="site-container">
+			{% include '_partials/_header.liquid' %}
+
+			{{ content }}
+
+			{% include '_partials/_footer.liquid' %}
+		</div>
+
+		{{ js }}
+	</body>
+</html>

@@ -1,15 +1,15 @@
-{%- if pageDescription -%}
-{%- set description = pageDescription -%}{%- else -%}
-{%- set description = data.meta.description -%}
-{%- endif -%}
-{%- if pageKeywords -%}
-{%- set keywords = pageKeywords -%}{%- else -%}
-{%- set keywords = data.meta.keywords -%}
-{%- endif -%}
-{%- if pageTitle -%}
-{%- set title = pageTitle -%}{%- else -%}
-{%- set title = data.sitename -%}
-{%- endif -%}
+{% if pageDescription %}
+{% assign description = pageDescription %}{% else %}
+{% assign description = data.meta.description %}
+{% endif %}
+{% if pageKeywords %}
+{% assign keywords = pageKeywords %}{% else %}
+{% assign keywords = data.meta.keywords %}
+{% endif %}
+{% if pageTitle %}
+{% assign title = pageTitle %}{% else %}
+{% assign title = data.sitename %}
+{% endif %}
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="format-detection" content="telephone=no">
