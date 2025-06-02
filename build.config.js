@@ -9,4 +9,11 @@ module.exports = {
 		images: "src/assets/images",
 	},
 	public: "src/public",
+	// sass-glob設定
+	sassGlob: {
+		// 自動的に_index.scssを生成するディレクトリ
+		directories: ["global", "components", "layouts", "pages"],
+		// 除外するディレクトリ（手動管理）
+		exclude: ["foundation"],
+	},
 };

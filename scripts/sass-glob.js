@@ -4,9 +4,8 @@ const config = require("../build.config");
 
 const sassDir = config.assets.css;
 
-// 各ディレクトリに_index.scssファイルを生成
-const directories = ["global", "components", "layouts", "pages"];
-// Note: foundationは手動管理のため除外
+// 設定ファイルからディレクトリリストを取得
+const directories = config.sassGlob?.directories || ["global", "components", "layouts", "pages"];
 
 // 同一階層の_*.scssファイルとサブディレクトリを取得してindex.scssを生成
 function generateIndexFile(dirPath) {
@@ -91,6 +90,13 @@ console.log = (...args) => {
 	originalLog.apply(console, args);
 };
 
+// 開始ログ
+if (config.sassGlob?.exclude) {
+	console.log(`SASS glob: Processing [${directories.join(", ")}], excluding [${config.sassGlob.exclude.join(", ")}]`);
+} else {
+	console.log(`SASS glob: Processing [${directories.join(", ")}]`);
+}
+
 directories.forEach((dir) => {
 	generateIndexFileRecursive(dir);
 });
@@ -100,4 +106,6 @@ console.log = originalLog;
 
 if (hasUpdates) {
 	console.log("SASS glob index files updated");
+} else {
+	console.log("SASS glob: No changes detected");
 }
