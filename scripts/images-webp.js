@@ -1,51 +1,110 @@
 #!/usr/bin/env node
 const sharp = require('sharp');
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
 const { glob } = require('glob');
+const crypto = require('crypto');
 const config = require('../build.config');
+const { ensureDir, readJSON, writeJSON, logger, processInParallel } = require('./utils');
 
 const srcDir = config.assets.images;
 const distDir = path.join(config.dist, 'assets/images');
 
-async function ensureDir(dir) {
-  try {
-    await fs.mkdir(dir, { recursive: true });
-  } catch (err) {
-    console.error(`Error creating directory ${dir}:`, err);
-  }
+// オプション設定
+const useCache = process.argv.includes('--cached');
+const cacheFile = '.webp-cache.json';
+
+// ファイルのMD5ハッシュを計算
+function calculateFileHash(filePath) {
+  const fileBuffer = fs.readFileSync(filePath);
+  const hashSum = crypto.createHash('md5');
+  hashSum.update(fileBuffer);
+  return hashSum.digest('hex');
 }
 
-async function convertToWebP(inputPath, outputPath) {
+async function convertToWebP(file, cache = {}) {
+  const inputPath = path.join(srcDir, file);
+  const outputPath = path.join(distDir, file);
   const ext = path.extname(inputPath).toLowerCase();
   const basename = path.basename(inputPath, ext);
   const outputWebP = path.join(path.dirname(outputPath), `${basename}.webp`);
 
-  if (ext === '.jpg' || ext === '.jpeg' || ext === '.png') {
-    try {
-      await sharp(inputPath)
-        .webp({ quality: 80 })
-        .toFile(outputWebP);
-      console.log(`Converted: ${inputPath} -> ${outputWebP}`);
-    } catch (err) {
-      console.error(`Error converting ${inputPath}:`, err);
+  if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
+    return;
+  }
+
+  // キャッシュチェック
+  if (useCache) {
+    const fileHash = calculateFileHash(inputPath);
+    const needsConversion = !cache[inputPath] || 
+                           cache[inputPath].hash !== fileHash ||
+                           !fs.existsSync(outputWebP);
+    
+    if (!needsConversion) {
+      logger.info(`Skipped (unchanged): ${file}`);
+      return;
     }
   }
-}
 
-async function processImages() {
-  const patterns = ['**/*.{jpg,jpeg,png}'];
-  const files = await glob(patterns, { cwd: srcDir });
+  await ensureDir(path.dirname(outputWebP));
 
-  await ensureDir(distDir);
-
-  for (const file of files) {
-    const inputPath = path.join(srcDir, file);
-    const outputPath = path.join(distDir, file);
+  try {
+    await sharp(inputPath)
+      .webp({ quality: 80 })
+      .toFile(outputWebP);
+    logger.success(`Converted: ${file} -> ${path.basename(outputWebP)}`);
     
-    await ensureDir(path.dirname(outputPath));
-    await convertToWebP(inputPath, outputPath);
+    // キャッシュを更新
+    if (useCache) {
+      cache[inputPath] = {
+        hash: calculateFileHash(inputPath),
+        destPath: outputWebP
+      };
+    }
+  } catch (err) {
+    logger.error(`Failed to convert ${file}: ${err.message}`);
+    throw err;
   }
 }
 
-processImages().catch(console.error);
+async function main() {
+  try {
+    logger.info('Starting WebP conversion...');
+    
+    // キャッシュを読み込む
+    let cache = {};
+    if (useCache) {
+      cache = (await readJSON(cacheFile)) || {};
+    }
+
+    const patterns = ['**/*.{jpg,jpeg,png}'];
+    const files = await glob(patterns, { cwd: srcDir });
+    
+    if (files.length === 0) {
+      logger.warning('No images found to convert');
+      return;
+    }
+
+    await ensureDir(distDir);
+
+    // 並列処理で画像を変換
+    await processInParallel(
+      files,
+      (file) => convertToWebP(file, cache),
+      10 // 最大10ファイル同時処理
+    );
+    
+    // キャッシュファイルを保存
+    if (useCache) {
+      await writeJSON(cacheFile, cache);
+      logger.success(`WebP conversion completed (cached mode) - ${files.length} files processed`);
+    } else {
+      logger.success(`WebP conversion completed - ${files.length} files processed`);
+    }
+  } catch (error) {
+    logger.error(`WebP conversion failed: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+main();

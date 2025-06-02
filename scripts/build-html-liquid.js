@@ -3,7 +3,9 @@ const { Liquid } = require('liquidjs');
 const fs = require('fs').promises;
 const path = require('path');
 const { glob } = require('glob');
+const yaml = require('js-yaml');
 const config = require('../build.config');
+const { ensureDir, readJSON, logger, processInParallel, getRelativePath } = require('./utils');
 
 const srcDir = config.assets.html;
 const distDir = config.dist;
@@ -15,109 +17,120 @@ const engine = new Liquid({
   cache: false
 });
 
-async function ensureDir(dir) {
-  try {
-    await fs.mkdir(dir, { recursive: true });
-  } catch (err) {
-    console.error(`Error creating directory ${dir}:`, err);
-  }
-}
-
-async function loadSiteData() {
-  try {
-    const dataPath = path.join(srcDir, '_config/site.json');
-    const data = await fs.readFile(dataPath, 'utf8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Error loading site data:', err);
-    return {};
-  }
-}
-
+// Front matterを解析
 function parseFrontMatter(content) {
   const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
   const match = content.match(frontMatterRegex);
   
-  if (match) {
-    const yaml = require('js-yaml');
-    try {
-      const frontMatter = yaml.load(match[1]);
-      return {
-        frontMatter,
-        content: match[2]
-      };
-    } catch (e) {
-      console.error('Error parsing YAML front matter:', e);
-      return {
-        frontMatter: {},
-        content
-      };
-    }
+  if (!match) {
+    return { frontMatter: {}, content };
   }
   
-  return {
-    frontMatter: {},
-    content
-  };
-}
-
-async function buildHTML() {
-  const siteData = await loadSiteData();
-  const files = await glob('pages/**/*.liquid', { cwd: srcDir });
-
-  for (const file of files) {
-    const inputPath = path.join(srcDir, file);
-    const relativePath = path.relative(path.join(srcDir, 'pages'), inputPath);
-    const outputPath = path.join(distDir, relativePath.replace('.liquid', '.html'));
-    
-    try {
-      // Read template content
-      const templateContent = await fs.readFile(inputPath, 'utf8');
-      
-      // Parse front matter
-      const { frontMatter, content } = parseFrontMatter(templateContent);
-      
-      // Prepare template data
-      const filenameParts = file
-        .replace('pages/', '')
-        .replace('.liquid', '')
-        .split('/');
-      
-      const data = {
-        ...siteData,
-        ...frontMatter,
-        filename: filenameParts,
-        content: content
-      };
-
-      let html;
-      if (frontMatter.layout) {
-        // First render the content
-        const renderedContent = await engine.parseAndRender(content, data);
-        
-        // Then render with layout
-        const layoutPath = path.join(srcDir, frontMatter.layout);
-        const layoutContent = await fs.readFile(layoutPath, 'utf8');
-        const layoutData = {
-          ...data,
-          content: renderedContent
-        };
-        html = await engine.parseAndRender(layoutContent, layoutData);
-      } else {
-        // Render standalone
-        html = await engine.parseAndRender(content, data);
-      }
-      
-      // Ensure output directory exists
-      await ensureDir(path.dirname(outputPath));
-      
-      // Write output file
-      await fs.writeFile(outputPath, html);
-      console.log(`Built: ${file} -> ${outputPath}`);
-    } catch (err) {
-      console.error(`Error building ${file}:`, err);
-    }
+  try {
+    const frontMatter = yaml.load(match[1]);
+    return {
+      frontMatter: frontMatter || {},
+      content: match[2]
+    };
+  } catch (e) {
+    logger.warning(`Failed to parse YAML front matter: ${e.message}`);
+    return {
+      frontMatter: {},
+      content
+    };
   }
 }
 
-buildHTML().catch(console.error);
+// HTMLファイルを処理
+async function processHTMLFile(file, siteData) {
+  const inputPath = path.join(srcDir, file);
+  const relativePath = path.relative(path.join(srcDir, 'pages'), inputPath);
+  const outputPath = path.join(distDir, relativePath.replace('.liquid', '.html'));
+  
+  try {
+    // テンプレートの内容を読み込む
+    const templateContent = await fs.readFile(inputPath, 'utf8');
+    
+    // Front matterを解析
+    const { frontMatter, content } = parseFrontMatter(templateContent);
+    
+    // テンプレートデータを準備
+    const filenameParts = file
+      .replace('pages/', '')
+      .replace('.liquid', '')
+      .split('/');
+    
+    const data = {
+      ...siteData,
+      ...frontMatter,
+      filename: filenameParts,
+      content: content
+    };
+
+    let html;
+    if (frontMatter.layout) {
+      // コンテンツをレンダリング
+      const renderedContent = await engine.parseAndRender(content, data);
+      
+      // レイアウトでラップ
+      const layoutPath = path.join(srcDir, frontMatter.layout);
+      const layoutContent = await fs.readFile(layoutPath, 'utf8');
+      const layoutData = {
+        ...data,
+        content: renderedContent
+      };
+      html = await engine.parseAndRender(layoutContent, layoutData);
+    } else {
+      // スタンドアロンでレンダリング
+      html = await engine.parseAndRender(content, data);
+    }
+    
+    // 出力ディレクトリを作成
+    await ensureDir(path.dirname(outputPath));
+    
+    // ファイルを書き込む
+    await fs.writeFile(outputPath, html);
+    logger.success(`Built: ${getRelativePath(srcDir, inputPath)} -> ${getRelativePath(distDir, outputPath)}`);
+  } catch (err) {
+    logger.error(`Failed to build ${file}: ${err.message}`);
+    throw err;
+  }
+}
+
+// メイン処理
+async function main() {
+  try {
+    logger.info('Starting HTML build...');
+    
+    // サイトデータを読み込む
+    const dataPath = path.join(srcDir, '_config/site.json');
+    const siteData = await readJSON(dataPath);
+    
+    if (!siteData) {
+      logger.error('Site configuration not found at _config/site.json');
+      process.exit(1);
+    }
+    
+    // すべての.liquidファイルを取得
+    const files = await glob('pages/**/*.liquid', { cwd: srcDir });
+    
+    if (files.length === 0) {
+      logger.warning('No .liquid files found in pages directory');
+      return;
+    }
+    
+    // 並列処理でHTMLファイルを生成
+    await processInParallel(
+      files,
+      (file) => processHTMLFile(file, siteData),
+      5 // 最大5ファイル同時処理
+    );
+    
+    logger.success(`HTML build completed - ${files.length} files generated`);
+  } catch (error) {
+    logger.error(`Build failed: ${error.message}`);
+    process.exit(1);
+  }
+}
+
+main();

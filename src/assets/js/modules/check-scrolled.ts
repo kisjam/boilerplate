@@ -1,22 +1,19 @@
 import { u } from "./utility";
+import { rafThrottle } from "./throttle";
 
-interface Option {
+interface CheckScrolledOptions {
 	selector: string;
 	fireClass: string;
 	fireRange: number;
 }
 
-interface CustonOption {
-	selector?: string;
-	fireClass?: string;
-	fireRange?: number;
-}
-
 export default class CheckScrolled {
-	option: Option;
+	private option: CheckScrolledOptions;
+	private scrollHandler: (() => void) | null = null;
+	private element: HTMLElement | null = null;
 
-	constructor(customOption?: CustonOption) {
-		const defaultOption: Option = {
+	constructor(customOption?: Partial<CheckScrolledOptions>) {
+		const defaultOption: CheckScrolledOptions = {
 			selector: "body",
 			fireClass: "-scrolled",
 			fireRange: 100,
@@ -25,19 +22,37 @@ export default class CheckScrolled {
 		this.option = { ...defaultOption, ...customOption };
 
 		document.addEventListener("DOMContentLoaded", () => {
-			const bodyElem = document.querySelector<HTMLBodyElement>(
-				this.option.selector
-			);
-
-			if (bodyElem === null) return;
-
-			window.addEventListener("scroll", () => {
-				if (u.wy < this.option.fireRange) {
-					bodyElem.classList.remove(this.option.fireClass);
-				} else {
-					bodyElem.classList.add(this.option.fireClass);
-				}
-			});
+			this.init();
 		});
+	}
+
+	private init(): void {
+		this.element = document.querySelector<HTMLElement>(this.option.selector);
+
+		if (!this.element) {
+			console.warn(`Element not found: ${this.option.selector}`);
+			return;
+		}
+
+		this.scrollHandler = rafThrottle(() => {
+			if (!this.element) return;
+			
+			if (u.wy < this.option.fireRange) {
+				this.element.classList.remove(this.option.fireClass);
+			} else {
+				this.element.classList.add(this.option.fireClass);
+			}
+		});
+
+		window.addEventListener("scroll", this.scrollHandler);
+		// 初回チェック
+		this.scrollHandler();
+	}
+
+	destroy(): void {
+		if (this.scrollHandler) {
+			window.removeEventListener("scroll", this.scrollHandler);
+			this.scrollHandler = null;
+		}
 	}
 }

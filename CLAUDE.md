@@ -1,8 +1,8 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+このファイルは、Claude Code (claude.ai/code) がこのリポジトリのコードを扱う際のガイドラインを提供します。
 
-## Development Commands
+## 開発コマンド
 
 ```bash
 # Start development environment (builds files and starts dev server with watch mode)
@@ -12,6 +12,12 @@ npm start
 
 # Build all files
 npm run build
+
+# Production build with minification
+npm run build:prod
+
+# Build with cache (skips unchanged images)
+npm run build:cached
 
 # Watch files for changes
 npm run watch
@@ -26,49 +32,74 @@ npm run clean
 npm install
 ```
 
-## Build System Architecture
+## ビルドシステムのアーキテクチャ
 
-This project uses npm scripts for all build tasks (migrated from Gulp 5.0).
+このプロジェクトは、すべてのビルドタスクにnpmスクリプトを使用しています（Gulp 5.0から移行）。
 
-### Task Structure
-- `build:images` - Copies images to dist
-- `build:images-webp` - Converts jpg/png to WebP format
-- `build:js` - Bundles TypeScript with Webpack, outputs to `dist/assets/js/bundle.js`
-- `build:css` - Compiles Sass to CSS
-- `build:html` - Processes Nunjucks templates using data from `_config/site.json`
-- `build:copy` - Copies static files from `src/public/` to `dist/`
-- `serve` - BrowserSync development server with live reload
-- `watch` - Watches all source files for changes
+### タスク構造
+- `build:images` - 画像をdistにコピー
+- `build:images-webp` - jpg/pngをWebP形式に変換
+- `build:images-webp:cached` - キャッシュ付きWebP変換（変更されていないファイルをスキップ）
+- `build:js` - ViteでTypeScriptをバンドル、`dist/assets/js/bundle.js`に出力
+- `build:css` - PostCSSを使用してSassをCSSにコンパイル
+- `build:html` - `_config/site.json`のデータを使用してLiquidテンプレートを処理
+- `build:copy` - `src/public/`から`dist/`に静的ファイルをコピー
+- `serve` - ライブリロード機能付きBrowserSync開発サーバー
+- `watch` - すべてのソースファイルの変更を監視
 
-The build system uses chokidar for file watching and npm-run-all for parallel task execution.
+ビルドシステムは、ファイル監視にchokidar、並列タスク実行にnpm-run-allを使用しています。
 
-## Code Organization
+## コード構成
 
-### Sass/CSS Architecture
-When creating new styles, follow this structure:
-- `components/` - Primary location for new components
-  - Create `.button-XXX`, `.title-XXX` patterns
-  - Group by function/role (event/, nav/) when files accumulate
-  - Use folder names as prefixes for easier discovery
-- `layouts/` - Site-wide layout components (header, footer)
-- `pages/` - Page-specific styles
-- `global/` - Mixins (`mixin/`) and variables (`variable-css/`, `variable-sass/`)
-- `utility/` - Utility classes
+### Sass/CSSアーキテクチャ
+新しいスタイルを作成する際は、以下の構造に従ってください：
+- `components/` - 新しいコンポーネントの主な配置場所
+  - `.button-XXX`、`.title-XXX`パターンを作成
+  - ファイルが増えたら機能/役割別にグループ化（event/, nav/）
+  - 検索しやすくするためフォルダ名をプレフィックスとして使用
+- `layouts/` - サイト全体のレイアウトコンポーネント（ヘッダー、フッター）
+- `pages/` - ページ固有のスタイル
+- `global/` - ミックスイン（`mixin/`）と変数（`variable-css/`、`variable-sass/`）
+- `utility/` - ユーティリティクラス
 
-### TypeScript Modules
-All JavaScript modules are in `src/assets/js/modules/` and use TypeScript with strict mode. Modules are class-based and initialized via data attributes.
+### TypeScriptモジュール
+すべてのJavaScriptモジュールは`src/assets/js/modules/`にあり、TypeScriptのstrictモードを使用しています。主要なモジュール：
+- `base-module.ts` - すべてのモジュールの基底クラス
+- `throttle.ts` - パフォーマンスユーティリティ（throttle、debounce、rafThrottle）
+- `types.ts` - 共通型定義
+- その他のモジュールはクラスベースで、data属性を介して初期化されます
 
-### HTML Templating
-Uses Nunjucks with:
-- Base layouts in `_layouts/`
-- Reusable partials in `_partials/`
-- Site configuration in `_config/site.json`
-- Page templates in `pages/`
+### HTMLテンプレート
+LiquidJS（Nunjucksから移行）を使用：
+- 基本レイアウトは`_layouts/`に配置
+- 再利用可能なコンポーネントは`_components/`に配置
+- 再利用可能なパーシャルは`_partials/`に配置
+- サイト設定は`_config/site.json`に配置
+- ページテンプレートは`pages/`に配置
 
-## Code Quality Tools
+## コード品質ツール
 
-ESLint is configured with standard and prettier configs. Run linting manually as there's no dedicated npm script.
+ESLintはstandardとprettierの設定で構成されています。専用のnpmスクリプトがないため、リンティングは手動で実行してください。
 
-## Environment Requirements
-- Node.js v16.17.1
-- npm v8.19
+## 環境要件
+- Node.js v16.17.1+
+- npm v8.19+
+
+## 重要な作業ルール
+
+### Gitコミットルール
+- 各主要タスクの完了後は必ずコミットを行う
+- 何を変更し、なぜ変更したかを説明する記述的なコミットメッセージを使用する
+- コミット前に`npm run build`を実行し、すべてが正しくビルドされることを確認する
+- コミット前にリンティングエラーをチェックする
+
+### タスク管理
+- TodoWrite/TodoReadツールを使用してすべてのタスクを追跡する
+- タスクを完了したらすぐに完了とマークする
+- 主要な作業の完了後はgitコミットをタスクアイテムとして追加する
+
+### コードスタイル
+- 特に要求されない限りコメントを追加しない
+- 既存のコードパターンと規則に従う
+- すべての新しいモジュールでTypeScript strictモードを使用する
+- 適切なエラーハンドリングとクリーンアップメソッドを実装する
