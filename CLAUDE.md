@@ -105,6 +105,32 @@ src/assets/
 - **画像**: Sharp（WebP変換 + サイズ自動検出）
 - **品質**: Biome（ESLintから移行）
 
+## 📝 作業履歴・技術的決定
+
+### 🎯 重要な技術的決定
+- **ESM移行 (2025-06-02)**: CommonJS → ESモジュール全面移行
+- **ビルドシステム (2025-06-02)**: Gulp → Node.js scripts + Vite
+- **テンプレート (既存)**: Nunjucks → LiquidJS
+- **品質ツール (既存)**: ESLint/Prettier → Biome
+
+### ✅ 完了した主要改善
+- ESM全面移行（package.json `"type": "module"`）
+- npm scripts簡素化（30+ → 7個）
+- 画像width/height自動付与機能実装
+- ドキュメント統合（TODO.md, ARCHITECTURE.md統合）
+- プロジェクト整理手順書作成
+
+### 📊 現在のメトリクス
+- **ビルド時間**: ~79ms (JavaScript)
+- **バンドルサイズ**: 14.79 kB (gzip: 2.93 kB)
+- **セキュリティ**: 脆弱性なし
+- **品質**: Biome設定済み
+
+### 🗂️ 削除候補ファイル（整理時に処理）
+- `src/assets/js/modules/disable-button-doubleclick.ts` - 未使用JSモジュール
+- `src/assets/sass/pages/about/_company.scss` - 空ファイル
+- `src/assets/sass/pages/about/_hoge.scss` - テスト用空ファイル
+
 ## 開発コマンド
 
 ```bash
