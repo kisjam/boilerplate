@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import { rmSync } from 'node:fs';
-import config from '../../build.config.js';
+import { rmSync } from "node:fs";
+import config from "../../build.config.js";
 
 try {
 	rmSync(config.dist, { recursive: true, force: true });

@@ -16,14 +16,20 @@ function generateIndexFile(dirPath) {
 	}
 
 	const entries = fs.readdirSync(fullPath, { withFileTypes: true });
-	
+
 	// SCSSファイルを取得
 	const scssFiles = entries
-		.filter((entry) => entry.isFile() && entry.name.startsWith("_") && entry.name.endsWith(".scss") && entry.name !== "_index.scss")
+		.filter(
+			(entry) =>
+				entry.isFile() &&
+				entry.name.startsWith("_") &&
+				entry.name.endsWith(".scss") &&
+				entry.name !== "_index.scss",
+		)
 		.map((entry) => entry.name)
 		.sort()
 		.map((file) => `@forward "${file.replace(".scss", "")}";`);
-	
+
 	// サブディレクトリで_index.scssを持つものを取得
 	const subDirs = entries
 		.filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
@@ -34,7 +40,7 @@ function generateIndexFile(dirPath) {
 		.map((entry) => entry.name)
 		.sort()
 		.map((dir) => `@forward "${dir}";`);
-	
+
 	// 両方を結合
 	const allImports = [...scssFiles, ...subDirs].join("\n");
 
@@ -53,7 +59,9 @@ function generateIndexFile(dirPath) {
 			fs.writeFileSync(indexPath, content);
 			const fileCount = scssFiles.length;
 			const dirCount = subDirs.length;
-			console.log(`Generated: ${path.relative(".", indexPath)} (${fileCount} files, ${dirCount} directories)`);
+			console.log(
+				`Generated: ${path.relative(".", indexPath)} (${fileCount} files, ${dirCount} directories)`,
+			);
 		}
 	}
 }

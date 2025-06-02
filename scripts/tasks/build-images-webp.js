@@ -1,33 +1,33 @@
 #!/usr/bin/env node
-import sharp from 'sharp';
-import { promises as fs } from 'node:fs';
-import fsSync from 'node:fs';
-import path from 'node:path';
-import { glob } from 'glob';
-import crypto from 'node:crypto';
-import config from '../../build.config.js';
+import crypto from "node:crypto";
+import { promises as fs } from "node:fs";
+import fsSync from "node:fs";
+import path from "node:path";
+import { glob } from "glob";
+import sharp from "sharp";
+import config from "../../build.config.js";
 
 const srcDir = config.assets.images;
-const distDir = path.join(config.dist, 'assets/images');
+const distDir = path.join(config.dist, "assets/images");
 
 // オプション設定
-const useCache = process.argv.includes('--cached');
-const cacheFile = '.webp-cache.json';
+const useCache = process.argv.includes("--cached");
+const cacheFile = ".webp-cache.json";
 
 // ファイルのMD5ハッシュを計算
 async function calculateFileHash(filePath) {
 	const fileBuffer = await fs.readFile(filePath);
-	const hashSum = crypto.createHash('md5');
+	const hashSum = crypto.createHash("md5");
 	hashSum.update(fileBuffer);
-	return hashSum.digest('hex');
+	return hashSum.digest("hex");
 }
 
 // キャッシュの読み込み
 async function loadCache() {
 	if (!useCache) return {};
-	
+
 	try {
-		const data = await fs.readFile(cacheFile, 'utf8');
+		const data = await fs.readFile(cacheFile, "utf8");
 		return JSON.parse(data);
 	} catch {
 		return {};
@@ -48,7 +48,7 @@ async function convertToWebP(file, cache = {}) {
 	const basename = path.basename(inputPath, ext);
 	const outputWebP = path.join(path.dirname(outputPath), `${basename}.webp`);
 
-	if (ext !== '.jpg' && ext !== '.jpeg' && ext !== '.png') {
+	if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
 		return null;
 	}
 
@@ -56,9 +56,7 @@ async function convertToWebP(file, cache = {}) {
 	if (useCache) {
 		const fileHash = await calculateFileHash(inputPath);
 		const needsConversion =
-			!cache[inputPath] || 
-			cache[inputPath].hash !== fileHash || 
-			!fsSync.existsSync(outputWebP);
+			!cache[inputPath] || cache[inputPath].hash !== fileHash || !fsSync.existsSync(outputWebP);
 
 		if (!needsConversion) {
 			console.log(`⏭️  Skipped (unchanged): ${file}`);
@@ -69,9 +67,7 @@ async function convertToWebP(file, cache = {}) {
 	await fs.mkdir(path.dirname(outputWebP), { recursive: true });
 
 	try {
-		await sharp(inputPath)
-			.webp({ quality: 80 })
-			.toFile(outputWebP);
+		await sharp(inputPath).webp({ quality: 80 }).toFile(outputWebP);
 
 		console.log(`✓ Converted: ${file} -> ${basename}.webp`);
 
@@ -80,7 +76,7 @@ async function convertToWebP(file, cache = {}) {
 			cache[inputPath] = {
 				hash: await calculateFileHash(inputPath),
 				output: outputWebP,
-				timestamp: new Date().toISOString()
+				timestamp: new Date().toISOString(),
 			};
 		}
 
@@ -93,35 +89,32 @@ async function convertToWebP(file, cache = {}) {
 
 // メイン処理
 async function buildImagesWebP() {
-	console.log('ℹ Starting WebP conversion...');
-	
+	console.log("ℹ Starting WebP conversion...");
+
 	try {
 		// キャッシュ読み込み
 		const cache = await loadCache();
-		
+
 		// 画像ファイルを検索
 		const pattern = `**/*.{jpg,jpeg,png}`;
 		const files = await glob(pattern, { cwd: srcDir });
-		
+
 		if (files.length === 0) {
-			console.log('No images found to convert.');
+			console.log("No images found to convert.");
 			return;
 		}
-		
+
 		// 並列処理で変換
-		const results = await Promise.all(
-			files.map(file => convertToWebP(file, cache))
-		);
-		
+		const results = await Promise.all(files.map((file) => convertToWebP(file, cache)));
+
 		// キャッシュ保存
 		await saveCache(cache);
-		
+
 		// 結果集計
-		const converted = results.filter(r => r !== null).length;
+		const converted = results.filter((r) => r !== null).length;
 		console.log(`✓ WebP conversion completed - ${converted} files processed`);
-		
 	} catch (error) {
-		console.error('WebP conversion failed:', error);
+		console.error("WebP conversion failed:", error);
 		process.exit(1);
 	}
 }

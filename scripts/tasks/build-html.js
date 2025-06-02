@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import { Liquid } from "liquidjs";
 import fs from "fs";
 import path from "path";
 import { glob } from "glob";
 import yaml from "js-yaml";
+import { Liquid } from "liquidjs";
 import config from "../../build.config.js";
-import { ensureDir, readJSON, logger, processInParallel, getRelativePath } from "../utils.js";
 import { processImageSizes } from "../lib/image-size-processor.js";
+import { ensureDir, getRelativePath, logger, processInParallel, readJSON } from "../utils.js";
 
 const fsPromises = fs.promises;
 

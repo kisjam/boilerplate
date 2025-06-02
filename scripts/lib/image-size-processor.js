@@ -1,6 +1,6 @@
-import imageSize from 'image-size';
-import path from 'path';
-import fs from 'fs';
+import fs from "fs";
+import path from "path";
+import imageSize from "image-size";
 
 // キャッシュ（ビルド中のメモリキャッシュ）
 const sizeCache = new Map();
@@ -28,7 +28,7 @@ function getImageSize(imagePath) {
 		const dimensions = imageSize(buffer);
 		const result = {
 			width: dimensions.width,
-			height: dimensions.height
+			height: dimensions.height,
 		};
 
 		// キャッシュに保存
@@ -49,7 +49,7 @@ function getImageSize(imagePath) {
 function processImageSizes(html, baseDir) {
 	// img要素を検索する正規表現
 	const imgRegex = /<img([^>]*)>/g;
-	
+
 	return html.replace(imgRegex, (match, attributes) => {
 		// すでにwidth/heightがある場合はスキップ
 		if (/\bwidth\s*=/.test(attributes) && /\bheight\s*=/.test(attributes)) {
@@ -63,16 +63,16 @@ function processImageSizes(html, baseDir) {
 		}
 
 		const src = srcMatch[1];
-		
+
 		// 外部URLはスキップ
-		if (src.startsWith('http://') || src.startsWith('https://') || src.startsWith('//')) {
+		if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("//")) {
 			return match;
 		}
 
 		// 画像パスを解決
-		const imagePath = src.startsWith('/')
-			? path.join(baseDir, 'dist', src)
-			: path.join(baseDir, 'dist', path.dirname(src), path.basename(src));
+		const imagePath = src.startsWith("/")
+			? path.join(baseDir, "dist", src)
+			: path.join(baseDir, "dist", path.dirname(src), path.basename(src));
 
 		// サイズ取得
 		const size = getImageSize(imagePath);
@@ -83,7 +83,7 @@ function processImageSizes(html, baseDir) {
 		// width/height属性を追加
 		// 既存の属性を保持しつつ、新しい属性を追加
 		const newAttributes = `${attributes} width="${size.width}" height="${size.height}"`;
-		
+
 		return `<img${newAttributes}>`;
 	});
 }
@@ -95,8 +95,4 @@ function clearCache() {
 	sizeCache.clear();
 }
 
-export {
-	getImageSize,
-	processImageSizes,
-	clearCache
-};
+export { getImageSize, processImageSizes, clearCache };
