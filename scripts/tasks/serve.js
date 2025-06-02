@@ -1,11 +1,21 @@
 #!/usr/bin/env node
-import { spawn } from 'node:child_process';
+import bs from 'browser-sync';
 import config from '../../build.config.js';
 
-const command = `browser-sync start --server ${config.dist} --files '${config.dist}/**/*' --open external`;
-console.log(`Starting server: ${command}`);
+const browserSync = bs.create();
 
-const child = spawn(command, { shell: true, stdio: 'inherit' });
-child.on('exit', (code) => {
-	process.exit(code);
+browserSync.init({
+	server: {
+		baseDir: config.dist
+	},
+	files: [`${config.dist}/**/*`],
+	open: 'external',
+	notify: false,
+	logPrefix: 'Dev Server'
+}, (err) => {
+	if (err) {
+		console.error('BrowserSync failed to start:', err);
+		process.exit(1);
+	}
+	console.log('✓ Development server started');
 });
