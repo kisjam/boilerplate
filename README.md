@@ -1,24 +1,15 @@
 # 静的サイトボイラープレート
 
-モダンなツールチェーンによる高速・軽量な静的サイト生成システム
+静的 Web サイト向けの雛形
 
-## ✨ 特徴
-
-- **⚡ 高速ビルド**: Node.js + Vite による最適化されたビルドシステム
-- **🖼️ 画像最適化**: 自動WebP変換 + width/height属性自動付与（CLS防止）
-- **🎨 モダンCSS**: Sass + PostCSS + Tailwind CSS v4
-- **📱 レスポンシブ**: モバイルファーストなコンポーネント設計
-- **🔧 TypeScript**: 型安全なJavaScriptモジュール
-- **🚀 開発体験**: ライブリロード + 自動フォーマット
-
-## 🛠️ 技術スタック
+## 概要
 
 - **ビルド**: Node.js ESM + npm scripts
 - **JavaScript**: TypeScript + Vite
 - **CSS**: Sass + PostCSS + Autoprefixer + Tailwind CSS
 - **HTML**: LiquidJS テンプレート
-- **画像**: Sharp（WebP変換）+ 自動サイズ検出
-- **品質**: Biome（リント + フォーマット）
+- **画像**: Sharp（WebP 変換）+ 自動サイズ検出
+- **Lint**: Biome
 
 ## 🚀 クイックスタート
 
@@ -56,17 +47,6 @@ src/assets/
 dist/               # ビルド出力
 scripts/            # ビルドスクリプト
 ```
-
-## 🎯 パフォーマンス最適化
-
-- **画像**: 自動WebP変換 + width/height属性付与
-- **JavaScript**: Viteによる最適化バンドル（14.79KB → 2.93KB gzip）
-- **CSS**: 自動プレフィックス + 最適化
-- **HTML**: テンプレートエンジンによる効率的生成
-
-## 📖 ドキュメント
-
-詳細な開発ガイドラインは `CLAUDE.md` を参照してください。
 
 ## ⚙️ 要件
 
