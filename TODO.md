@@ -12,6 +12,14 @@
   - above-the-fold画像の除外設定
   - 効果測定の実装
 
+#### PERF-005: 画像のwidth/height自動付与
+- **状態**: 進行中
+- **概要**: ビルド時に画像のwidth/height属性を自動設定し、CLSを防止
+- **詳細**:
+  - HTMLビルド時に画像サイズを取得
+  - img要素にwidth/height属性を自動追加
+  - レスポンシブ対応（aspect-ratio保持）
+
 #### PERF-002: Critical CSS自動インライン化
 - **状態**: 未着手
 - **概要**: 初期表示に必要なCSSのみをインライン化
@@ -43,6 +51,18 @@
   - キーボードフォーカスのみ表示
   - カスタムフォーカススタイル
   - フォーカストラップの実装
+
+#### BUILD-003: ESモジュール（ESM）全面移行
+- **状態**: 未着手
+- **概要**: CommonJSからESモジュールへの完全移行
+- **詳細**:
+  - package.jsonに`"type": "module"`追加
+  - 全require()をimportに変換
+  - 全module.exportsをexportに変換
+  - __dirnameを`import.meta.url`ベースに変更
+  - 動的requireを`await import()`に変更
+  - 設定ファイル（biome.json等）の拡張子調整
+  - Node.js v18以上を要求
 
 #### DX-001: Git pre-commitフック
 - **状態**: 未着手
