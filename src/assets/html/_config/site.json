@@ -1,44 +1,44 @@
 {
-  "site": {
-    "name": "Boilerplate for static website",
-    "description": "静的なWebサイトを作るためのボイラープレートです。",
-    "keywords": "ボイラープレート, 静的サイト, HTML, CSS, JavaScript",
-    "author": "Your Company Name",
-    "url": "https://example.com",
-    "locale": "ja_JP",
-    "charset": "UTF-8",
-    "viewport": "width=device-width, initial-scale=1.0"
-  },
-  "social": {
-    "og": {
-      "image": "https://example.com/og-image.jpg",
-      "type": "website"
-    },
-    "twitter": {
-      "card": "summary_large_image",
-      "site": "@yourhandle"
-    }
-  },
-  "contact": {
-    "email": "info@example.com",
-    "phone": "03-0000-0000",
-    "address": "東京都千代田区"
-  },
-  "features": [
-    {
-      "icon": "speed",
-      "title": "Fast Performance",
-      "description": "Optimized build process for maximum speed"
-    },
-    {
-      "icon": "code",
-      "title": "Modern Stack",
-      "description": "Built with latest web technologies"
-    },
-    {
-      "icon": "responsive",
-      "title": "Responsive Design",
-      "description": "Works perfectly on all devices"
-    }
-  ]
+	"site": {
+		"name": "Boilerplate for static website",
+		"description": "静的なWebサイトを作るためのボイラープレートです。",
+		"keywords": "ボイラープレート, 静的サイト, HTML, CSS, JavaScript",
+		"author": "Your Company Name",
+		"url": "https://example.com",
+		"locale": "ja_JP",
+		"charset": "UTF-8",
+		"viewport": "width=device-width, initial-scale=1.0"
+	},
+	"social": {
+		"og": {
+			"image": "https://example.com/og-image.jpg",
+			"type": "website"
+		},
+		"twitter": {
+			"card": "summary_large_image",
+			"site": "@yourhandle"
+		}
+	},
+	"contact": {
+		"email": "info@example.com",
+		"phone": "03-0000-0000",
+		"address": "東京都千代田区"
+	},
+	"features": [
+		{
+			"icon": "speed",
+			"title": "Fast Performance",
+			"description": "Optimized build process for maximum speed"
+		},
+		{
+			"icon": "code",
+			"title": "Modern Stack",
+			"description": "Built with latest web technologies"
+		},
+		{
+			"icon": "responsive",
+			"title": "Responsive Design",
+			"description": "Works perfectly on all devices"
+		}
+	]
 }

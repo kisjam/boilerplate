@@ -1,3 +1,4 @@
 export interface CustomOption {
-  [key: string]: any;
+	// biome-ignore lint/suspicious/noExplicitAny: Options type is intentionally flexible
+	[key: string]: any;
 }

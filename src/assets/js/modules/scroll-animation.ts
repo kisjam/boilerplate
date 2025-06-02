@@ -1,5 +1,5 @@
-import { u } from "./utility";
 import { rafThrottle } from "./throttle";
+import { u } from "./utility";
 
 interface ScrollAnimationOptions {
 	selector: string;
@@ -32,7 +32,7 @@ export default class ScrollAnimation {
 		if (elems.length === 0) return;
 
 		// Use Intersection Observer if available
-		if ('IntersectionObserver' in window) {
+		if ("IntersectionObserver" in window) {
 			this.initIntersectionObserver(elems);
 		} else {
 			// Fallback to scroll event
@@ -45,11 +45,11 @@ export default class ScrollAnimation {
 	private initIntersectionObserver(elems: NodeListOf<HTMLElement>): void {
 		const observerOptions: IntersectionObserverInit = {
 			rootMargin: `0px 0px -${(1 - this.option.fireRange) * 100}% 0px`,
-			threshold: 0
+			threshold: 0,
 		};
 
 		this.observer = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
+			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					entry.target.classList.add(this.option.fireClass);
 					this.observer?.unobserve(entry.target);
@@ -57,7 +57,7 @@ export default class ScrollAnimation {
 			});
 		}, observerOptions);
 
-		elems.forEach(elem => {
+		elems.forEach((elem) => {
 			this.observer?.observe(elem);
 		});
 	}

@@ -16,11 +16,11 @@ interface CustonOption {
 
 export default class NavManager {
 	option: Option;
-	isMenuActive: Boolean = false;
+	isMenuActive = false;
 	menuButtonElem: HTMLElement | null = null;
 	menuElem: HTMLElement | null = null;
 	hiddenElems: NodeListOf<HTMLElement> | null = null;
-	prevPosY: number = 0;
+	prevPosY = 0;
 
 	constructor(customOption?: CustonOption) {
 		const defaultOption: Option = {
@@ -33,15 +33,9 @@ export default class NavManager {
 		this.option = { ...defaultOption, ...customOption };
 
 		document.addEventListener("DOMContentLoaded", () => {
-			this.menuButtonElem = document.querySelector<HTMLElement>(
-				this.option.menuButtonSelector
-			);
-			this.menuElem = document.querySelector<HTMLElement>(
-				this.option.menuSelector
-			);
-			this.hiddenElems = document.querySelectorAll<HTMLElement>(
-				this.option.hiddenSelector
-			);
+			this.menuButtonElem = document.querySelector<HTMLElement>(this.option.menuButtonSelector);
+			this.menuElem = document.querySelector<HTMLElement>(this.option.menuSelector);
+			this.hiddenElems = document.querySelectorAll<HTMLElement>(this.option.hiddenSelector);
 
 			if (this.menuButtonElem === null) return;
 
@@ -61,12 +55,7 @@ export default class NavManager {
 		this.rendar();
 	}
 	rendar() {
-		if (
-			this.menuButtonElem === null ||
-			this.menuElem === null ||
-			this.hiddenElems === null
-		)
-			return;
+		if (this.menuButtonElem === null || this.menuElem === null || this.hiddenElems === null) return;
 
 		if (this.isMenuActive) {
 			this.menuButtonElem.classList.add(this.option.menuAvtiveClass);

@@ -9,9 +9,7 @@ export default class Accordion {
 
 		const panelId = this.buttonEl.getAttribute("data-accordion");
 		if (!panelId) {
-			throw new Error(
-				"Accordion button does not have a 'data-accordion' attribute."
-			);
+			throw new Error("Accordion button does not have a 'data-accordion' attribute.");
 		}
 
 		const isExpanded = this.buttonEl.getAttribute("aria-expanded") || "false";
@@ -26,10 +24,7 @@ export default class Accordion {
 		this.panelEl = panelEl as HTMLElement;
 
 		this.panelEl.setAttribute("aria-labelledby", this.buttonEl.id);
-		this.panelEl.setAttribute(
-			"aria-hidden",
-			isExpanded === "true" ? "false" : "true"
-		);
+		this.panelEl.setAttribute("aria-hidden", isExpanded === "true" ? "false" : "true");
 		this.panelEl.style.display = isExpanded === "true" ? "block" : "none";
 		this.closeButtonEl = this.panelEl.querySelector("[data-accordion-close]");
 
@@ -64,7 +59,7 @@ export default class Accordion {
 		this.panelEl.setAttribute("aria-hidden", "false");
 		this.slideDown(this.panelEl);
 	}
-	slideUp(element: HTMLElement, duration: number = 500): void {
+	slideUp(element: HTMLElement, duration = 500): void {
 		this.isAnimating = true;
 		element.style.height = `${element.offsetHeight}px`;
 		element.offsetHeight;
@@ -94,7 +89,7 @@ export default class Accordion {
 		element.addEventListener("transitionend", slideUpCallback);
 	}
 
-	slideDown(element: HTMLElement, duration: number = 500): void {
+	slideDown(element: HTMLElement, duration = 500): void {
 		this.isAnimating = true;
 		element.style.removeProperty("display");
 		let display = window.getComputedStyle(element).display;
@@ -102,7 +97,7 @@ export default class Accordion {
 		if (display === "none") display = "block";
 
 		element.style.display = display;
-		let height = element.offsetHeight;
+		const height = element.offsetHeight;
 		element.style.overflow = "hidden";
 		element.style.height = "0";
 		element.style.paddingTop = "0";

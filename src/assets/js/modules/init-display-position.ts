@@ -13,10 +13,7 @@ const initDisplayPosition = (): void => {
 		if (targetElem === null) return;
 
 		setTimeout(() => {
-			window.scrollTo(
-				0,
-				targetElem.getBoundingClientRect().top + u.wy + u.scrollGap
-			);
+			window.scrollTo(0, targetElem.getBoundingClientRect().top + u.wy + u.scrollGap);
 		}, 10);
 
 		history.replaceState(null, "", hash);

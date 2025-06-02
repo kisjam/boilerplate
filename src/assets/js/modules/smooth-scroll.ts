@@ -22,7 +22,7 @@ export default class SmoothScroll {
 
 		document.addEventListener("DOMContentLoaded", () => {
 			const anchors = document.querySelectorAll<HTMLAnchorElement>(
-				this.option.selector + this.option.ignoreSelector
+				this.option.selector + this.option.ignoreSelector,
 			);
 
 			if (anchors === null) return;

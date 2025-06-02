@@ -25,13 +25,9 @@ export const u = new Utility();
 
 export const addScrollbarWidth = (): void => {
 	const addCustomProperty = (): void => {
-		const scrollbarWidth: number =
-			window.innerWidth - document.documentElement.clientWidth;
+		const scrollbarWidth: number = window.innerWidth - document.documentElement.clientWidth;
 
-		document.documentElement.style.setProperty(
-			"--scrollbar",
-			`${scrollbarWidth}px`
-		);
+		document.documentElement.style.setProperty("--scrollbar", `${scrollbarWidth}px`);
 	};
 
 	window.addEventListener("load", addCustomProperty);
@@ -49,11 +45,7 @@ export const addLoadedClass = (): void => {
 	});
 };
 
-export const slideUp = (
-	element: HTMLElement,
-	duration: number = 600,
-	onComplete?: () => void
-): void => {
+export const slideUp = (element: HTMLElement, duration = 600, onComplete?: () => void): void => {
 	element.style.height = `${element.offsetHeight}px`;
 	element.offsetHeight;
 	element.style.overflow = "hidden";
@@ -84,18 +76,14 @@ export const slideUp = (
 	element.addEventListener("transitionend", slideUpCallback);
 };
 
-export const slideDown = (
-	element: HTMLElement,
-	duration: number = 600,
-	onComplete?: () => void
-): void => {
+export const slideDown = (element: HTMLElement, duration = 600, onComplete?: () => void): void => {
 	element.style.removeProperty("display");
 	let display = window.getComputedStyle(element).display;
 
 	if (display === "none") display = "block";
 
 	element.style.display = display;
-	let height = element.offsetHeight;
+	const height = element.offsetHeight;
 	element.style.overflow = "hidden";
 	element.style.height = "0";
 	element.style.paddingTop = "0";

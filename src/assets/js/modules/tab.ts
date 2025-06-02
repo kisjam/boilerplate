@@ -11,7 +11,7 @@ interface CustonOption {
 export default class Tab {
 	option: Option;
 
-	constructor(selector: string = "[data-tab]", customOption?: CustonOption) {
+	constructor(selector = "[data-tab]", customOption?: CustonOption) {
 		const defaultOption: Option = {
 			buttonSelector: "[data-tab-target]",
 			contentSelector: "[data-tab-content]",
@@ -30,19 +30,13 @@ export default class Tab {
 		});
 	}
 	registEventHandler(elem: HTMLElement): void {
-		const tabButtons = elem.querySelectorAll<HTMLButtonElement>(
-			this.option.buttonSelector
-		);
-		const tabContents = elem.querySelectorAll<HTMLElement>(
-			this.option.contentSelector
-		);
+		const tabButtons = elem.querySelectorAll<HTMLButtonElement>(this.option.buttonSelector);
+		const tabContents = elem.querySelectorAll<HTMLElement>(this.option.contentSelector);
 		const rendar = (): void => {
 			tabContents.forEach((content) => {
 				content.classList.remove("-is-open");
 			});
-			const content = elem.querySelector(
-				`[data-tab-content="${targetContent}"]`
-			);
+			const content = elem.querySelector(`[data-tab-content="${targetContent}"]`);
 			content?.classList.add("-is-open");
 
 			tabButtons.forEach((button) => {

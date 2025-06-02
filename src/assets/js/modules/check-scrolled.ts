@@ -1,5 +1,5 @@
-import { u } from "./utility";
 import { rafThrottle } from "./throttle";
+import { u } from "./utility";
 
 interface CheckScrolledOptions {
 	selector: string;
@@ -36,7 +36,7 @@ export default class CheckScrolled {
 
 		this.scrollHandler = rafThrottle(() => {
 			if (!this.element) return;
-			
+
 			if (u.wy < this.option.fireRange) {
 				this.element.classList.remove(this.option.fireClass);
 			} else {
