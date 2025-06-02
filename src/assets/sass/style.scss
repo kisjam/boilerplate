@@ -1,19 +1,7 @@
-// グローバル設定
-@forward "global/";
+@forward "global";
+@forward "foundation";
+@forward "layouts";
+@forward "components";
+@forward "pages";
 
-// 基本スタイル
-@forward "foundation/";
-
-// レイアウト
-@forward "layouts/";
-
-// コンポーネント
-@forward "components/";
-
-// ページ固有
-@forward "pages/";
-
-// Tailwind CSS
-@tailwind base;
-@tailwind components;
 @tailwind utilities;
