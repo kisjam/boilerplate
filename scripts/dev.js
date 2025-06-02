@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { spawn } = require('node:child_process');
+import { spawn } from 'node:child_process';
 
 // dev: build + watch + serve を並列実行
 const command = 'npm-run-all build -p watch serve';

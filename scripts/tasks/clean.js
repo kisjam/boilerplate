@@ -1,5 +1,11 @@
 #!/usr/bin/env node
-const { runCommand, replaceConfig } = require('../lib/task-runner');
+import { rmSync } from 'node:fs';
+import config from '../../build.config.js';
 
-const command = replaceConfig('rimraf ${config.dist}');
-runCommand(command).then(process.exit);
+try {
+	rmSync(config.dist, { recursive: true, force: true });
+	console.log(`✓ Cleaned ${config.dist} directory`);
+} catch (error) {
+	console.error(`Failed to clean ${config.dist}:`, error.message);
+	process.exit(1);
+}

@@ -42,12 +42,22 @@ npm install
 - `build:images-webp:cached` - キャッシュ付きWebP変換（変更されていないファイルをスキップ）
 - `build:js` - ViteでTypeScriptをバンドル、`dist/assets/js/bundle.js`に出力
 - `build:css` - PostCSSを使用してSassをCSSにコンパイル
-- `build:html` - `_config/site.json`のデータを使用してLiquidテンプレートを処理
+- `build:html` - `_config/site.json`のデータを使用してLiquidテンプレートを処理（画像のwidth/height自動付与機能含む）
 - `build:copy` - `src/public/`から`dist/`に静的ファイルをコピー
 - `serve` - ライブリロード機能付きBrowserSync開発サーバー
 - `watch` - すべてのソースファイルの変更を監視
 
 ビルドシステムは、ファイル監視にchokidar、並列タスク実行にnpm-run-allを使用しています。
+
+### パフォーマンス最適化機能
+
+#### 画像のwidth/height自動付与
+HTMLビルド時に、img要素に自動的にwidth/height属性を追加してCLS（Cumulative Layout Shift）を防止：
+- 実装: `scripts/lib/image-size-processor.js`
+- ビルド時に画像サイズを自動検出
+- メモリキャッシュによる高速処理
+- 外部URL画像はスキップ
+- 既存のwidth/height属性がある場合はスキップ
 
 ## コード構成
 
@@ -128,6 +138,37 @@ git commit -m "バグ修正"        # 具体的でない
 4. 1つのコミットは1つの論理的な変更のみ
 5. 各主要タスクの完了後は必ずコミットを行う
 6. コミット前に`npm run build`を実行し、すべてが正しくビルドされることを確認する
+
+### Git Addルール
+
+**⚠️ 重要: `git add -A` や `git add .` は使用禁止**
+
+#### 理由
+- 複数の作業が並行している可能性
+- 意図しないファイルのコミットを防ぐ
+- 変更内容の明確化
+
+#### 正しい方法
+```bash
+# ❌ 悪い例
+git add -A
+git add .
+
+# ✅ 良い例 - 関連ファイルのみを明示的に指定
+git add package.json build.config.js
+git add scripts/tasks/build-css.js scripts/tasks/sass-glob.js
+git add src/assets/sass/components/_button.scss
+
+# ✅ パターンを使用する場合も慎重に
+git add scripts/tasks/*.js  # tasksディレクトリのJSファイルのみ
+```
+
+#### 推奨プロセス
+1. `git status` で変更されたファイルを確認
+2. 今回のタスクに関連するファイルのみを特定
+3. 関連ファイルを個別に `git add` で追加
+4. `git status` で追加されたファイルを再確認
+5. コミット実行
 
 ### タスク管理
 - TodoWrite/TodoReadツールを使用してすべてのタスクを追跡する

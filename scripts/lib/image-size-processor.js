@@ -23,8 +23,9 @@ function getImageSize(imagePath) {
 			return null;
 		}
 
-		// サイズ取得
-		const dimensions = imageSize(imagePath);
+		// ファイルを読み込んでBufferとして渡す
+		const buffer = fs.readFileSync(imagePath);
+		const dimensions = imageSize(buffer);
 		const result = {
 			width: dimensions.width,
 			height: dimensions.height

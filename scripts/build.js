@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { spawn } = require('node:child_process');
+import { spawn } from 'node:child_process';
 
 // 引数で本番ビルドとキャッシュオプションを制御
 const args = process.argv.slice(2);
