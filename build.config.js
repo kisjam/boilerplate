@@ -12,8 +12,7 @@ module.exports = {
 	// sass-glob設定
 	sassGlob: {
 		// 自動的に_index.scssを生成するディレクトリ
+		// Note: foundationは手動管理のため含めない
 		directories: ["global", "components", "layouts", "pages"],
-		// 除外するディレクトリ（手動管理）
-		exclude: ["foundation"],
 	},
 };

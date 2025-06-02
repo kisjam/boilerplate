@@ -91,11 +91,7 @@ console.log = (...args) => {
 };
 
 // 開始ログ
-if (config.sassGlob?.exclude) {
-	console.log(`SASS glob: Processing [${directories.join(", ")}], excluding [${config.sassGlob.exclude.join(", ")}]`);
-} else {
-	console.log(`SASS glob: Processing [${directories.join(", ")}]`);
-}
+console.log(`SASS glob: Processing [${directories.join(", ")}]`);
 
 directories.forEach((dir) => {
 	generateIndexFileRecursive(dir);

@@ -4,8 +4,8 @@ const fs = require("fs").promises;
 const path = require("path");
 const { glob } = require("glob");
 const yaml = require("js-yaml");
-const config = require("../build.config");
-const { ensureDir, readJSON, logger, processInParallel, getRelativePath } = require("./utils");
+const config = require("../../build.config");
+const { ensureDir, readJSON, logger, processInParallel, getRelativePath } = require("../utils");
 
 const srcDir = config.assets.html;
 const distDir = config.dist;
