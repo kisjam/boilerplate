@@ -1,6 +1,6 @@
-const imageSize = require('image-size');
-const path = require('path');
-const fs = require('fs');
+import imageSize from 'image-size';
+import path from 'path';
+import fs from 'fs';
 
 // キャッシュ（ビルド中のメモリキャッシュ）
 const sizeCache = new Map();
@@ -94,7 +94,7 @@ function clearCache() {
 	sizeCache.clear();
 }
 
-module.exports = {
+export {
 	getImageSize,
 	processImageSizes,
 	clearCache

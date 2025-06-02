@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-const sass = require('sass');
-const postcss = require('postcss');
-const autoprefixer = require('autoprefixer');
-const tailwindcss = require('@tailwindcss/postcss');
-const fs = require('node:fs').promises;
-const path = require('node:path');
-const config = require('../../build.config');
+import * as sass from 'sass';
+import postcss from 'postcss';
+import autoprefixer from 'autoprefixer';
+import tailwindcss from '@tailwindcss/postcss';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
+import config from '../../build.config.js';
 
 async function buildCSS() {
 	const isProd = process.argv.includes('--prod');
 	
 	try {
 		// 1. sass-globを実行
-		require('./sass-glob');
+		await import('./sass-glob.js');
 		
 		// 2. Sassコンパイル
 		const result = sass.compile(

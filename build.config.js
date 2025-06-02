@@ -1,5 +1,5 @@
 // Build configuration
-module.exports = {
+export default {
 	src: "src",
 	dist: "dist",
 	assets: {

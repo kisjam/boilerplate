@@ -1,11 +1,13 @@
-const fs = require("fs").promises;
-const path = require("path");
-const chalk = require("chalk");
+import fs from "fs";
+import path from "path";
+import chalk from "chalk";
+
+const fsPromises = fs.promises;
 
 // ディレクトリ作成
 async function ensureDir(dir) {
 	try {
-		await fs.mkdir(dir, { recursive: true });
+		await fsPromises.mkdir(dir, { recursive: true });
 	} catch (err) {
 		throw new Error(`Failed to create directory ${dir}: ${err.message}`);
 	}
@@ -14,7 +16,7 @@ async function ensureDir(dir) {
 // JSONファイル読み込み
 async function readJSON(filePath) {
 	try {
-		const content = await fs.readFile(filePath, "utf8");
+		const content = await fsPromises.readFile(filePath, "utf8");
 		return JSON.parse(content);
 	} catch (err) {
 		if (err.code === "ENOENT") {
@@ -27,7 +29,7 @@ async function readJSON(filePath) {
 // JSONファイル書き込み
 async function writeJSON(filePath, data) {
 	try {
-		await fs.writeFile(filePath, JSON.stringify(data, null, 2));
+		await fsPromises.writeFile(filePath, JSON.stringify(data, null, 2));
 	} catch (err) {
 		throw new Error(`Failed to write JSON file ${filePath}: ${err.message}`);
 	}
@@ -81,7 +83,7 @@ async function processInParallel(items, processor, concurrency = 5) {
 // ファイル存在チェック
 async function fileExists(filePath) {
 	try {
-		await fs.access(filePath);
+		await fsPromises.access(filePath);
 		return true;
 	} catch {
 		return false;
@@ -93,7 +95,7 @@ function getRelativePath(from, to) {
 	return path.relative(from, to).replace(/\\/g, "/");
 }
 
-module.exports = {
+export {
 	ensureDir,
 	readJSON,
 	writeJSON,

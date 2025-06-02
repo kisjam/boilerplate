@@ -2,6 +2,7 @@
 	"name": "boilerplate-static",
 	"version": "2.2.0",
 	"description": "",
+	"type": "module",
 	"main": "index.js",
 	"scripts": {
 		"clean": "node scripts/tasks/clean.js",
@@ -58,6 +59,9 @@
 	},
 	"dependencies": {
 		"js-yaml": "^4.1.0"
+	},
+	"engines": {
+		"node": ">=18.0.0"
 	},
 	"volta": {
 		"node": "22.16.0"

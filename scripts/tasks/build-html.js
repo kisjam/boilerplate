@@ -1,11 +1,14 @@
 #!/usr/bin/env node
-const { Liquid } = require("liquidjs");
-const fs = require("fs").promises;
-const path = require("path");
-const { glob } = require("glob");
-const yaml = require("js-yaml");
-const config = require("../../build.config");
-const { ensureDir, readJSON, logger, processInParallel, getRelativePath } = require("../utils");
+import { Liquid } from "liquidjs";
+import fs from "fs";
+import path from "path";
+import { glob } from "glob";
+import yaml from "js-yaml";
+import config from "../../build.config.js";
+import { ensureDir, readJSON, logger, processInParallel, getRelativePath } from "../utils.js";
+import { processImageSizes } from "../lib/image-size-processor.js";
+
+const fsPromises = fs.promises;
 
 const srcDir = config.assets.html;
 const distDir = config.dist;
@@ -49,7 +52,7 @@ async function processHTMLFile(file, siteData) {
 
 	try {
 		// テンプレートの内容を読み込む
-		const templateContent = await fs.readFile(inputPath, "utf8");
+		const templateContent = await fsPromises.readFile(inputPath, "utf8");
 
 		// Front matterを解析
 		const { frontMatter, content } = parseFrontMatter(templateContent);
@@ -71,7 +74,7 @@ async function processHTMLFile(file, siteData) {
 
 			// レイアウトでラップ
 			const layoutPath = path.join(srcDir, frontMatter.layout);
-			const layoutContent = await fs.readFile(layoutPath, "utf8");
+			const layoutContent = await fsPromises.readFile(layoutPath, "utf8");
 			const layoutData = {
 				...data,
 				content: renderedContent,
@@ -82,11 +85,14 @@ async function processHTMLFile(file, siteData) {
 			html = await engine.parseAndRender(content, data);
 		}
 
+		// 画像にwidth/height属性を追加
+		html = processImageSizes(html, process.cwd());
+
 		// 出力ディレクトリを作成
 		await ensureDir(path.dirname(outputPath));
 
 		// ファイルを書き込む
-		await fs.writeFile(outputPath, html);
+		await fsPromises.writeFile(outputPath, html);
 		logger.success(
 			`Built: ${getRelativePath(srcDir, inputPath)} -> ${getRelativePath(distDir, outputPath)}`,
 		);

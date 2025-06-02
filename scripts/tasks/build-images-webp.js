@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-const sharp = require('sharp');
-const fs = require('node:fs').promises;
-const fsSync = require('node:fs');
-const path = require('node:path');
-const { glob } = require('glob');
-const crypto = require('node:crypto');
-const config = require('../../build.config');
+import sharp from 'sharp';
+import { promises as fs } from 'node:fs';
+import fsSync from 'node:fs';
+import path from 'node:path';
+import { glob } from 'glob';
+import crypto from 'node:crypto';
+import config from '../../build.config.js';
 
 const srcDir = config.assets.images;
 const distDir = path.join(config.dist, 'assets/images');

@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const config = require("../../build.config");
+import fs from "fs";
+import path from "path";
+import config from "../../build.config.js";
 
 const sassDir = config.assets.css;
 
