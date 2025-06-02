@@ -3,9 +3,10 @@ const sharp = require('sharp');
 const fs = require('fs').promises;
 const path = require('path');
 const { glob } = require('glob');
+const config = require('../build.config');
 
-const srcDir = 'src/assets/images';
-const distDir = 'dist/assets/images';
+const srcDir = config.assets.images;
+const distDir = path.join(config.dist, 'assets/images');
 
 async function ensureDir(dir) {
   try {

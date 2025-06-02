@@ -1,0 +1,23 @@
+<div class="card">
+  {% if image %}
+    <div class="card__image">
+      <img src="{{ image }}" alt="{{ title }}">
+    </div>
+  {% endif %}
+  
+  <div class="card__body">
+    {% if title %}
+      <h3 class="card__title">{{ title }}</h3>
+    {% endif %}
+    
+    {% if content %}
+      <div class="card__content">
+        {{ content }}
+      </div>
+    {% endif %}
+    
+    {% if link %}
+      <a href="{{ link }}" class="card__link">Learn More</a>
+    {% endif %}
+  </div>
+</div>

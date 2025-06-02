@@ -55,5 +55,8 @@
 		"swiper": "^8.4.4",
 		"typescript": "^4.8.4",
 		"vite": "^6.3.5"
+	},
+	"dependencies": {
+		"js-yaml": "^4.1.0"
 	}
 }

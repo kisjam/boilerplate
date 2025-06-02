@@ -1,0 +1,5 @@
+<button class="button button--{{ type | default: 'default' }}" 
+        {% if disabled %}disabled{% endif %}
+        {% if onClick %}onclick="{{ onClick }}"{% endif %}>
+  {{ text }}
+</button>

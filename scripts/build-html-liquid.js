@@ -3,13 +3,14 @@ const { Liquid } = require('liquidjs');
 const fs = require('fs').promises;
 const path = require('path');
 const { glob } = require('glob');
+const config = require('../build.config');
 
-const srcDir = 'src/assets/html';
-const distDir = 'dist';
+const srcDir = config.assets.html;
+const distDir = config.dist;
 
 // Configure LiquidJS
 const engine = new Liquid({
-  root: srcDir,
+  root: [srcDir, path.join(srcDir, '_components')],
   extname: '.liquid',
   cache: false
 });
@@ -38,21 +39,20 @@ function parseFrontMatter(content) {
   const match = content.match(frontMatterRegex);
   
   if (match) {
-    const frontMatter = {};
-    const lines = match[1].split('\n');
-    
-    for (const line of lines) {
-      const [key, ...valueParts] = line.split(':');
-      if (key && valueParts.length > 0) {
-        const value = valueParts.join(':').trim().replace(/^['"]|['"]$/g, '');
-        frontMatter[key.trim()] = value;
-      }
+    const yaml = require('js-yaml');
+    try {
+      const frontMatter = yaml.load(match[1]);
+      return {
+        frontMatter,
+        content: match[2]
+      };
+    } catch (e) {
+      console.error('Error parsing YAML front matter:', e);
+      return {
+        frontMatter: {},
+        content
+      };
     }
-    
-    return {
-      frontMatter,
-      content: match[2]
-    };
   }
   
   return {
@@ -92,10 +92,17 @@ async function buildHTML() {
 
       let html;
       if (frontMatter.layout) {
-        // Render with layout
+        // First render the content
+        const renderedContent = await engine.parseAndRender(content, data);
+        
+        // Then render with layout
         const layoutPath = path.join(srcDir, frontMatter.layout);
         const layoutContent = await fs.readFile(layoutPath, 'utf8');
-        html = await engine.parseAndRender(layoutContent, data);
+        const layoutData = {
+          ...data,
+          content: renderedContent
+        };
+        html = await engine.parseAndRender(layoutContent, layoutData);
       } else {
         // Render standalone
         html = await engine.parseAndRender(content, data);

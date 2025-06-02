@@ -1,7 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const config = require('../build.config');
 
-const sassDir = 'src/assets/sass';
+const sassDir = config.assets.css;
 
 // 各ディレクトリに_index.scssファイルを生成
 const directories = [

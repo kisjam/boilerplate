@@ -2,9 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const crypto = require('crypto');
+const config = require('../build.config');
 
-const srcDir = 'src/assets/images';
-const destDir = 'dist/assets/images';
+const srcDir = config.assets.images;
+const destDir = path.join(config.dist, 'assets/images');
 
 // タイムスタンプを記録するキャッシュファイル
 const cacheFile = '.webp-cache.json';

@@ -1,13 +1,14 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import config from './build.config.js';
 
 export default defineConfig({
-  root: 'src',
+  root: config.src,
   build: {
-    outDir: '../dist/assets/js',
+    outDir: resolve(config.dist, 'assets/js'),
     emptyOutDir: true,
     rollupOptions: {
-      input: resolve(__dirname, 'src/assets/js/app.ts'),
+      input: resolve(__dirname, config.assets.js, 'app.ts'),
       output: {
         entryFileNames: 'bundle.js',
         assetFileNames: '[name].[ext]'
@@ -18,7 +19,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, 'src')
+      '@': resolve(__dirname, config.src)
     }
   }
 });
