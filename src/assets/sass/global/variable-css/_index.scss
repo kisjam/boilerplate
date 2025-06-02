@@ -2,11 +2,24 @@
 @use "../variable-sass/" as v;
 
 :root {
+	// コアデザイントークン
+	--color-text: #{v.$color-black};
+	--color-background: #{v.$color-white};
+	
+	// フォント
+	--font-sans: #{v.$ff-noto-sans};
+	--font-serif: #{v.$ff-noto-serif};
+	--font-size-base: #{v.$base-font-size}px;
+	
+	// レイアウト
 	--padding-side: 80px;
 	--height-header: 120px;
+	--width-content: #{v.$width-content};
+	
+	// ユーティリティ
 	--leading-trim: calc((1em - 1lh) / 2);
 	--outer: min(
-		calc((((100vw - var(--scrollbar, 0)) - #{v.$width-content}) / 2) * -1),
+		calc((((100vw - var(--scrollbar, 0)) - var(--width-content)) / 2) * -1),
 		calc(var(--padding-side) * -1)
 	);
 

@@ -1,8 +1,10 @@
 $base-font-size: 16;
 
+// フォントファミリー
 $ff-noto-sans: "Noto Sans JP", sans-serif;
 $ff-noto-serif: "Noto Serif JP", serif;
 
+// フォントウェイト
 $fw-thin: 100;
 $fw-light: 300;
 $fw-regular: 400;
@@ -11,11 +13,11 @@ $fw-semibold: 600;
 $fw-bold: 700;
 $fw-black: 900;
 
+// カラー
 $color-black: #333;
 $color-white: #fff;
-$color-assort: "";
-$color-accent: "";
 
+// ブレークポイント（Tailwindと統一）
 $breakpoints: (
 	2xl: 1536px,
 	xl: 1280px,
@@ -24,6 +26,7 @@ $breakpoints: (
 	sm: 640px,
 );
 
+// レイアウト
 $width-content: 1290px;
 $viewport-pc: 1920;
 $viewport-sp: 375;

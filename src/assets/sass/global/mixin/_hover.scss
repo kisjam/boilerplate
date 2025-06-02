@@ -1,13 +1,12 @@
-/*
-/* Mixin
-/*
------------------------------------------------------------------ */
-@use '../variable-sass/' as var;
+// ホバーエフェクトミックスイン
+// 使用非推奨: Tailwindのhover:を使用してください
 
 @mixin hover-opacity($opacity: 0.8) {
 	transition: opacity 0.3s ease;
 
-	&:hover {
-		opacity: $opacity;
+	@media (any-hover: hover) {
+		&:hover {
+			opacity: $opacity;
+		}
 	}
 }

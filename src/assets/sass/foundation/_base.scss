@@ -1,9 +1,9 @@
 @use "../global" as *;
 
 body {
-	font-family: $ff-noto-sans;
-	color: $color-black;
-	font-size: rem(16);
+	font-family: var(--font-sans);
+	color: var(--color-text);
+	font-size: var(--font-size-base);
 	text-size-adjust: none;
 	-webkit-text-size-adjust: none;
 	-webkit-font-smoothing: antialiased;
@@ -20,5 +20,5 @@ img {
 }
 
 a {
-	color: $color-black;
+	color: var(--color-text);
 }
