@@ -8,7 +8,7 @@ const sassDir = config.assets.css;
 const directories = ["global", "components", "layouts", "pages"];
 // Note: foundationは手動管理のため除外
 
-// 同一階層の_*.scssファイルを取得してindex.scssを生成
+// 同一階層の_*.scssファイルとサブディレクトリを取得してindex.scssを生成
 function generateIndexFile(dirPath) {
 	const fullPath = path.join(sassDir, dirPath);
 
@@ -16,16 +16,32 @@ function generateIndexFile(dirPath) {
 		return;
 	}
 
-	const files = fs.readdirSync(fullPath);
-	const scssFiles = files
-		.filter((file) => file.startsWith("_") && file.endsWith(".scss") && file !== "_index.scss")
+	const entries = fs.readdirSync(fullPath, { withFileTypes: true });
+	
+	// SCSSファイルを取得
+	const scssFiles = entries
+		.filter((entry) => entry.isFile() && entry.name.startsWith("_") && entry.name.endsWith(".scss") && entry.name !== "_index.scss")
+		.map((entry) => entry.name)
 		.sort()
-		.map((file) => `@forward "${file.replace(".scss", "")}";`)
-		.join("\n");
+		.map((file) => `@forward "${file.replace(".scss", "")}";`);
+	
+	// サブディレクトリで_index.scssを持つものを取得
+	const subDirs = entries
+		.filter((entry) => entry.isDirectory() && !entry.name.startsWith("."))
+		.filter((entry) => {
+			const indexPath = path.join(fullPath, entry.name, "_index.scss");
+			return fs.existsSync(indexPath);
+		})
+		.map((entry) => entry.name)
+		.sort()
+		.map((dir) => `@forward "${dir}";`);
+	
+	// 両方を結合
+	const allImports = [...scssFiles, ...subDirs].join("\n");
 
-	if (scssFiles) {
+	if (allImports) {
 		const indexPath = path.join(fullPath, "_index.scss");
-		const content = `${scssFiles}\n`;
+		const content = `// [AUTO-GENERATED] This file is managed by sass-glob.js\n\n${allImports}\n`;
 
 		// 既存の内容と比較して変更がある場合のみ書き込み
 		let needsUpdate = true;
@@ -36,10 +52,9 @@ function generateIndexFile(dirPath) {
 
 		if (needsUpdate) {
 			fs.writeFileSync(indexPath, content);
-			const fileCount = files.filter(
-				(file) => file.startsWith("_") && file.endsWith(".scss") && file !== "_index.scss",
-			).length;
-			console.log(`Generated: ${path.relative(".", indexPath)} (${fileCount} files)`);
+			const fileCount = scssFiles.length;
+			const dirCount = subDirs.length;
+			console.log(`Generated: ${path.relative(".", indexPath)} (${fileCount} files, ${dirCount} directories)`);
 		}
 	}
 }
