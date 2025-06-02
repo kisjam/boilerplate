@@ -1,8 +1,11 @@
 #!/usr/bin/env node
-const { runCommand, replaceConfig } = require('../lib/task-runner');
+import { spawn } from 'node:child_process';
+import config from '../../build.config.js';
 
-const command = replaceConfig(
-	"browser-sync start --server ${config.dist} --files '${config.dist}/**/*' --open external"
-);
+const command = `browser-sync start --server ${config.dist} --files '${config.dist}/**/*' --open external`;
+console.log(`Starting server: ${command}`);
 
-runCommand(command).then(process.exit);
+const child = spawn(command, { shell: true, stdio: 'inherit' });
+child.on('exit', (code) => {
+	process.exit(code);
+});
