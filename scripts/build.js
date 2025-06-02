@@ -1,28 +1,55 @@
 #!/usr/bin/env node
 import { spawn } from 'node:child_process';
 
-// 引数で本番ビルドとキャッシュオプションを制御
+// 引数で本番ビルドを制御
 const args = process.argv.slice(2);
 const isProd = args.includes('--prod');
-const isCached = args.includes('--cached');
 
-let buildTasks = 'build:copy build:js build:css build:images build:images-webp build:html';
+console.log(`Building project${isProd ? ' (production)' : ''}...`);
 
-// 本番ビルド時の設定
-if (isProd) {
-	buildTasks = buildTasks.replace('build:js', 'build:js:prod').replace('build:css', 'build:css:prod');
-}
+// まずクリーンアップを実行
+const cleanCommand = 'node scripts/tasks/clean.js';
+console.log(`\n1. Cleaning: ${cleanCommand}`);
+const cleanChild = spawn(cleanCommand, { shell: true, stdio: 'inherit' });
 
-// キャッシュオプションの設定
-if (isCached) {
-	buildTasks = buildTasks.replace('build:images-webp', 'build:images-webp:cached');
-	buildTasks = buildTasks.replace('build:html', 'build:html:optimized');
-}
+cleanChild.on('exit', async (code) => {
+	if (code !== 0) {
+		console.error('Clean failed');
+		process.exit(code);
+	}
 
-const command = `npm-run-all clean -p ${buildTasks}`;
-console.log(`Running: ${command}`);
+	// ビルドタスクを並列実行
+	const tasks = [
+		'node scripts/tasks/build-copy.js',
+		`node scripts/tasks/build-js.js${isProd ? ' --prod' : ''}`,
+		`node scripts/tasks/build-css.js${isProd ? ' --prod' : ''}`,
+		'node scripts/tasks/build-images.js',
+		'node scripts/tasks/build-images-webp.js',
+		'node scripts/tasks/build-html.js'
+	];
 
-const child = spawn(command, { shell: true, stdio: 'inherit' });
-child.on('exit', (code) => {
-	process.exit(code);
+	console.log('\n2. Building assets in parallel...');
+	
+	const buildPromises = tasks.map((task, index) => {
+		console.log(`   ${index + 1}. ${task}`);
+		return new Promise((resolve, reject) => {
+			const child = spawn(task, { shell: true, stdio: 'inherit' });
+			child.on('exit', (code) => {
+				if (code === 0) {
+					resolve();
+				} else {
+					reject(new Error(`Task failed: ${task}`));
+				}
+			});
+		});
+	});
+
+	try {
+		await Promise.all(buildPromises);
+		console.log('\n✅ Build completed successfully!');
+		process.exit(0);
+	} catch (error) {
+		console.error('\n❌ Build failed:', error.message);
+		process.exit(1);
+	}
 });
