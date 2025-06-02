@@ -15,7 +15,7 @@
 		"build:images-webp:cached": "node scripts/tasks/build-images-webp.js --cached",
 		"build:html": "node scripts/tasks/build-html.js",
 		"build:html:optimized": "node scripts/tasks/build-html.js",
-		"sass-glob": "node scripts/sass-glob.js",
+		"sass-glob": "node scripts/tasks/sass-glob.js",
 		"watch:js": "vite build --watch",
 		"watch:css": "node scripts/tasks/watch-css.js",
 		"watch:html": "node scripts/tasks/watch-html.js",

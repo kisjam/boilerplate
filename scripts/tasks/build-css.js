@@ -6,14 +6,13 @@ const tailwindcss = require('@tailwindcss/postcss');
 const fs = require('node:fs').promises;
 const path = require('node:path');
 const config = require('../../build.config');
-const { execSync } = require('node:child_process');
 
 async function buildCSS() {
 	const isProd = process.argv.includes('--prod');
 	
 	try {
-		// 1. sass-globを実行（一時的にexecSyncを使用、後で関数化）
-		execSync('npm run sass-glob', { stdio: 'inherit' });
+		// 1. sass-globを実行
+		require('./sass-glob');
 		
 		// 2. Sassコンパイル
 		const result = sass.compile(
