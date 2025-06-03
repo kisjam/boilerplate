@@ -71,6 +71,12 @@ async function convertToWebP(file, cache = {}) {
 
 		console.log(`✓ Converted: ${file} -> ${basename}.webp`);
 
+		// 元画像を削除
+		if (fsSync.existsSync(outputPath)) {
+			await fs.unlink(outputPath);
+			console.log(`✓ Removed original: ${file}`);
+		}
+
 		// キャッシュ更新
 		if (useCache) {
 			cache[inputPath] = {

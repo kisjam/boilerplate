@@ -17,21 +17,17 @@ try {
 	await build({
 		root: rootDir,
 		build: {
-			lib: {
-				entry: resolve(rootDir, config.assets.js, "app.ts"),
-				name: "App",
-				fileName: "bundle",
-				formats: ["iife"],
+			rollupOptions: {
+				input: resolve(rootDir, config.assets.js, "app.ts"),
+				output: {
+					entryFileNames: "bundle.js",
+					assetFileNames: "[name][extname]",
+				},
 			},
 			outDir: resolve(rootDir, config.dist, "assets/js"),
 			emptyOutDir: false,
 			sourcemap: !isProd,
 			minify: isProd,
-			rollupOptions: {
-				output: {
-					assetFileNames: "[name][extname]",
-				},
-			},
 		},
 		esbuild: {
 			target: "es2020",
