@@ -102,7 +102,7 @@ async function buildImagesWebP() {
 		const cache = await loadCache();
 
 		// 画像ファイルを検索
-		const pattern = `**/*.{jpg,jpeg,png}`;
+		const pattern = "**/*.{jpg,jpeg,png}";
 		const files = await glob(pattern, { cwd: srcDir });
 
 		if (files.length === 0) {

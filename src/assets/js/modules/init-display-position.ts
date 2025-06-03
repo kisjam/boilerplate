@@ -5,7 +5,7 @@ const initDisplayPosition = (): void => {
 
 	if (hash === "") return;
 
-	window.location.hash = hash + "_";
+	window.location.hash = `${hash}_`;
 
 	window.addEventListener("load", (): void => {
 		const targetElem = document.querySelector<HTMLElement>(hash);

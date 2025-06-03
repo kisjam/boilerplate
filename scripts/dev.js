@@ -9,7 +9,7 @@ import { startServer } from "./tasks/serve.js";
 // Get the directory of this script
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, '..');
+const projectRoot = path.resolve(__dirname, "..");
 
 console.log("🚀 Starting development environment...");
 
@@ -31,7 +31,7 @@ buildChild.on("exit", async (code) => {
 	// BrowserSyncを統合されたserve.jsから起動
 	try {
 		await startServer();
-	} catch (err) {
+	} catch (_err) {
 		console.error("❌ Failed to start development server");
 		process.exit(1);
 	}
@@ -45,7 +45,7 @@ buildChild.on("exit", async (code) => {
 	const htmlPath = path.resolve(projectRoot, config.assets.html);
 	const imagesPath = path.resolve(projectRoot, config.assets.images);
 	const publicPath = path.resolve(projectRoot, config.public);
-	
+
 	console.log(`   CSS: ${cssPath}/**/*.scss`);
 	console.log(`   JS: ${jsPath}/**/*.ts`);
 	console.log(`   HTML: ${htmlPath}/**/*.liquid`);
@@ -55,13 +55,13 @@ buildChild.on("exit", async (code) => {
 	const watchers = [
 		// CSS監視
 		chokidar
-			.watch(path.join(cssPath, '**/*.scss'), {
-				ignored: '**/node_modules/**',
+			.watch(path.join(cssPath, "**/*.scss"), {
+				ignored: "**/node_modules/**",
 				ignoreInitial: true,
 				persistent: true,
 				usePolling: true,
 				interval: 100,
-				binaryInterval: 300
+				binaryInterval: 300,
 			})
 			.on("change", (filePath) => {
 				console.log(`🎨 CSS changed: ${filePath}`);
@@ -74,7 +74,7 @@ buildChild.on("exit", async (code) => {
 
 		// JS監視
 		chokidar
-			.watch(path.join(jsPath, '**/*.ts'), {
+			.watch(path.join(jsPath, "**/*.ts"), {
 				ignoreInitial: true,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
@@ -89,7 +89,7 @@ buildChild.on("exit", async (code) => {
 
 		// HTML監視
 		chokidar
-			.watch(path.join(htmlPath, '**/*.liquid'), {
+			.watch(path.join(htmlPath, "**/*.liquid"), {
 				ignoreInitial: true,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
@@ -104,7 +104,7 @@ buildChild.on("exit", async (code) => {
 
 		// 画像監視
 		chokidar
-			.watch(path.join(imagesPath, '**/*'), {
+			.watch(path.join(imagesPath, "**/*"), {
 				ignoreInitial: true,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
@@ -119,7 +119,7 @@ buildChild.on("exit", async (code) => {
 
 		// 静的ファイル監視
 		chokidar
-			.watch(path.join(publicPath, '**/*'), {
+			.watch(path.join(publicPath, "**/*"), {
 				ignoreInitial: true,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,

@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import config from "../../build.config.js";
 
 const sassDir = config.assets.css;
@@ -92,7 +92,7 @@ let hasUpdates = false;
 // 元のログ関数を保存
 const originalLog = console.log;
 console.log = (...args) => {
-	if (args[0] && args[0].startsWith("Generated:")) {
+	if (args[0]?.startsWith("Generated:")) {
 		hasUpdates = true;
 	}
 	originalLog.apply(console, args);

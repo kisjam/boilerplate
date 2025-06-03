@@ -6,10 +6,10 @@ const browserSync = bs.create();
 
 // コマンドライン引数の処理
 const args = process.argv.slice(2);
-const options = {
-	open: args.includes('--no-open') ? false : "external",
+const _options = {
+	open: args.includes("--no-open") ? false : "external",
 	// dev.jsから呼ばれる場合は、BrowserSyncインスタンスを返す
-	returnInstance: args.includes('--return-instance')
+	returnInstance: args.includes("--return-instance"),
 };
 
 // APIとして使える形に変更
@@ -22,7 +22,7 @@ export function startServer(customOptions = {}) {
 		open: customOptions.open ?? "external",
 		notify: false,
 		logPrefix: customOptions.logPrefix ?? "Dev",
-		...customOptions
+		...customOptions,
 	};
 
 	return new Promise((resolve, reject) => {
