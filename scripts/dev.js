@@ -11,6 +11,53 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
 
+// ================================
+// Helper Functions
+// ================================
+
+/**
+ * タスクを実行する
+ * @param {string} command - 実行するコマンド
+ */
+function runTask(command) {
+	console.log(`🔄 ${command}`);
+	const child = spawn(command, { shell: true, stdio: "inherit" });
+
+	child.on("exit", (code) => {
+		if (code === 0) {
+			console.log("✓ Task completed");
+		} else {
+			console.error(`❌ Task failed: ${command}`);
+		}
+	});
+}
+
+/**
+ * ファイル監視の設定を作成
+ * @param {string} watchPath - 監視するパス
+ * @param {object} options - chokidarのオプション
+ * @param {object} handlers - イベントハンドラー
+ * @returns {chokidar.FSWatcher}
+ */
+function createWatcher(watchPath, options, handlers) {
+	const watcher = chokidar.watch(watchPath, {
+		ignoreInitial: true,
+		...options,
+	});
+
+	if (handlers.change) watcher.on("change", handlers.change);
+	if (handlers.add) watcher.on("add", handlers.add);
+	if (handlers.unlink) watcher.on("unlink", handlers.unlink);
+	if (handlers.error) watcher.on("error", handlers.error);
+	if (handlers.ready) watcher.on("ready", handlers.ready);
+
+	return watcher;
+}
+
+// ================================
+// Main Process
+// ================================
+
 console.log("🚀 Starting development environment...");
 
 // 初回ビルド
@@ -26,7 +73,7 @@ buildChild.on("exit", async (code) => {
 		process.exit(code);
 	}
 
-	console.log("✅ Initial build completed");
+	console.log("✓ Initial build completed");
 
 	// BrowserSyncを統合されたserve.jsから起動
 	try {
@@ -38,24 +85,31 @@ buildChild.on("exit", async (code) => {
 
 	console.log("👀 Watching for changes...");
 
-	// ファイル監視設定
-	console.log("📁 Watching paths:");
-	const cssPath = path.resolve(projectRoot, config.assets.css);
-	const jsPath = path.resolve(projectRoot, config.assets.js);
-	const htmlPath = path.resolve(projectRoot, config.assets.html);
-	const imagesPath = path.resolve(projectRoot, config.assets.images);
-	const publicPath = path.resolve(projectRoot, config.public);
+	// ================================
+	// Watch Configuration
+	// ================================
 
-	console.log(`   CSS: ${cssPath} (*.scss, *.sass)`);
-	console.log(`   JS: ${jsPath} (*.ts, *.js)`);
-	console.log(`   HTML: ${htmlPath} (*.liquid)`);
-	console.log(`   Images: ${imagesPath}`);
-	console.log(`   Static: ${publicPath}`);
+	// パスの設定
+	const paths = {
+		css: path.resolve(projectRoot, config.assets.css),
+		js: path.resolve(projectRoot, config.assets.js),
+		html: path.resolve(projectRoot, config.assets.html),
+		images: path.resolve(projectRoot, config.assets.images),
+		public: path.resolve(projectRoot, config.public),
+	};
+
+	console.log("📁 Watching paths:");
+	console.log(`   CSS: ${paths.css} (*.scss, *.sass)`);
+	console.log(`   JS: ${paths.js} (*.ts, *.js)`);
+	console.log(`   HTML: ${paths.html} (*.liquid)`);
+	console.log(`   Images: ${paths.images}`);
+	console.log(`   Static: ${paths.public}`);
 
 	const watchers = [
 		// CSS監視 - chokidar v4では直接ディレクトリを監視
-		chokidar
-			.watch(cssPath, {
+		createWatcher(
+			paths.css,
+			{
 				ignored: (filePath, stats) => {
 					// ディレクトリは無視しない
 					if (stats?.isDirectory()) return false;
@@ -64,149 +118,150 @@ buildChild.on("exit", async (code) => {
 					// .scss/.sass以外のファイルを無視
 					return !filePath.endsWith(".scss") && !filePath.endsWith(".sass");
 				},
-				ignoreInitial: true,
 				persistent: true,
 				usePolling: true,
 				interval: 100,
 				binaryInterval: 300,
-			})
-			.on("change", (filePath) => {
-				console.log(`🎨 CSS changed: ${filePath}`);
-				runTask("node scripts/tasks/build-css.js");
-			})
-			.on("add", (filePath) => {
-				console.log(`📝 CSS added: ${filePath}`);
-				runTask("node scripts/tasks/build-css.js");
-			})
-			.on("unlink", (filePath) => {
-				console.log(`🗑️ CSS deleted: ${filePath}`);
-				runTask("node scripts/tasks/build-css.js");
-			})
-			.on("error", (error) => console.error(`❌ CSS watcher error: ${error}`))
-			.on("ready", () => console.log("✅ CSS watcher ready")),
+			},
+			{
+				change: (filePath) => {
+					console.log(`🎨 CSS changed: ${filePath}`);
+					runTask("node scripts/tasks/build-css.js");
+				},
+				add: (filePath) => {
+					console.log(`📝 CSS added: ${filePath}`);
+					runTask("node scripts/tasks/build-css.js");
+				},
+				unlink: (filePath) => {
+					console.log(`🗑️ CSS deleted: ${filePath}`);
+					runTask("node scripts/tasks/build-css.js");
+				},
+				error: (error) => console.error(`❌ CSS watcher error: ${error}`),
+				ready: () => console.log("✓ CSS watcher ready"),
+			}
+		),
 
 		// JS監視
-		chokidar
-			.watch(jsPath, {
+		createWatcher(
+			paths.js,
+			{
 				ignored: (filePath, stats) => {
 					if (stats?.isDirectory()) return false;
 					return !filePath.endsWith(".ts") && !filePath.endsWith(".js");
 				},
-				ignoreInitial: true,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
 				},
-			})
-			.on("change", (filePath) => {
-				console.log(`📜 JS changed: ${filePath}`);
-				runTask("node scripts/tasks/build-js.js");
-			})
-			.on("add", (filePath) => {
-				console.log(`📝 JS added: ${filePath}`);
-				runTask("node scripts/tasks/build-js.js");
-			})
-			.on("unlink", (filePath) => {
-				console.log(`🗑️ JS deleted: ${filePath}`);
-				runTask("node scripts/tasks/build-js.js");
-			})
-			.on("ready", () => console.log("✅ JS watcher ready")),
+			},
+			{
+				change: (filePath) => {
+					console.log(`📜 JS changed: ${filePath}`);
+					runTask("node scripts/tasks/build-js.js");
+				},
+				add: (filePath) => {
+					console.log(`📝 JS added: ${filePath}`);
+					runTask("node scripts/tasks/build-js.js");
+				},
+				unlink: (filePath) => {
+					console.log(`🗑️ JS deleted: ${filePath}`);
+					runTask("node scripts/tasks/build-js.js");
+				},
+				ready: () => console.log("✓ JS watcher ready"),
+			}
+		),
 
 		// HTML監視
-		chokidar
-			.watch(htmlPath, {
+		createWatcher(
+			paths.html,
+			{
 				ignored: (filePath, stats) => {
 					if (stats?.isDirectory()) return false;
 					return !filePath.endsWith(".liquid");
 				},
-				ignoreInitial: true,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
 				},
-			})
-			.on("change", (filePath) => {
-				console.log(`📄 HTML changed: ${filePath}`);
-				runTask("node scripts/tasks/build-html.js");
-			})
-			.on("add", (filePath) => {
-				console.log(`📝 HTML added: ${filePath}`);
-				runTask("node scripts/tasks/build-html.js");
-			})
-			.on("unlink", (filePath) => {
-				console.log(`🗑️ HTML deleted: ${filePath}`);
-				runTask("node scripts/tasks/build-html.js");
-			})
-			.on("ready", () => console.log("✅ HTML watcher ready")),
+			},
+			{
+				change: (filePath) => {
+					console.log(`📄 HTML changed: ${filePath}`);
+					runTask("node scripts/tasks/build-html.js");
+				},
+				add: (filePath) => {
+					console.log(`📝 HTML added: ${filePath}`);
+					runTask("node scripts/tasks/build-html.js");
+				},
+				unlink: (filePath) => {
+					console.log(`🗑️ HTML deleted: ${filePath}`);
+					runTask("node scripts/tasks/build-html.js");
+				},
+				ready: () => console.log("✓ HTML watcher ready"),
+			}
+		),
 
 		// 画像監視
-		chokidar
-			.watch(imagesPath, {
-				ignoreInitial: true,
+		createWatcher(
+			paths.images,
+			{
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
 				},
-			})
-			.on("change", (filePath) => {
-				console.log(`🖼️ Image changed: ${filePath}`);
-				runTask("node scripts/tasks/build-images.js");
-			})
-			.on("add", (filePath) => {
-				console.log(`📝 Image added: ${filePath}`);
-				runTask("node scripts/tasks/build-images.js");
-				runTask("node scripts/tasks/build-images-webp.js");
-			})
-			.on("unlink", (filePath) => {
-				console.log(`🗑️ Image deleted: ${filePath}`);
-				// 削除時は対応するWebPファイルも削除する必要がある
-				const webpPath = filePath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-				console.log(`🔄 Checking for WebP: ${webpPath}`);
-				runTask("node scripts/tasks/build-images.js");
-			})
-			.on("ready", () => console.log("✅ Image watcher ready")),
+			},
+			{
+				change: (filePath) => {
+					console.log(`🖼️ Image changed: ${filePath}`);
+					runTask("node scripts/tasks/build-images.js");
+				},
+				add: (filePath) => {
+					console.log(`📝 Image added: ${filePath}`);
+					runTask("node scripts/tasks/build-images.js");
+					// JPG/PNG の場合は WebP 変換も実行
+					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
+						runTask("node scripts/tasks/build-images-webp.js");
+					}
+				},
+				unlink: (filePath) => {
+					console.log(`🗑️ Image deleted: ${filePath}`);
+					runTask("node scripts/tasks/build-images.js");
+				},
+				ready: () => console.log("✓ Image watcher ready"),
+			}
+		),
 
 		// 静的ファイル監視
-		chokidar
-			.watch(publicPath, {
-				ignoreInitial: true,
+		createWatcher(
+			paths.public,
+			{
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
 				},
-			})
-			.on("change", (filePath) => {
-				console.log(`📁 Static file changed: ${filePath}`);
-				runTask("node scripts/tasks/build-copy.js");
-			})
-			.on("add", (filePath) => {
-				console.log(`📝 Static file added: ${filePath}`);
-				runTask("node scripts/tasks/build-copy.js");
-			})
-			.on("unlink", (filePath) => {
-				console.log(`🗑️ Static file deleted: ${filePath}`);
-				runTask("node scripts/tasks/build-copy.js");
-			})
-			.on("ready", () => console.log("✅ Static file watcher ready")),
+			},
+			{
+				change: (filePath) => {
+					console.log(`📁 Static file changed: ${filePath}`);
+					runTask("node scripts/tasks/build-copy.js");
+				},
+				add: (filePath) => {
+					console.log(`📝 Static file added: ${filePath}`);
+					runTask("node scripts/tasks/build-copy.js");
+				},
+				unlink: (filePath) => {
+					console.log(`🗑️ Static file deleted: ${filePath}`);
+					runTask("node scripts/tasks/build-copy.js");
+				},
+				ready: () => console.log("✓ Static file watcher ready"),
+			}
+		),
 	];
 
 	// Ctrl+C で終了
 	process.on("SIGINT", () => {
-		console.log("\nShutting down...");
+		console.log("\n🍺 Shutting down...");
 		watchers.forEach((watcher) => watcher.close());
 		process.exit(0);
 	});
 });
-
-function runTask(command) {
-	console.log(`🔄 ${command}`);
-	const child = spawn(command, { shell: true, stdio: "inherit" });
-
-	child.on("exit", (code) => {
-		if (code === 0) {
-			console.log("✅ Task completed");
-		} else {
-			console.error(`❌ Task failed: ${command}`);
-		}
-	});
-}

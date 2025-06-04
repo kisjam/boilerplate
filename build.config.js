@@ -4,8 +4,8 @@ export default {
 	dist: "dist",
 	assets: {
 		html: "src/assets/html",
-		css: "src/assets/sass",
-		js: "src/assets/js",
+		css: "src/assets/styles",
+		js: "src/assets/scripts",
 		images: "src/assets/images",
 	},
 	public: "src/public",

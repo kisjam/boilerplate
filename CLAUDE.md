@@ -108,8 +108,8 @@
 
 ```
 src/assets/
-├── sass/          # Sassファイル（BEM命名、コンポーネント設計）
-├── js/            # TypeScript（クラスベース、data属性初期化）
+├── styles/        # Sassファイル（BEM命名、コンポーネント設計）
+├── scripts/       # TypeScript（クラスベース、data属性初期化）
 ├── images/        # 画像（自動WebP変換、width/height自動付与）
 └── html/          # LiquidJSテンプレート（Nunjucksから移行）
 ```
@@ -148,9 +148,9 @@ src/assets/
 
 ### 🗂️ 削除候補ファイル（整理時に処理）
 
-- `src/assets/js/modules/disable-button-doubleclick.ts` - 未使用 JS モジュール
-- `src/assets/sass/pages/about/_company.scss` - 空ファイル
-- `src/assets/sass/pages/about/_hoge.scss` - テスト用空ファイル
+- `src/assets/scripts/modules/disable-button-doubleclick.ts` - 未使用 JS モジュール
+- `src/assets/styles/pages/about/_company.scss` - 空ファイル
+- `src/assets/styles/pages/about/_hoge.scss` - テスト用空ファイル
 
 ## 開発コマンド
 
@@ -237,7 +237,7 @@ HTML ビルド時に、img 要素に自動的に width/height 属性を追加し
 
 ### TypeScript モジュール
 
-すべての JavaScript モジュールは`src/assets/js/modules/`にあり、TypeScript の strict モードを使用しています。主要なモジュール：
+すべての JavaScript モジュールは`src/assets/scripts/modules/`にあり、TypeScript の strict モードを使用しています。主要なモジュール：
 
 - `base-module.ts` - すべてのモジュールの基底クラス
 - `throttle.ts` - パフォーマンスユーティリティ（throttle、debounce、rafThrottle）
@@ -337,6 +337,7 @@ git commit -m "バグ修正"        # 具体的でない
 4. 1 つのコミットは 1 つの論理的な変更のみ
 5. 各主要タスクの完了後は必ずコミットを行う
 6. コミット前に`npm run build`を実行し、すべてが正しくビルドされることを確認する
+7. **Claudeの署名は含めない**（`Generated with Claude Code`や`Co-Authored-By: Claude`は不要）
 
 ### Git Add ルール
 
