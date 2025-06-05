@@ -5,7 +5,7 @@
 {% block contents %}
 
 
-<h1>hoge</h1>
+<h1></h1>
 <p class="sample">piyo</p>
 <p class="add">ADD STYLE</p>
 

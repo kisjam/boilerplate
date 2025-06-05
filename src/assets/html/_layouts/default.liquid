@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html lang="ja" id="top">
+	<head>
+		{%- block afterOpeningHead -%}{%- endblock -%}
+		{%- include '_components/_head.liquid' -%}
+		{%- block beforeClosingHead -%}{%- endblock -%}
+	</head>
+
+	<body>
+		{%- block afterOpeningBody -%}{%- endblock -%}
+
+		<div class="site-container">
+			{%- include '_components/_header.liquid' -%}
+			<main class="main">
+				{% block contents %}{% endblock %}
+			</main>
+			{%- include '_components/_footer.liquid' -%}
+		</div>
+
+		{%- block beforeClosingBody -%}{%- endblock -%}
+	</body>
+</html>

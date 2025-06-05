@@ -1,39 +1,7 @@
----
-layout: _layouts/_default.liquid
-pageTitle: 'Breadcrumb Demo'
-pageDescription: 'Demonstrating breadcrumb functionality'
-pageKeywords: 'breadcrumb, demo'
-breadcrumbs:
-  - text: 'Home'
-    url: '/'
-  - text: 'Examples'
-    url: '/examples/'
-  - text: 'Breadcrumb Demo'
-    url: '/examples/breadcrumb-demo.html'
----
+{% layout "_layouts/default.liquid" %}
+{% assign title = "ユニークなページタイトル" %}
+{% assign description = "ユニークなページディスクリプション" %}
 
-<main class="main">
-  <h1>{{ pageTitle }}</h1>
-  
-  <!-- Breadcrumb will be rendered from _partials/_breadcrumb.liquid -->
-  {% include '_partials/_breadcrumb.liquid' %}
-  
-  <section>
-    <h2>Component Include Examples</h2>
-    
-    <!-- Include a button component -->
-    {% include '_button.liquid', text: 'Click Me', type: 'primary' %}
-    
-    <!-- Include a card component with data -->
-    {% include '_card.liquid', 
-       title: 'Sample Card',
-       content: 'This is a card component example.',
-       image: '/assets/images/cat-new.jpg'
-    %}
-    
-    <!-- Include with dynamic data -->
-    {% for item in features %}
-      {% include '_feature-card.liquid', feature: item %}
-    {% endfor %}
-  </section>
-</main>
+{% block contents %}
+
+{% endblock %}
