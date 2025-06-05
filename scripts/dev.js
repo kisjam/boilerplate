@@ -110,14 +110,7 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.css,
 			{
-				ignored: (filePath, stats) => {
-					// ディレクトリは無視しない
-					if (stats?.isDirectory()) return false;
-					// _index.scssファイルは無視（sass-globが生成）
-					if (filePath.includes("_index.scss")) return true;
-					// .scss/.sass以外のファイルを無視
-					return !filePath.endsWith(".scss") && !filePath.endsWith(".sass");
-				},
+				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".scss"),
 				persistent: true,
 				usePolling: true,
 				interval: 100,
@@ -145,10 +138,11 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.js,
 			{
-				ignored: (filePath, stats) => {
-					if (stats?.isDirectory()) return false;
-					return !filePath.endsWith(".ts") && !filePath.endsWith(".js");
-				},
+				ignored: (path, stats) =>
+					stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
+				usePolling: true,
+				interval: 100,
+				binaryInterval: 300,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
@@ -175,10 +169,10 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.html,
 			{
-				ignored: (filePath, stats) => {
-					if (stats?.isDirectory()) return false;
-					return !filePath.endsWith(".liquid");
-				},
+				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".liquid"),
+				usePolling: true,
+				interval: 100,
+				binaryInterval: 300,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
@@ -197,7 +191,10 @@ buildChild.on("exit", async (code) => {
 					console.log(`🗑️ HTML deleted: ${filePath}`);
 					runTask("node scripts/tasks/build-html.js");
 				},
-				ready: () => console.log("✓ HTML watcher ready"),
+				ready: () => {
+					console.log("✓ HTML watcher ready");
+					console.log(`   Watching: ${paths.html} for *.liquid files`);
+				},
 			}
 		),
 
@@ -205,6 +202,9 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.images,
 			{
+				usePolling: true,
+				interval: 100,
+				binaryInterval: 300,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,
@@ -235,6 +235,9 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.public,
 			{
+				usePolling: true,
+				interval: 100,
+				binaryInterval: 300,
 				awaitWriteFinish: {
 					stabilityThreshold: 100,
 					pollInterval: 100,

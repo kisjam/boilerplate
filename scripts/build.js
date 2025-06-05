@@ -46,7 +46,7 @@ cleanChild.on("exit", async (code) => {
 
 	try {
 		await Promise.all(buildPromises);
-		console.log("\n✅ Build completed successfully!");
+		console.log("\n✓ Build completed successfully!");
 		process.exit(0);
 	} catch (error) {
 		console.error("\n❌ Build failed:", error.message);
