@@ -105,7 +105,12 @@ async function processHTMLFile(file, siteData) {
 // メイン処理
 async function main() {
 	try {
-		logger.info("Starting HTML build...");
+		// コマンドライン引数を解析
+		const args = process.argv.slice(2);
+		const singleFileIndex = args.findIndex(arg => arg === '--single' || arg === '-s');
+		const singleFilePath = singleFileIndex !== -1 ? args[singleFileIndex + 1] : null;
+
+		logger.info(singleFilePath ? `Building single file: ${singleFilePath}` : "Starting HTML build...");
 
 		// サイトデータを読み込む
 		const dataPath = path.join(srcDir, "_config/site.json");
@@ -116,12 +121,33 @@ async function main() {
 			process.exit(1);
 		}
 
-		// すべての.liquidファイルを取得
-		const files = await glob("pages/**/*.liquid", { cwd: srcDir });
+		let files;
+		
+		if (singleFilePath) {
+			// 単一ファイルビルドモード
+			const relativePath = path.relative(srcDir, singleFilePath);
+			
+			// pagesディレクトリ内のファイルかチェック
+			if (!relativePath.startsWith('pages/') || !relativePath.endsWith('.liquid')) {
+				logger.error(`Invalid file path: ${singleFilePath}. Must be a .liquid file in pages directory.`);
+				process.exit(1);
+			}
+			
+			// ファイルが存在するかチェック
+			if (!fs.existsSync(singleFilePath)) {
+				logger.error(`File not found: ${singleFilePath}`);
+				process.exit(1);
+			}
+			
+			files = [relativePath];
+		} else {
+			// 全ファイルビルドモード
+			files = await glob("pages/**/*.liquid", { cwd: srcDir });
 
-		if (files.length === 0) {
-			logger.warning("No .liquid files found in pages directory");
-			return;
+			if (files.length === 0) {
+				logger.warning("No .liquid files found in pages directory");
+				return;
+			}
 		}
 
 		// 並列処理でHTMLファイルを生成
@@ -131,7 +157,7 @@ async function main() {
 			5, // 最大5ファイル同時処理
 		);
 
-		logger.success(`HTML build completed - ${files.length} files generated`);
+		logger.success(`HTML build completed - ${files.length} file${files.length !== 1 ? 's' : ''} generated`);
 	} catch (error) {
 		logger.error(`Build failed: ${error.message}`);
 		process.exit(1);
