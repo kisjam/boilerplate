@@ -180,12 +180,31 @@ buildChild.on("exit", async (code) => {
 			},
 			{
 				change: (filePath) => {
-					console.log(`📄 HTML changed: ${filePath}`);
-					runTask("node scripts/tasks/build-html.js");
+					const relativePath = path.relative(paths.html, filePath);
+					const isShared = relativePath.startsWith('_components/') || 
+					                relativePath.startsWith('_layouts/') || 
+					                relativePath.startsWith('_config/');
+					
+					if (isShared) {
+						console.log(`📄 Shared template changed, rebuilding all HTML: ${filePath}`);
+						runTask("node scripts/tasks/build-html.js");
+					} else {
+						console.log(`📄 Page changed, rebuilding single file: ${filePath}`);
+						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
+					}
 				},
 				add: (filePath) => {
-					console.log(`📝 HTML added: ${filePath}`);
-					runTask("node scripts/tasks/build-html.js");
+					const relativePath = path.relative(paths.html, filePath);
+					const isShared = relativePath.startsWith('_components/') || 
+					                relativePath.startsWith('_layouts/');
+					
+					if (isShared) {
+						console.log(`📝 Shared template added, rebuilding all HTML: ${filePath}`);
+						runTask("node scripts/tasks/build-html.js");
+					} else {
+						console.log(`📝 Page added, building single file: ${filePath}`);
+						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
+					}
 				},
 				unlink: (filePath) => {
 					console.log(`🗑️ HTML deleted: ${filePath}`);
@@ -194,6 +213,7 @@ buildChild.on("exit", async (code) => {
 				ready: () => {
 					console.log("✓ HTML watcher ready");
 					console.log(`   Watching: ${paths.html} for *.liquid files`);
+					console.log("   ⚡ Single page build enabled for pages/ directory");
 				},
 			}
 		),
