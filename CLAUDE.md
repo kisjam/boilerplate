@@ -58,3 +58,55 @@
 3. **ビルドプロセス**
    - Sass → PostCSS(Tailwind + Autoprefixer) の順で処理
    - Tailwindはthemeとutilitiesレイヤーのみインポート
+
+## 重要な作業ルール
+
+### Git コミットルール
+
+このプロジェクトは[Conventional Commits](https://www.conventionalcommits.org/)仕様に従います：
+
+```
+<type>: <description>
+```
+
+#### タイプ
+- `feat`: 新機能
+- `fix`: バグ修正
+- `docs`: ドキュメントのみの変更
+- `style`: コードの意味に影響しない変更（空白、フォーマット等）
+- `refactor`: バグ修正や機能追加を伴わないコード変更
+- `perf`: パフォーマンス改善
+- `test`: テストの追加・修正
+- `build`: ビルドシステムや外部依存の変更
+- `chore`: その他の変更
+
+#### 重要なルール
+1. 日本語でコミットメッセージを書く
+2. 1行目は50文字以内
+3. 動詞で始める（追加、修正、変更、削除など）
+4. 1つのコミットは1つの論理的な変更のみ
+5. **Claudeの署名は含めない**
+
+### Git Add ルール
+
+**⚠️ 重要: `git add -A` や `git add .` は使用禁止**
+
+#### 正しい方法
+```bash
+# ✅ 良い例 - 関連ファイルのみを明示的に指定
+git add package.json build.config.js
+git add scripts/tasks/build-css.js
+```
+
+### タスク管理
+
+- TodoWrite/TodoRead ツールを使用してすべてのタスクを追跡する
+- タスクを完了したらすぐに完了とマークする
+- 主要な作業の完了後は git コミットをタスクアイテムとして追加する
+
+### コードスタイル
+
+- 特に要求されない限りコメントを追加しない
+- 既存のコードパターンと規則に従う
+- すべての新しいモジュールで TypeScript strict モードを使用する
+- 適切なエラーハンドリングとクリーンアップメソッドを実装する
