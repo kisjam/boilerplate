@@ -1,26 +1,28 @@
 @use "../global" as *;
 
-.tab {
-	&__list {
-	}
-
-	&__list-item {
-	}
-
-	&__list-button {
-		appearance: none;
-		background: #eef;
-
-		&.-is-active {
-			background: #ccf;
+@layer components {
+	.tab {
+		&__list {
 		}
-	}
 
-	&__content {
-		display: none;
+		&__list-item {
+		}
 
-		&.-is-open {
-			display: block;
+		&__list-button {
+			appearance: none;
+			background: #eef;
+
+			&.-is-active {
+				background: #ccf;
+			}
+		}
+
+		&__content {
+			display: none;
+
+			&.-is-open {
+				display: block;
+			}
 		}
 	}
 }

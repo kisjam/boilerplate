@@ -14,7 +14,7 @@ async function buildCSS() {
 		// 1. sass-globを実行
 		await import("./sass-glob.js");
 
-		// 2. Sassコンパイル
+		// 2. Sassコンパイル（FLOCSS: Foundation, Layout, Component, Page）
 		const result = sass.compile(path.join(config.assets.css, "style.scss"), {
 			style: isProd ? "compressed" : "expanded",
 			sourceMap: !isProd,
@@ -25,24 +25,30 @@ async function buildCSS() {
 		const outputDir = path.join(config.dist, "assets/css");
 		await fs.mkdir(outputDir, { recursive: true });
 
-		// 4. PostCSS処理
+		// 4. SassのCSS末尾にTailwindテーマ・ユーティリティを追加
+		const cssWithTailwind = `${result.css}\n\n/* Tailwind CSS - Theme & Utilities */\n@import "tailwindcss/theme";\n@import "tailwindcss/utilities";`;
+
+		// 5. PostCSS処理（Tailwind + Autoprefixer）
 		const processed = await postcss([
 			tailwindcss,
 			autoprefixer({
 				cascade: false,
 				grid: "autoplace",
 			}),
-		]).process(result.css, {
+		]).process(cssWithTailwind, {
 			from: path.join(config.assets.css, "style.scss"),
 			to: path.join(outputDir, "style.css"),
 			map: isProd ? false : { inline: false },
 		});
 
-		// 5. ファイルに書き込み
+		// 6. 最終CSSを書き込み
 		await fs.writeFile(path.join(outputDir, "style.css"), processed.css);
 
 		if (processed.map && !isProd) {
-			await fs.writeFile(path.join(outputDir, "style.css.map"), processed.map.toString());
+			await fs.writeFile(
+				path.join(outputDir, "style.css.map"),
+				processed.map.toString()
+			);
 		}
 
 		console.log("✓ CSS build completed");

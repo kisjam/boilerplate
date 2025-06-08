@@ -37,6 +37,28 @@
 - **デバウンス**: 100ms で連続変更をまとめて処理
 - **単一ページビルド**: `build-html.js --single <file>` で個別ページビルド可能
 
+### 🎨 CSS アーキテクチャ (2025-06-08)
+
+#### Tailwind CSS v4 + FLOCSS 統合完了
+
+**構成:**
+- **FLOCSS**: Foundation, Layout, Component, Page レイヤー（Utilities除外）
+- **Tailwind CSS v4**: ユーティリティクラスのみ使用（preflight無効）
+- **カスケードレイヤー**: `@layer base, layouts, components, pages, utilities;`
+
+**重要設定:**
+1. **tailwind.config.js**
+   - `corePlugins.preflight: false` - Sassのリセット使用
+   - screensのみ定義（v4では多くの設定がCSS変数に移行）
+
+2. **CSS変数カスタマイズ**
+   - `src/assets/styles/_layers.scss`で`@theme`ディレクティブ使用
+   - `--spacing: 8px` - 基本単位を4pxから8pxに変更
+
+3. **ビルドプロセス**
+   - Sass → PostCSS(Tailwind + Autoprefixer) の順で処理
+   - Tailwindはthemeとutilitiesレイヤーのみインポート
+
 ## 📋 タスク管理（統合 TODO）
 
 ### 🔴 優先度: 高
@@ -114,6 +136,7 @@
 - **PERF-005**: 画像 width/height 自動付与機能
 - **BUILD-003**: ES モジュール（ESM）全面移行
 - **CLEAN-002**: プロジェクト整理手順書作成
+- **CSS-001**: Tailwind CSS v4 + FLOCSS カスケードレイヤー統合
 
 ## 🏗️ プロジェクトアーキテクチャ
 
@@ -136,7 +159,7 @@ src/assets/
 ### 主要技術スタック
 
 - **JS**: TypeScript + Vite（Webpack から移行）
-- **CSS**: Sass + PostCSS + Autoprefixer
+- **CSS**: Sass + PostCSS + Autoprefixer + Tailwind CSS v4
 - **HTML**: LiquidJS + 画像最適化
 - **画像**: Sharp（WebP 変換 + サイズ自動検出）
 - **品質**: Biome（ESLint から移行）
@@ -149,6 +172,7 @@ src/assets/
 - **ビルドシステム (2025-06-02)**: Gulp → Node.js scripts + Vite
 - **テンプレート (既存)**: Nunjucks → LiquidJS
 - **品質ツール (既存)**: ESLint/Prettier → Biome
+- **CSS アーキテクチャ (2025-06-08)**: FLOCSS + Tailwind CSS v4 カスケードレイヤー統合
 
 ### ✅ 完了した主要改善
 
@@ -157,6 +181,8 @@ src/assets/
 - 画像 width/height 自動付与機能実装
 - ドキュメント統合（TODO.md, ARCHITECTURE.md 統合）
 - プロジェクト整理手順書作成
+- Tailwind CSS v4 統合（ユーティリティクラスのみ、カスケードレイヤー実装）
+- CSS変数による spacing カスタマイズ（8px基準）
 
 ### 📊 現在のメトリクス
 

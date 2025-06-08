@@ -1,9 +1,11 @@
 @use "../global" as *;
 
-.sa-fade {
-	@include sa-transition;
+@layer components {
+	.sa-fade {
+		@include sa-transition;
 
-	&.-run {
-		@include sa-run;
+		&.-run {
+			@include sa-run;
+		}
 	}
 }

@@ -21,6 +21,8 @@
 	}
 }
 
-.table {
-	@include table;
+@layer components {
+	.table {
+		@include table;
+	}
 }

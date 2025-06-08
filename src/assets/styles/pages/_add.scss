@@ -1,4 +1,6 @@
-.add {
-	color: #f00;
+@layer pages {
+	.add {
+		color: #f00;
+	}
+	/* watcher test */
 }
-/* watcher test */

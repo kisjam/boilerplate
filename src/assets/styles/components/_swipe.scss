@@ -1,13 +1,15 @@
 @use "../global" as *;
 
-.swipe {
-	@include mq(md) {
-		overflow: auto;
-	}
-
-	&__inner {
+@layer components {
+	.swipe {
 		@include mq(md) {
-			width: $width-content;
+			overflow: auto;
+		}
+
+		&__inner {
+			@include mq(md) {
+				width: $width-content;
+			}
 		}
 	}
 }

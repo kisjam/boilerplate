@@ -1,5 +1,7 @@
 @use "../global" as *;
 
-.site-container {
-	padding-top: var(--height-header);
+@layer layouts {
+	.site-container {
+		padding-top: var(--height-header);
+	}
 }

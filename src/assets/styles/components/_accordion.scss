@@ -1,50 +1,52 @@
 @use "../global" as *;
 
-.accordion {
-	$this: &;
-	background: #f00;
+@layer components {
+	.accordion {
+		$this: &;
+		background: #f00;
 
-	&__header {
-		position: relative;
-		display: block;
-		padding: 16px;
-		cursor: pointer;
+		&__header {
+			position: relative;
+			display: block;
+			padding: 16px;
+			cursor: pointer;
 
-		&::after,
-		&::before {
-			content: "";
-			position: absolute;
-			right: 16px;
-			top: 50%;
-			width: 14px;
-			height: 2px;
-			background-color: #aaf;
-			transition: transform 0.3s ease;
+			&::after,
+			&::before {
+				content: "";
+				position: absolute;
+				right: 16px;
+				top: 50%;
+				width: 14px;
+				height: 2px;
+				background-color: #aaf;
+				transition: transform 0.3s ease;
 
-			#{$this}[open] & {
-				transform: rotate(360deg);
+				#{$this}[open] & {
+					transform: rotate(360deg);
+				}
+			}
+
+			&::before {
+				transform: rotate(90deg);
+			}
+
+			&::after {
+				transform: rotate(180deg);
+			}
+
+			&::-webkit-details-marker {
+				display: none;
 			}
 		}
 
-		&::before {
-			transform: rotate(90deg);
-		}
-
-		&::after {
-			transform: rotate(180deg);
-		}
-
-		&::-webkit-details-marker {
+		&__body {
+			border-top: 1px solid #ddf;
+			padding: 16px;
 			display: none;
 		}
-	}
 
-	&__body {
-		border-top: 1px solid #ddf;
-		padding: 16px;
-		display: none;
-	}
-
-	&[open] {
+		&[open] {
+		}
 	}
 }
