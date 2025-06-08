@@ -27,26 +27,26 @@
 			$bp2: nth($point, 2);
 		}
 
-		@media screen and (min-width: $bp1) and (max-width: $bp2) {
+		@media (width >= $bp1) and (width <= $bp2) {
 			@content;
 		}
 	} @else if ($min) {
 		@if (map.get(var.$breakpoints, $point)) {
-			@media screen and (min-width: (map.get(var.$breakpoints, $point)+1)) {
+			@media (width >= (map.get(var.$breakpoints, $point)+1)) {
 				@content;
 			}
 		} @else {
-			@media screen and (min-width: $point) {
+			@media (width >= $point) {
 				@content;
 			}
 		}
 	} @else {
 		@if (map.get(var.$breakpoints, $point)) {
-			@media screen and (max-width: map.get(var.$breakpoints, $point)) {
+			@media (width <= map.get(var.$breakpoints, $point)) {
 				@content;
 			}
 		} @else {
-			@media screen and (max-width: $point) {
+			@media (width <= $point) {
 				@content;
 			}
 		}
