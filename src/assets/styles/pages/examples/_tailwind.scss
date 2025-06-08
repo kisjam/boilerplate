@@ -1,0 +1,16 @@
+@use "../../global" as *;
+
+@layer pages {
+	.p-examples-tailwind-responsive {
+		&__md {
+			@include mq(md) {
+				color: #f00;
+			}
+		}
+		&__md-min {
+			@include mq(md, true) {
+				color: #f00;
+			}
+		}
+	}
+}

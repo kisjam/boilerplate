@@ -1,0 +1,190 @@
+{% layout "_layouts/default.liquid" %}
+
+{% block contents %}
+<div class="site-container">
+	<div class="mx-auto max-w-6xl p-8">
+		<h1 class="text-4xl font-bold mb-8">Tailwind CSS v4</h1>
+
+		<!-- Spacing -->
+		<section class="mb-12">
+			<h2 class="text-2xl font-semibold mb-6 pb-2 border-b">Spacing (8px基準)</h2>
+
+			<div class="space-y-8">
+				<!-- Padding -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Padding</h3>
+					<div class="space-y-2">
+						<div class="bg-gray-100">
+							<div class="bg-blue-500 text-white p-1">.p-1 (8px)</div>
+						</div>
+						<div class="bg-gray-100">
+							<div class="bg-blue-500 text-white p-2">.p-2 (16px)</div>
+						</div>
+						<div class="bg-gray-100">
+							<div class="bg-blue-500 text-white p-[24px]">.p-[24px]</div>
+						</div>
+						<div class="bg-gray-100">
+							<div class="bg-blue-500 text-white pt-4">.pt-4 (32px)</div>
+						</div>
+
+					</div>
+				</div>
+
+				<!-- Margin -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Margin</h3>
+					<div class="bg-gray-100 p-4">
+						<div class="bg-white mb-2 p-2">.mb-2 (16px)</div>
+						<div class="bg-white mt-4 p-2">.mt-4 (32px)</div>
+						<div class="bg-white mx-auto p-2 w-32 text-center">.mx-auto</div>
+					</div>
+				</div>
+
+				<!-- Gap -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Gap (Flexbox/Grid)</h3>
+					<div class="flex gap-2 bg-gray-100 p-4">
+						<div class="bg-white p-2">gap-2</div>
+						<div class="bg-white p-2">=</div>
+						<div class="bg-white p-2">16px</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Typography -->
+		<section class="mb-12">
+			<h2 class="text-2xl font-semibold mb-6 pb-2 border-b">Typography</h2>
+
+			<div class="space-y-8">
+				<!-- Font Size -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Font Size</h3>
+					<div class="space-y-2">
+						<p class="text-xs">.text-xs - Extra small text</p>
+						<p class="text-sm">.text-sm - Small text</p>
+						<p class="text-base">.text-base - Base text (default)</p>
+						<p class="text-lg">.text-lg - Large text</p>
+						<p class="text-xl">.text-xl - Extra large text</p>
+						<p class="text-2xl">.text-2xl - 2x large text</p>
+						<p class="text-4xl">.text-4xl - 4x large text</p>
+					</div>
+				</div>
+
+				<!-- Font Weight -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Font Weight</h3>
+					<div class="space-y-2">
+						<p class="font-light">.font-light - Light weight</p>
+						<p class="font-normal">.font-normal - Normal weight</p>
+						<p class="font-medium">.font-medium - Medium weight</p>
+						<p class="font-semibold">.font-semibold - Semibold weight</p>
+						<p class="font-bold">.font-bold - Bold weight</p>
+					</div>
+				</div>
+
+				<!-- Text Color -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Text Color</h3>
+					<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+						<p class="text-black">.text-black</p>
+						<p class="text-gray-500">.text-gray-500</p>
+						<p class="text-blue-500">.text-blue-500</p>
+						<p class="text-red-500">.text-red-500</p>
+					</div>
+				</div>
+
+				<!-- Text Alignment -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Text Alignment</h3>
+					<div class="space-y-2">
+						<p class="text-left bg-gray-100 p-2">.text-left</p>
+						<p class="text-center bg-gray-100 p-2">.text-center</p>
+						<p class="text-right bg-gray-100 p-2">.text-right</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<!-- Responsive Design -->
+		<section class="mb-12">
+			<h2 class="text-2xl font-semibold mb-6 pb-2 border-b">Responsive Design</h2>
+
+			<div class="bg-gray-100 p-6 rounded">
+				<p class="mb-4">ブレークポイント: <code>md:768px</code>, <code>lg:1024px</code>, <code>xl:1290px</code></p>
+
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					<div class="bg-white p-4">
+						<p class="font-medium">Mobile First</p>
+						<code class="text-sm">.grid-cols-1</code>
+					</div>
+					<div class="bg-white p-4">
+						<p class="font-medium">Tablet (md:)</p>
+						<code class="text-sm">md:grid-cols-2</code>
+					</div>
+					<div class="bg-white p-4">
+						<p class="font-medium">Desktop (lg:)</p>
+						<code class="text-sm">lg:grid-cols-3</code>
+					</div>
+				</div>
+			</div>
+			<div class="bg-gray-200 p-6 rounded md:bg-blue-500">
+				<p>md:bg-blue-500</p>
+			</div>
+			<div class="bg-gray-200 p-6 rounded max-md:bg-blue-500">
+				<p>max-md:bg-blue-500</p>
+			</div>
+			<div class="bg-gray-200 p-6 rounded md:max-xl:bg-blue-500">
+				<p>md:max-xl:bg-blue-500</p>
+			</div>
+			<div class="p-examples-tailwind-responsive__md">
+				<p>p-examples-tailwind-responsive__md mq(md) { ... }</p>
+			</div>
+			<div class="p-examples-tailwind-responsive__md-min">
+				<p>p-examples-tailwind-responsive__md mq(md, true) { ... }</p>
+			</div>
+		</section>
+
+		<!-- Sizing -->
+		<section class="mb-12">
+			<h2 class="text-2xl font-semibold mb-6 pb-2 border-b">Sizing</h2>
+
+			<div class="space-y-8">
+				<!-- Width -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Width</h3>
+					<div class="space-y-2">
+						<div class="bg-gray-200 p-2 w-full">.w-full (100%)</div>
+						<div class="bg-gray-200 p-2 w-1/2">.w-1/2 (50%)</div>
+						<div class="bg-gray-200 p-2 w-64">.w-64 (16rem)</div>
+						<div class="bg-gray-200 p-2 w-auto inline-block">.w-auto</div>
+						<div class="bg-gray-200 p-2 w-[100px]">.w-[100px]</div>
+					</div>
+				</div>
+
+				<!-- Max Width -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Max Width</h3>
+					<div class="space-y-2">
+						<div class="bg-gray-200 p-2 max-w-sm mx-auto">.max-w-sm</div>
+						<div class="bg-gray-200 p-2 max-w-md mx-auto">.max-w-md</div>
+						<div class="bg-gray-200 p-2 max-w-lg mx-auto">.max-w-lg</div>
+					</div>
+				</div>
+
+				<!-- Height -->
+				<div>
+					<h3 class="text-lg font-medium mb-3">Height</h3>
+					<div class="flex gap-4 items-end">
+						<div class="bg-gray-200 p-2 h-16 flex items-center">.h-16</div>
+						<div class="bg-gray-200 p-2 h-24 flex items-center">.h-24</div>
+						<div class="bg-gray-200 p-2 h-32 flex items-center">.h-32</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+</div>
+{% endblock %}
