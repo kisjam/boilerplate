@@ -1,27 +1,27 @@
 {% if breadcrumbs %}
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <ul class="breadcrumb__list">
-      {% for crumb in breadcrumbs %}
-        <li class="breadcrumb__item">
-          {% if forloop.last %}
-            <span class="breadcrumb__current" aria-current="page">{{ crumb.text }}</span>
-          {% else %}
-            <a href="{{ crumb.url }}" class="breadcrumb__link">{{ crumb.text }}</a>
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
+<nav class="breadcrumb" aria-label="Breadcrumb">
+	<ul class="breadcrumb__list">
+		{% for crumb in breadcrumbs %}
+		<li class="breadcrumb__item">
+			{% if forloop.last %}
+			<span class="breadcrumb__current" aria-current="page">{{ crumb.text }}</span>
+			{% else %}
+			<a href="{{ crumb.url }}" class="breadcrumb__link">{{ crumb.text }}</a>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+</nav>
 {% elsif pageTitle %}
-  <!-- Fallback: Simple breadcrumb if no array provided -->
-  <nav class="breadcrumb" aria-label="Breadcrumb">
-    <ul class="breadcrumb__list">
-      <li class="breadcrumb__item">
-        <a href="/" class="breadcrumb__link">Home</a>
-      </li>
-      <li class="breadcrumb__item">
-        <span class="breadcrumb__current" aria-current="page">{{ pageTitle }}</span>
-      </li>
-    </ul>
-  </nav>
+<!-- Fallback: Simple breadcrumb if no array provided -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+	<ul class="breadcrumb__list">
+		<li class="breadcrumb__item">
+			<a href="/" class="breadcrumb__link">Home</a>
+		</li>
+		<li class="breadcrumb__item">
+			<span class="breadcrumb__current" aria-current="page">{{ pageTitle }}</span>
+		</li>
+	</ul>
+</nav>
 {% endif %}

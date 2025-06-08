@@ -4,81 +4,37 @@
 
 {% block contents %}
 
-
-<h1>hoge</h1>
-<p class="sample">piyo</p>
-<p class="add">ADD STYLE</p>
-
-<div class="accordion-item">
-	<button type="button" id="faq-01" data-accordion="faq-01-panel">
-		Accordion 1
-	</button>
-	<div id="faq-01-panel">
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<button type="button" data-accordion-close>
-			閉じるボタン
-		</button>
+<div class="p-top">
+	<div class="p-top__mv">
+		<div class="p-top-mv">
+			<h1 class="p-top-mv__title">Boilerplate</h1>
+		</div>
 	</div>
-</div>
-<div class="accordion-item">
-	<button type="button" id="faq-02" data-accordion="faq-02-panel">
-		Accordion 2
-	</button>
-
-	<div id="faq-02-panel">
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<button type="button" data-accordion-close>
-			閉じるボタン
-		</button>
+	<div class="p-top__todo">
+		<div class="p-top-todo">
+			<div class="p-top-todo__item"></div>
+		</div>
 	</div>
-</div>
-<div class="accordion-item">
-	<button type="button" id="faq-03" data-accordion="faq-03-panel">
-		Accordion 3
-	</button>
+	<div class="p-top__examples">
+		<h2>Liquid</h2>
+		block全部
+		パンクズ
+		<h2 class="c-title-fill">CSS</h2>
+		<ul class="c-list-disc">
+			<li class="c-list-disc__item"><a href="/examples/tailwind.html">Tailwind</a></li>
+		</ul>
 
-	<div id="faq-03-panel">
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<p>Panel 1</p>
-		<button type="button" data-accordion-close>
-			閉じるボタン
-		</button>
 	</div>
-</div>
-
-<p>
-<label class="input-checkbox">
-	<input type="checkbox" class="input-checkbox__input" name="piyo">
-	<span class="input-checkbox__label">チェックボックスのサンプル</span>
-</label>
-</p>
-
-<!-- Tailwindのテスト -->
-<div class="p-4 m-4 bg-gray-100 rounded-lg mt-8">
-	<h2 class="text-2xl font-bold mb-2">Tailwind CSS Test</h2>
-	<p class="text-gray-700">Tailwindのユーティリティクラスが使えます。</p>
-	<button class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+	<div class="p-top__components">
+		タブ
+		アコーディオン
+		トグル
+		アンカー
+		フォーム
+		カルーセル
 		ボタン
-	</button>
-	<div class="hidden">hiddenクラスも使えます（非表示）</div>
-	<div class="block mt-2">blockクラスの要素</div>
-	<div class="flex gap-4 mt-4">
-		<div class="flex-1 p-2 bg-gray-200 rounded">Flex Item 1</div>
-		<div class="flex-1 p-2 bg-gray-200 rounded">Flex Item 2</div>
+		カード
+		モーダル
 	</div>
 </div>
 
