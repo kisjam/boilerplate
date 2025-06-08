@@ -93,9 +93,8 @@ async function processHTMLFile(file, siteData) {
 
 		// ファイルを書き込む
 		await fsPromises.writeFile(outputPath, html);
-		logger.success(
-			`Built: ${getRelativePath(srcDir, inputPath)} -> ${getRelativePath(distDir, outputPath)}`,
-		);
+		// ログを簡略化（ファイル名のみ表示）
+		logger.success(`Built: ${path.basename(outputPath)}`);
 	} catch (err) {
 		logger.error(`Failed to build ${file}: ${err.message}`);
 		throw err;
@@ -108,9 +107,17 @@ async function main() {
 		// コマンドライン引数を解析
 		const args = process.argv.slice(2);
 		const singleFileIndex = args.findIndex(arg => arg === '--single' || arg === '-s');
-		const singleFilePath = singleFileIndex !== -1 ? args[singleFileIndex + 1] : null;
+		let singleFilePath = null;
+		
+		if (singleFileIndex !== -1) {
+			// --single 以降のすべての引数を結合（スペースを含むパス対応）
+			const remainingArgs = args.slice(singleFileIndex + 1);
+			singleFilePath = remainingArgs.join(' ');
+		}
 
-		logger.info(singleFilePath ? `Building single file: ${singleFilePath}` : "Starting HTML build...");
+		if (!singleFilePath) {
+			logger.info("Starting HTML build...");
+		}
 
 		// サイトデータを読み込む
 		const dataPath = path.join(srcDir, "_config/site.json");
@@ -125,7 +132,18 @@ async function main() {
 		
 		if (singleFilePath) {
 			// 単一ファイルビルドモード
-			const relativePath = path.relative(srcDir, singleFilePath);
+			let relativePath;
+			let fullPath;
+			
+			// 相対パスか絶対パスかを判定
+			if (path.isAbsolute(singleFilePath)) {
+				fullPath = singleFilePath;
+				relativePath = path.relative(srcDir, singleFilePath);
+			} else {
+				// 相対パスの場合、srcDirからの相対パスとして処理
+				relativePath = singleFilePath;
+				fullPath = path.join(srcDir, singleFilePath);
+			}
 			
 			// pagesディレクトリ内のファイルかチェック
 			if (!relativePath.startsWith('pages/') || !relativePath.endsWith('.liquid')) {
@@ -134,8 +152,8 @@ async function main() {
 			}
 			
 			// ファイルが存在するかチェック
-			if (!fs.existsSync(singleFilePath)) {
-				logger.error(`File not found: ${singleFilePath}`);
+			if (!fs.existsSync(fullPath)) {
+				logger.error(`File not found: ${fullPath}`);
 				process.exit(1);
 			}
 			
@@ -157,7 +175,10 @@ async function main() {
 			5, // 最大5ファイル同時処理
 		);
 
-		logger.success(`HTML build completed - ${files.length} file${files.length !== 1 ? 's' : ''} generated`);
+		// 単一ファイルの場合は省略、複数ファイルの場合は簡潔に
+		if (files.length > 1) {
+			logger.success(`HTML build completed - ${files.length} files`);
+		}
 	} catch (error) {
 		logger.error(`Build failed: ${error.message}`);
 		process.exit(1);

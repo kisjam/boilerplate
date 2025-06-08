@@ -20,13 +20,10 @@ const projectRoot = path.resolve(__dirname, "..");
  * @param {string} command - 実行するコマンド
  */
 function runTask(command) {
-	console.log(`🔄 ${command}`);
 	const child = spawn(command, { shell: true, stdio: "inherit" });
 
 	child.on("exit", (code) => {
-		if (code === 0) {
-			console.log("✓ Task completed");
-		} else {
+		if (code !== 0) {
 			console.error(`❌ Task failed: ${command}`);
 		}
 	});
@@ -118,15 +115,12 @@ buildChild.on("exit", async (code) => {
 			},
 			{
 				change: (filePath) => {
-					console.log(`🎨 CSS changed: ${filePath}`);
 					runTask("node scripts/tasks/build-css.js");
 				},
 				add: (filePath) => {
-					console.log(`📝 CSS added: ${filePath}`);
 					runTask("node scripts/tasks/build-css.js");
 				},
 				unlink: (filePath) => {
-					console.log(`🗑️ CSS deleted: ${filePath}`);
 					runTask("node scripts/tasks/build-css.js");
 				},
 				error: (error) => console.error(`❌ CSS watcher error: ${error}`),
@@ -150,15 +144,16 @@ buildChild.on("exit", async (code) => {
 			},
 			{
 				change: (filePath) => {
-					console.log(`📜 JS changed: ${filePath}`);
 					runTask("node scripts/tasks/build-js.js");
+					// Tailwind CSS再ビルド（クラス変更対応）
+					runTask("node scripts/tasks/build-css.js");
 				},
 				add: (filePath) => {
-					console.log(`📝 JS added: ${filePath}`);
 					runTask("node scripts/tasks/build-js.js");
+					// Tailwind CSS再ビルド（クラス変更対応）
+					runTask("node scripts/tasks/build-css.js");
 				},
 				unlink: (filePath) => {
-					console.log(`🗑️ JS deleted: ${filePath}`);
 					runTask("node scripts/tasks/build-js.js");
 				},
 				ready: () => console.log("✓ JS watcher ready"),
@@ -186,12 +181,12 @@ buildChild.on("exit", async (code) => {
 					                relativePath.startsWith('_config/');
 					
 					if (isShared) {
-						console.log(`📄 Shared template changed, rebuilding all HTML: ${filePath}`);
 						runTask("node scripts/tasks/build-html.js");
 					} else {
-						console.log(`📄 Page changed, rebuilding single file: ${filePath}`);
 						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
 					}
+					// Tailwind CSS再ビルド（クラス変更対応）
+					runTask("node scripts/tasks/build-css.js");
 				},
 				add: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
@@ -199,15 +194,14 @@ buildChild.on("exit", async (code) => {
 					                relativePath.startsWith('_layouts/');
 					
 					if (isShared) {
-						console.log(`📝 Shared template added, rebuilding all HTML: ${filePath}`);
 						runTask("node scripts/tasks/build-html.js");
 					} else {
-						console.log(`📝 Page added, building single file: ${filePath}`);
 						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
 					}
+					// Tailwind CSS再ビルド（クラス変更対応）
+					runTask("node scripts/tasks/build-css.js");
 				},
 				unlink: (filePath) => {
-					console.log(`🗑️ HTML deleted: ${filePath}`);
 					runTask("node scripts/tasks/build-html.js");
 				},
 				ready: () => {
@@ -232,11 +226,9 @@ buildChild.on("exit", async (code) => {
 			},
 			{
 				change: (filePath) => {
-					console.log(`🖼️ Image changed: ${filePath}`);
 					runTask("node scripts/tasks/build-images.js");
 				},
 				add: (filePath) => {
-					console.log(`📝 Image added: ${filePath}`);
 					runTask("node scripts/tasks/build-images.js");
 					// JPG/PNG の場合は WebP 変換も実行
 					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
@@ -244,7 +236,6 @@ buildChild.on("exit", async (code) => {
 					}
 				},
 				unlink: (filePath) => {
-					console.log(`🗑️ Image deleted: ${filePath}`);
 					runTask("node scripts/tasks/build-images.js");
 				},
 				ready: () => console.log("✓ Image watcher ready"),
@@ -265,15 +256,12 @@ buildChild.on("exit", async (code) => {
 			},
 			{
 				change: (filePath) => {
-					console.log(`📁 Static file changed: ${filePath}`);
 					runTask("node scripts/tasks/build-copy.js");
 				},
 				add: (filePath) => {
-					console.log(`📝 Static file added: ${filePath}`);
 					runTask("node scripts/tasks/build-copy.js");
 				},
 				unlink: (filePath) => {
-					console.log(`🗑️ Static file deleted: ${filePath}`);
 					runTask("node scripts/tasks/build-copy.js");
 				},
 				ready: () => console.log("✓ Static file watcher ready"),
