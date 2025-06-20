@@ -13,6 +13,6 @@ export default {
 	sassGlob: {
 		// 自動的に_index.scssを生成するディレクトリ
 		// Note: foundationは手動管理のため含めない
-		directories: ["global", "components", "layouts", "pages"],
+		directories: ["global", "components", "layouts", "pages", "utilities"],
 	},
 };

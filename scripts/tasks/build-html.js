@@ -2,7 +2,6 @@
 import fs from "node:fs";
 import path from "node:path";
 import { glob } from "glob";
-import yaml from "js-yaml";
 import { Liquid } from "liquidjs";
 import config from "../../build.config.js";
 import { processImageSizes } from "../lib/image-size-processor.js";
@@ -20,30 +19,6 @@ const engine = new Liquid({
 	cache: false,
 });
 
-// Front matterを解析
-function parseFrontMatter(content) {
-	const frontMatterRegex = /^---\s*\n([\s\S]*?)\n---\s*\n([\s\S]*)$/;
-	const match = content.match(frontMatterRegex);
-
-	if (!match) {
-		return { frontMatter: {}, content };
-	}
-
-	try {
-		const frontMatter = yaml.load(match[1]);
-		return {
-			frontMatter: frontMatter || {},
-			content: match[2],
-		};
-	} catch (e) {
-		logger.warning(`Failed to parse YAML front matter: ${e.message}`);
-		return {
-			frontMatter: {},
-			content,
-		};
-	}
-}
-
 // HTMLファイルを処理
 async function processHTMLFile(file, siteData) {
 	const inputPath = path.join(srcDir, file);
@@ -54,36 +29,16 @@ async function processHTMLFile(file, siteData) {
 		// テンプレートの内容を読み込む
 		const templateContent = await fsPromises.readFile(inputPath, "utf8");
 
-		// Front matterを解析
-		const { frontMatter, content } = parseFrontMatter(templateContent);
-
 		// テンプレートデータを準備
 		const filenameParts = file.replace("pages/", "").replace(".liquid", "").split("/");
 
 		const data = {
 			...siteData,
-			...frontMatter,
 			filename: filenameParts,
-			content: content,
 		};
 
-		let html;
-		if (frontMatter.layout) {
-			// コンテンツをレンダリング
-			const renderedContent = await engine.parseAndRender(content, data);
-
-			// レイアウトでラップ
-			const layoutPath = path.join(srcDir, frontMatter.layout);
-			const layoutContent = await fsPromises.readFile(layoutPath, "utf8");
-			const layoutData = {
-				...data,
-				content: renderedContent,
-			};
-			html = await engine.parseAndRender(layoutContent, layoutData);
-		} else {
-			// スタンドアロンでレンダリング
-			html = await engine.parseAndRender(content, data);
-		}
+		// スタンドアロンでレンダリング
+		const html = await engine.parseAndRender(templateContent, data)
 
 		// 画像にwidth/height属性を追加
 		html = processImageSizes(html, process.cwd());

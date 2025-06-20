@@ -18,17 +18,28 @@ cleanChild.on("exit", async (code) => {
 		process.exit(code);
 	}
 
-	// ビルドタスクを並列実行
-	const tasks = [
+	// sass-globを実行
+	console.log("\n2. Running sass-glob...");
+	const sassGlobChild = spawn("node scripts/tasks/sass-glob.js", { shell: true, stdio: "inherit" });
+	
+	sassGlobChild.on("exit", async (sassGlobCode) => {
+		if (sassGlobCode !== 0) {
+			console.error("sass-glob failed");
+			process.exit(sassGlobCode);
+		}
+
+		// ビルドタスクを並列実行
+		const tasks = [
 		"node scripts/tasks/build-copy.js",
 		`node scripts/tasks/build-js.js${isProd ? " --prod" : ""}`,
 		`node scripts/tasks/build-css.js${isProd ? " --prod" : ""}`,
+		"node scripts/tasks/build-tailwind.js",
 		"node scripts/tasks/build-images.js",
 		"node scripts/tasks/build-images-webp.js",
 		"node scripts/tasks/build-html.js",
 	];
 
-	console.log("\n2. Building assets in parallel...");
+		console.log("\n3. Building assets in parallel...");
 
 	const buildPromises = tasks.map((task, index) => {
 		console.log(`   ${index + 1}. ${task}`);
@@ -44,12 +55,13 @@ cleanChild.on("exit", async (code) => {
 		});
 	});
 
-	try {
-		await Promise.all(buildPromises);
-		console.log("\n✓ Build completed successfully!");
-		process.exit(0);
-	} catch (error) {
-		console.error("\n❌ Build failed:", error.message);
-		process.exit(1);
-	}
+		try {
+			await Promise.all(buildPromises);
+			console.log("\n✓ Build completed successfully!");
+			process.exit(0);
+		} catch (error) {
+			console.error("\n❌ Build failed:", error.message);
+			process.exit(1);
+		}
+	});
 });

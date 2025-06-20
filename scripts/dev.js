@@ -66,11 +66,10 @@ const buildChild = spawn("node scripts/build.js", {
 
 buildChild.on("exit", async (code) => {
 	if (code !== 0) {
-		console.error("❌ Initial build failed");
-		process.exit(code);
+		console.error("❌ Initial build failed - continuing with development server");
+	} else {
+		console.log("✓ Initial build completed");
 	}
-
-	console.log("✓ Initial build completed");
 
 	// BrowserSyncを統合されたserve.jsから起動
 	try {
@@ -118,9 +117,13 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-css.js");
 				},
 				add: (filePath) => {
+					// SCSSファイルの追加時はsass-globを実行
+					runTask("node scripts/tasks/sass-glob.js");
 					runTask("node scripts/tasks/build-css.js");
 				},
 				unlink: (filePath) => {
+					// SCSSファイルの削除時はsass-globを実行
+					runTask("node scripts/tasks/sass-glob.js");
 					runTask("node scripts/tasks/build-css.js");
 				},
 				error: (error) => console.error(`❌ CSS watcher error: ${error}`),
@@ -146,12 +149,12 @@ buildChild.on("exit", async (code) => {
 				change: (filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 					// Tailwind CSS再ビルド（クラス変更対応）
-					runTask("node scripts/tasks/build-css.js");
+					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				add: (filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 					// Tailwind CSS再ビルド（クラス変更対応）
-					runTask("node scripts/tasks/build-css.js");
+					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				unlink: (filePath) => {
 					runTask("node scripts/tasks/build-js.js");
@@ -186,7 +189,7 @@ buildChild.on("exit", async (code) => {
 						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
 					}
 					// Tailwind CSS再ビルド（クラス変更対応）
-					runTask("node scripts/tasks/build-css.js");
+					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				add: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
@@ -199,7 +202,7 @@ buildChild.on("exit", async (code) => {
 						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
 					}
 					// Tailwind CSS再ビルド（クラス変更対応）
-					runTask("node scripts/tasks/build-css.js");
+					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				unlink: (filePath) => {
 					runTask("node scripts/tasks/build-html.js");
