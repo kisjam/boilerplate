@@ -15,4 +15,8 @@ export default {
 		// Note: foundationは手動管理のため含めない
 		directories: ["global", "components", "layouts", "pages", "utilities"],
 	},
+	tailwind: {
+		// Tailwind CSSの出力先
+		outputFile: "utilities/_tailwind.scss",
+	},
 };

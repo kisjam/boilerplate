@@ -93,6 +93,7 @@ buildChild.on("exit", async (code) => {
 		js: path.resolve(projectRoot, config.assets.js),
 		html: path.resolve(projectRoot, config.assets.html),
 		images: path.resolve(projectRoot, config.assets.images),
+		icons: path.resolve(projectRoot, "src/assets/icons"),
 		public: path.resolve(projectRoot, config.public),
 	};
 
@@ -101,6 +102,7 @@ buildChild.on("exit", async (code) => {
 	console.log(`   JS: ${paths.js} (*.ts, *.js)`);
 	console.log(`   HTML: ${paths.html} (*.liquid)`);
 	console.log(`   Images: ${paths.images}`);
+	console.log(`   Icons: ${paths.icons} (*.svg)`);
 	console.log(`   Static: ${paths.public}`);
 
 	const watchers = [
@@ -270,6 +272,33 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
 				ready: () => console.log("✓ Static file watcher ready"),
+			}
+		),
+
+		// アイコン監視
+		createWatcher(
+			paths.icons,
+			{
+				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".svg"),
+				usePolling: true,
+				interval: 100,
+				binaryInterval: 300,
+				awaitWriteFinish: {
+					stabilityThreshold: 100,
+					pollInterval: 100,
+				},
+			},
+			{
+				change: (_filePath) => {
+					runTask("node scripts/tasks/build-svg-sprite.js");
+				},
+				add: (_filePath) => {
+					runTask("node scripts/tasks/build-svg-sprite.js");
+				},
+				unlink: (_filePath) => {
+					runTask("node scripts/tasks/build-svg-sprite.js");
+				},
+				ready: () => console.log("✓ Icon watcher ready"),
 			}
 		),
 	];

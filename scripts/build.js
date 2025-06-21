@@ -36,6 +36,7 @@ cleanChild.on("exit", async (code) => {
 			"node scripts/tasks/build-tailwind.js",
 			"node scripts/tasks/build-images.js",
 			"node scripts/tasks/build-images-webp.js",
+			"node scripts/tasks/build-svg-sprite.js",
 			"node scripts/tasks/build-html.js",
 		];
 
