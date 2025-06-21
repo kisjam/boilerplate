@@ -17,6 +17,9 @@
 			},
 			"suspicious": {
 				"noExplicitAny": "warn"
+			},
+			"complexity": {
+				"noForEach": "off"
 			}
 		},
 		"ignore": ["dist", "node_modules", "*.min.js"]
