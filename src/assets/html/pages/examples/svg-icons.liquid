@@ -1,0 +1,118 @@
+{% layout "_layouts/default.liquid" %}
+
+{% block contents %}
+<div class="p-8 max-w-6xl mx-auto">
+	<h1 class="text-4xl font-bold mb-8">SVGアイコンシステム</h1>
+
+	<section class="mb-12">
+		<h2 class="text-2xl font-semibold mb-6">基本的な使い方</h2>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<!-- 基本サイズ -->
+			<div class="bg-gray-100 p-6 rounded">
+				<h3 class="font-medium mb-4">デフォルトサイズ（24px）</h3>
+				<div class="flex items-center gap-4">
+					{% include "_components/icon.liquid", name: "menu" %}
+					{% include "_components/icon.liquid", name: "close" %}
+					{% include "_components/icon.liquid", name: "arrow-right" %}
+				</div>
+			</div>
+
+			<!-- サイズ変更 -->
+			<div class="bg-gray-100 p-6 rounded">
+				<h3 class="font-medium mb-4">サイズバリエーション</h3>
+				<div class="flex items-center gap-4">
+					{% include "_components/icon.liquid", name: "menu", size: "16" %}
+					{% include "_components/icon.liquid", name: "menu", size: "32" %}
+					{% include "_components/icon.liquid", name: "menu", size: "48" %}
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="mb-12">
+		<h2 class="text-2xl font-semibold mb-6">色の変更</h2>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+			<!-- Tailwindクラスで色変更 -->
+			<div class="bg-gray-100 p-6 rounded">
+				<h3 class="font-medium mb-4">Tailwindクラスで色変更</h3>
+				<div class="flex items-center gap-4">
+					{% include "_components/icon.liquid", name: "arrow-right", class: "text-blue-500" %}
+					{% include "_components/icon.liquid", name: "arrow-right", class: "text-red-500" %}
+					{% include "_components/icon.liquid", name: "arrow-right", class: "text-gray-500" %}
+				</div>
+			</div>
+
+			<!-- ホバー効果 -->
+			<div class="bg-gray-100 p-6 rounded">
+				<h3 class="font-medium mb-4">ホバー効果</h3>
+				<div class="flex items-center gap-4">
+					<button class="p-2 hover:text-blue-500 transition-colors">
+						{% include "_components/icon.liquid", name: "menu", size: "32" %}
+					</button>
+					<button class="p-2 hover:text-red-500 transition-colors">
+						{% include "_components/icon.liquid", name: "close", size: "32" %}
+					</button>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="mb-12">
+		<h2 class="text-2xl font-semibold mb-6">実装例</h2>
+
+		<div class="space-y-6">
+			<!-- ボタン内のアイコン -->
+			<div>
+				<h3 class="font-medium mb-4">ボタン内での使用</h3>
+				<div class="flex gap-4">
+					<button class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+						{% include "icon", name: "arrow-right", size: "20" %}
+						次へ進む
+					</button>
+
+					<button class="p-2 rounded-full bg-gray-200 hover:bg-gray-300">
+						{% include "icon", name: "close", size: "24", label: "閉じる" %}
+					</button>
+				</div>
+			</div>
+
+			<!-- ナビゲーション -->
+			<div>
+				<h3 class="font-medium mb-4">ナビゲーション</h3>
+				<nav class="flex gap-6">
+					<a href="#" class="flex items-center gap-2 hover:text-blue-500">
+						{% include "icon", name: "menu", size: "20" %}
+						メニュー
+					</a>
+					<a href="#" class="flex items-center gap-2 hover:text-blue-500">
+						{% include "icon", name: "arrow-right", size: "20" %}
+						詳細を見る
+					</a>
+				</nav>
+			</div>
+		</div>
+	</section>
+
+	<section class="mb-12">
+		<h2 class="text-2xl font-semibold mb-6">実装方法</h2>
+
+		<div class="bg-gray-100 p-6 rounded">
+			<pre class="text-sm"><code>{% raw %}
+<!-- 基本的な使い方 -->
+{% include "icon", name: "menu" %}
+
+<!-- サイズ指定 -->
+{% include "icon", name: "menu", size: "32" %}
+
+<!-- クラス追加 -->
+{% include "icon", name: "menu", class: "text-blue-500" %}
+
+<!-- アクセシビリティラベル -->
+{% include "icon", name: "menu", label: "メニューを開く" %}
+{% endraw %}</code></pre>
+		</div>
+	</section>
+</div>
+{% endblock %}
