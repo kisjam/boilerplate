@@ -66,7 +66,9 @@ const buildChild = spawn("node scripts/build.js", {
 
 buildChild.on("exit", async (code) => {
 	if (code !== 0) {
-		console.error("❌ Initial build failed - continuing with development server");
+		console.error(
+			"❌ Initial build failed - continuing with development server"
+		);
 	} else {
 		console.log("✓ Initial build completed");
 	}
@@ -113,15 +115,15 @@ buildChild.on("exit", async (code) => {
 				binaryInterval: 300,
 			},
 			{
-				change: (filePath) => {
+				change: (_filePath) => {
 					runTask("node scripts/tasks/build-css.js");
 				},
-				add: (filePath) => {
+				add: (_filePath) => {
 					// SCSSファイルの追加時はsass-globを実行
 					runTask("node scripts/tasks/sass-glob.js");
 					runTask("node scripts/tasks/build-css.js");
 				},
-				unlink: (filePath) => {
+				unlink: (_filePath) => {
 					// SCSSファイルの削除時はsass-globを実行
 					runTask("node scripts/tasks/sass-glob.js");
 					runTask("node scripts/tasks/build-css.js");
@@ -146,17 +148,17 @@ buildChild.on("exit", async (code) => {
 				},
 			},
 			{
-				change: (filePath) => {
+				change: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
-				add: (filePath) => {
+				add: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
-				unlink: (filePath) => {
+				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 				},
 				ready: () => console.log("✓ JS watcher ready"),
@@ -179,10 +181,11 @@ buildChild.on("exit", async (code) => {
 			{
 				change: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
-					const isShared = relativePath.startsWith('_components/') || 
-					                relativePath.startsWith('_layouts/') || 
-					                relativePath.startsWith('_config/');
-					
+					const isShared =
+						relativePath.startsWith("_components/") ||
+						relativePath.startsWith("_layouts/") ||
+						relativePath.startsWith("_config/");
+
 					if (isShared) {
 						runTask("node scripts/tasks/build-html.js");
 					} else {
@@ -193,9 +196,10 @@ buildChild.on("exit", async (code) => {
 				},
 				add: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
-					const isShared = relativePath.startsWith('_components/') || 
-					                relativePath.startsWith('_layouts/');
-					
+					const isShared =
+						relativePath.startsWith("_components/") ||
+						relativePath.startsWith("_layouts/");
+
 					if (isShared) {
 						runTask("node scripts/tasks/build-html.js");
 					} else {
@@ -204,13 +208,11 @@ buildChild.on("exit", async (code) => {
 					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
-				unlink: (filePath) => {
+				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-html.js");
 				},
 				ready: () => {
 					console.log("✓ HTML watcher ready");
-					console.log(`   Watching: ${paths.html} for *.liquid files`);
-					console.log("   ⚡ Single page build enabled for pages/ directory");
 				},
 			}
 		),
@@ -228,7 +230,7 @@ buildChild.on("exit", async (code) => {
 				},
 			},
 			{
-				change: (filePath) => {
+				change: (_filePath) => {
 					runTask("node scripts/tasks/build-images.js");
 				},
 				add: (filePath) => {
@@ -238,7 +240,7 @@ buildChild.on("exit", async (code) => {
 						runTask("node scripts/tasks/build-images-webp.js");
 					}
 				},
-				unlink: (filePath) => {
+				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-images.js");
 				},
 				ready: () => console.log("✓ Image watcher ready"),
@@ -258,13 +260,13 @@ buildChild.on("exit", async (code) => {
 				},
 			},
 			{
-				change: (filePath) => {
+				change: (_filePath) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
-				add: (filePath) => {
+				add: (_filePath) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
-				unlink: (filePath) => {
+				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
 				ready: () => console.log("✓ Static file watcher ready"),

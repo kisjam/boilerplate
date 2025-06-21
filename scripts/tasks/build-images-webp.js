@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import crypto from "node:crypto";
-import { promises as fs } from "node:fs";
-import fsSync from "node:fs";
+import fsSync, { promises as fs } from "node:fs";
 import path from "node:path";
 import { glob } from "glob";
 import sharp from "sharp";

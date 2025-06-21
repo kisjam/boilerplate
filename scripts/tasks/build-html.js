@@ -5,7 +5,7 @@ import { glob } from "glob";
 import { Liquid } from "liquidjs";
 import config from "../../build.config.js";
 import { processImageSizes } from "../lib/image-size-processor.js";
-import { ensureDir, getRelativePath, logger, processInParallel, readJSON } from "../utils.js";
+import { ensureDir, logger, processInParallel, readJSON } from "../utils.js";
 
 const fsPromises = fs.promises;
 
@@ -38,7 +38,7 @@ async function processHTMLFile(file, siteData) {
 		};
 
 		// スタンドアロンでレンダリング
-		const html = await engine.parseAndRender(templateContent, data)
+		let html = await engine.parseAndRender(templateContent, data);
 
 		// 画像にwidth/height属性を追加
 		html = processImageSizes(html, process.cwd());
@@ -61,13 +61,13 @@ async function main() {
 	try {
 		// コマンドライン引数を解析
 		const args = process.argv.slice(2);
-		const singleFileIndex = args.findIndex(arg => arg === '--single' || arg === '-s');
+		const singleFileIndex = args.findIndex((arg) => arg === "--single" || arg === "-s");
 		let singleFilePath = null;
-		
+
 		if (singleFileIndex !== -1) {
 			// --single 以降のすべての引数を結合（スペースを含むパス対応）
 			const remainingArgs = args.slice(singleFileIndex + 1);
-			singleFilePath = remainingArgs.join(' ');
+			singleFilePath = remainingArgs.join(" ");
 		}
 
 		if (!singleFilePath) {
@@ -84,12 +84,12 @@ async function main() {
 		}
 
 		let files;
-		
+
 		if (singleFilePath) {
 			// 単一ファイルビルドモード
 			let relativePath;
 			let fullPath;
-			
+
 			// 相対パスか絶対パスかを判定
 			if (path.isAbsolute(singleFilePath)) {
 				fullPath = singleFilePath;
@@ -99,19 +99,21 @@ async function main() {
 				relativePath = singleFilePath;
 				fullPath = path.join(srcDir, singleFilePath);
 			}
-			
+
 			// pagesディレクトリ内のファイルかチェック
-			if (!relativePath.startsWith('pages/') || !relativePath.endsWith('.liquid')) {
-				logger.error(`Invalid file path: ${singleFilePath}. Must be a .liquid file in pages directory.`);
+			if (!relativePath.startsWith("pages/") || !relativePath.endsWith(".liquid")) {
+				logger.error(
+					`Invalid file path: ${singleFilePath}. Must be a .liquid file in pages directory.`,
+				);
 				process.exit(1);
 			}
-			
+
 			// ファイルが存在するかチェック
 			if (!fs.existsSync(fullPath)) {
 				logger.error(`File not found: ${fullPath}`);
 				process.exit(1);
 			}
-			
+
 			files = [relativePath];
 		} else {
 			// 全ファイルビルドモード

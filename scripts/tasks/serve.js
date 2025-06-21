@@ -5,7 +5,7 @@ import config from "../../build.config.js";
 const browserSync = bs.create();
 
 // コマンドライン引数の処理
-const args = process.argv.slice(2);
+const _args = process.argv.slice(2);
 
 // APIとして使える形に変更
 export function startServer(customOptions = {}) {
