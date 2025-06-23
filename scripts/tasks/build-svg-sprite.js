@@ -46,6 +46,24 @@ async function buildSVGSprite() {
 		// スプライトファイルを書き込み
 		await fs.writeFile(path.join(outputDir, "sprite.svg"), sprite);
 		
+		// Sass変数ファイルを生成
+		const iconNames = [];
+		for (const file of svgFiles) {
+			const fileName = path.basename(file, ".svg");
+			iconNames.push(fileName);
+		}
+		
+		let sassContent = "// [AUTO-GENERATED] This file is managed by build-svg-sprite.js\n";
+		for (const name of iconNames) {
+			const varName = `$icon-${name}`;
+			const varValue = `/assets/icons/sprite.svg#icon-${name}`;
+			sassContent += `${varName}: "${varValue}";\n`;
+		}
+		
+		// Sass変数ファイルを書き込み
+		const sassVarPath = path.join(config.assets.css, "global/variable-sass/_icons.scss");
+		await fs.writeFile(sassVarPath, sassContent);
+		
 		const totalTime = Math.round(performance.now() - startTime);
 		console.log(`✓ SVG sprite generated (${totalTime}ms) - ${svgFiles.length} icons`);
 	} catch (error) {
