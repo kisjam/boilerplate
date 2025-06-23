@@ -18,9 +18,9 @@ cleanChild.on("exit", async (code) => {
 		process.exit(code);
 	}
 
-	// sass-globを実行
+	// sass-globを実行（初回は強制更新）
 	console.log("\n2. Running sass-glob...");
-	const sassGlobChild = spawn("node scripts/tasks/sass-glob.js", { shell: true, stdio: "inherit" });
+	const sassGlobChild = spawn("node scripts/tasks/sass-glob.js --force", { shell: true, stdio: "inherit" });
 
 	sassGlobChild.on("exit", async (sassGlobCode) => {
 		if (sassGlobCode !== 0) {

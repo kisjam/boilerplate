@@ -15,9 +15,7 @@ async function buildCSS() {
 
 		// CSSディレクトリ内のファイルを読み取り
 		const files = await fs.readdir(config.assets.css);
-		const scssFiles = files.filter(
-			(file) => file.endsWith(".scss") && !file.startsWith("_")
-		);
+		const scssFiles = files.filter((file) => file.endsWith(".scss") && !file.startsWith("_"));
 
 		if (scssFiles.length === 0) {
 			console.log("No SCSS files found to compile");
@@ -44,7 +42,7 @@ async function buildCSS() {
 		}
 
 		const totalTime = Math.round(performance.now() - startTime);
-		const fileList = scssFiles.map(f => f.replace(".scss", ".css")).join(", ");
+		const fileList = scssFiles.map((f) => f.replace(".scss", ".css")).join(", ");
 		console.log(`✓ CSS build completed (${totalTime}ms) - ${fileList}`);
 	} catch (error) {
 		console.error("CSS build failed:", error);

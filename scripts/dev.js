@@ -66,9 +66,7 @@ const buildChild = spawn("node scripts/build.js", {
 
 buildChild.on("exit", async (code) => {
 	if (code !== 0) {
-		console.error(
-			"❌ Initial build failed - continuing with development server"
-		);
+		console.error("❌ Initial build failed - continuing with development server");
 	} else {
 		console.log("✓ Initial build completed");
 	}
@@ -110,7 +108,13 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.css,
 			{
-				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".scss"),
+				ignored: (filePath, stats) => {
+					// 削除されたファイルの場合statsはundefinedになるので、パスのみで判定
+					if (!stats) {
+						return !filePath.endsWith(".scss");
+					}
+					return stats.isFile() && !filePath.endsWith(".scss");
+				},
 				persistent: true,
 				usePolling: true,
 				interval: 100,
@@ -132,15 +136,14 @@ buildChild.on("exit", async (code) => {
 				},
 				error: (error) => console.error(`❌ CSS watcher error: ${error}`),
 				ready: () => console.log("✓ CSS watcher ready"),
-			}
+			},
 		),
 
 		// JS監視
 		createWatcher(
 			paths.js,
 			{
-				ignored: (path, stats) =>
-					stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
+				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
 				usePolling: true,
 				interval: 100,
 				binaryInterval: 300,
@@ -164,7 +167,7 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-js.js");
 				},
 				ready: () => console.log("✓ JS watcher ready"),
-			}
+			},
 		),
 
 		// HTML監視
@@ -199,8 +202,7 @@ buildChild.on("exit", async (code) => {
 				add: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
 					const isShared =
-						relativePath.startsWith("_components/") ||
-						relativePath.startsWith("_layouts/");
+						relativePath.startsWith("_components/") || relativePath.startsWith("_layouts/");
 
 					if (isShared) {
 						runTask("node scripts/tasks/build-html.js");
@@ -216,7 +218,7 @@ buildChild.on("exit", async (code) => {
 				ready: () => {
 					console.log("✓ HTML watcher ready");
 				},
-			}
+			},
 		),
 
 		// 画像監視
@@ -246,7 +248,7 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-images.js");
 				},
 				ready: () => console.log("✓ Image watcher ready"),
-			}
+			},
 		),
 
 		// 静的ファイル監視
@@ -272,7 +274,7 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
 				ready: () => console.log("✓ Static file watcher ready"),
-			}
+			},
 		),
 
 		// アイコン監視
@@ -299,7 +301,7 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-svg-sprite.js");
 				},
 				ready: () => console.log("✓ Icon watcher ready"),
-			}
+			},
 		),
 	];
 

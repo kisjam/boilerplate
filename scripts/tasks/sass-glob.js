@@ -7,6 +7,9 @@ const sassDir = config.assets.css;
 // 設定ファイルからディレクトリリストを取得
 const directories = config.sassGlob?.directories || ["global", "components", "layouts", "pages"];
 
+// 強制更新フラグ（コマンドライン引数で指定）
+const forceUpdate = process.argv.includes("--force");
+
 // 同一階層の_*.scssファイルとサブディレクトリを取得してindex.scssを生成
 function generateIndexFile(dirPath) {
 	const fullPath = path.join(sassDir, dirPath);
@@ -44,25 +47,28 @@ function generateIndexFile(dirPath) {
 	// 両方を結合
 	const allImports = [...scssFiles, ...subDirs].join("\n");
 
-	if (allImports) {
-		const indexPath = path.join(fullPath, "_index.scss");
-		const content = `// [AUTO-GENERATED] This file is managed by sass-glob.js\n\n${allImports}\n`;
+	// _index.scssファイルを生成（コンテンツが空でも更新する）
+	const indexPath = path.join(fullPath, "_index.scss");
+	const content = allImports 
+		? `// [AUTO-GENERATED] This file is managed by sass-glob.js\n\n${allImports}\n`
+		: `// [AUTO-GENERATED] This file is managed by sass-glob.js\n`;
 
-		// 既存の内容と比較して変更がある場合のみ書き込み
-		let needsUpdate = true;
-		if (fs.existsSync(indexPath)) {
-			const existingContent = fs.readFileSync(indexPath, "utf8");
-			needsUpdate = existingContent !== content;
-		}
+	// 既存の内容と比較して変更がある場合のみ書き込み
+	let needsUpdate = forceUpdate; // 強制更新フラグがある場合は常に更新
+	if (!forceUpdate && fs.existsSync(indexPath)) {
+		const existingContent = fs.readFileSync(indexPath, "utf8");
+		needsUpdate = existingContent !== content;
+	} else if (!fs.existsSync(indexPath)) {
+		needsUpdate = true; // ファイルが存在しない場合は常に作成
+	}
 
-		if (needsUpdate) {
-			fs.writeFileSync(indexPath, content);
-			const fileCount = scssFiles.length;
-			const dirCount = subDirs.length;
-			console.log(
-				`Generated: ${path.relative(".", indexPath)} (${fileCount} files, ${dirCount} directories)`,
-			);
-		}
+	if (needsUpdate) {
+		fs.writeFileSync(indexPath, content);
+		const fileCount = scssFiles.length;
+		const dirCount = subDirs.length;
+		console.log(
+			`Generated: ${path.relative(".", indexPath)} (${fileCount} files, ${dirCount} directories)`,
+		);
 	}
 }
 
@@ -74,10 +80,7 @@ function generateIndexFileRecursive(dirPath) {
 		return;
 	}
 
-	// 現在のディレクトリの_index.scssを生成
-	generateIndexFile(dirPath);
-
-	// サブディレクトリを処理
+	// 先にサブディレクトリを処理（深い階層から）
 	const entries = fs.readdirSync(fullPath, { withFileTypes: true });
 	entries.forEach((entry) => {
 		if (entry.isDirectory() && !entry.name.startsWith(".")) {
@@ -85,6 +88,9 @@ function generateIndexFileRecursive(dirPath) {
 			generateIndexFileRecursive(subDirPath);
 		}
 	});
+
+	// その後で現在のディレクトリの_index.scssを生成
+	generateIndexFile(dirPath);
 }
 
 let hasUpdates = false;
