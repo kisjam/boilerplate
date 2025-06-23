@@ -1,33 +1,3 @@
-@use "../mixin/" as *;
-@use "../variable-sass/" as v;
+// [AUTO-GENERATED] This file is managed by sass-glob.js
 
-:root {
-	// コアデザイントークン
-	--color-text: #{v.$color-black};
-	--color-background: #{v.$color-white};
-
-	// フォント
-	--font-sans: #{v.$ff-noto-sans};
-	--font-serif: #{v.$ff-noto-serif};
-	--font-size-base: #{v.$base-font-size}px;
-
-	// レイアウト
-	--padding-side: 80px;
-	--height-header: 120px;
-	--width-content: #{v.$width-content};
-
-	--leading-trim: calc((1em - 1lh) / 2);
-	--outer: min(
-		calc((((100vw - var(--scrollbar, 0)) - var(--width-content)) / 2) * -1),
-		calc(var(--padding-side) * -1)
-	);
-
-	@include mq(lg) {
-		--padding-side: 40px;
-	}
-
-	@include mq(md) {
-		--padding-side: 24px;
-		--height-header: 64px;
-	}
-}
+@forward "_shared";

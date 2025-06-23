@@ -1,29 +1,4 @@
-$base-font-size: 16;
+// [AUTO-GENERATED] This file is managed by sass-glob.js
 
-$ff-noto-sans: "Noto Sans JP", sans-serif;
-$ff-noto-serif: "Noto Serif JP", serif;
-
-$fw-thin: 100;
-$fw-light: 300;
-$fw-regular: 400;
-$fw-medium: 500;
-$fw-semibold: 600;
-$fw-bold: 700;
-$fw-black: 900;
-
-$color-black: #333;
-$color-white: #fff;
-
-$breakpoints: (
-	2xl: 1536px,
-	xl: 1280px,
-	lg: 1024px,
-	md: 768px,
-	sm: 640px,
-);
-
-$width-content: 1280px;
-$viewport-pc: 1920;
-$viewport-sp: 375;
-
-$duration: 300ms;
+@forward "_icons";
+@forward "_shared";
