@@ -1,17 +1,20 @@
 @use "../../global" as *;
 
 @layer components {
-	.input-textarea {
-		appearance: none;
-		max-width: 100%;
+	.c-input-textarea {
+		&__field {
+			width: 100%;
+			min-height: 240px;
+			border-radius: $radius-s;
+			background-color: #ebebeb;
+			border: none;
+			font-size: rem(14);
+			padding: 6px 10px;
 
-		&:focus {
-			outline: none;
-		}
-
-		&:disabled {
-			opacity: 0.2;
-			pointer-events: none;
+			@include mq(md) {
+				font-size: rem(16);
+				min-height: 220px;
+			}
 		}
 	}
 }

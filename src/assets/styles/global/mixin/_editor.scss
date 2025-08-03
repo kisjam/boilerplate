@@ -1,0 +1,235 @@
+@use "../variable-sass/" as v;
+@use "responsive" as r;
+@use "font" as f;
+
+@mixin p {
+	line-height: v.$lh-l;
+
+	@include r.mq(md) {
+		font-size: f.rem(14);
+	}
+
+	&:not(:first-child) {
+		margin-top: 24px;
+	}
+}
+@mixin h2 {
+	--space: 0;
+	margin-top: var(--space);
+	border-left: 8px solid v.$color-orange;
+	padding-left: 12px;
+	line-height: v.$lh;
+	font-weight: v.$fw-medium;
+	font-size: f.rem(22);
+
+	@include r.mq(md) {
+		border-left-width: 6px;
+		font-size: f.rem(20);
+	}
+
+	&:not(:first-child) {
+		--space: 48px;
+	}
+
+	& + h3.wp-block-heading,
+	& + h4.wp-block-heading {
+		--space: 24px;
+	}
+}
+
+@mixin h3 {
+	--space: 0;
+	margin-top: var(--space);
+	border-bottom: 1px solid v.$color-orange;
+	padding-bottom: 12px;
+	font-size: f.rem(18);
+	line-height: v.$lh;
+	font-weight: v.$fw-medium;
+
+	@include r.mq(md) {
+		font-size: f.rem(16);
+		padding-bottom: 8px;
+	}
+
+	& + h4.wp-block-heading {
+		--space: 24px;
+	}
+
+	&:not(:first-child) {
+		--space: 48px;
+	}
+}
+
+@mixin h4 {
+	--space: 0;
+	position: relative;
+	margin-top: var(--space);
+	border-bottom: 1px solid #ffdfc9;
+	padding-bottom: 12px;
+	font-size: f.rem(16);
+	line-height: v.$lh;
+	font-weight: v.$fw-medium;
+
+	@include r.mq(md) {
+		font-size: f.rem(14);
+		padding-bottom: 8px;
+	}
+
+	&:not(:first-child) {
+		--space: 48px;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -1px;
+		width: 44px;
+		height: 1px;
+		background-color: v.$color-orange;
+	}
+}
+@mixin image {
+	--space: 0;
+	margin-top: var(--space);
+
+	&:not(:first-child) {
+		--space: 24px;
+	}
+}
+@mixin ul {
+	--space: 0;
+	margin-top: var(--space);
+	list-style: disc;
+	padding-left: 24px;
+
+	@include r.mq(md) {
+		font-size: f.rem(14);
+	}
+
+	&:not(:first-child) {
+		--space: 24px;
+	}
+}
+@mixin ol {
+	--space: 0;
+	margin-top: var(--space);
+	list-style: decimal;
+	padding-left: 24px;
+
+	@include r.mq(md) {
+		font-size: f.rem(14);
+	}
+
+	&:not(:first-child) {
+		--space: 24px;
+	}
+}
+@mixin quote {
+	--space: 0;
+	position: relative;
+	margin-top: var(--space);
+	padding: 32px 48px;
+	background-color: v.$color-white;
+	border-radius: v.$radius;
+
+	@include r.mq(md) {
+		padding: 24px 16px;
+	}
+
+	&:not(:first-child) {
+		--space: 40px;
+		@include r.mq(md) {
+			--space: 24px;
+		}
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 20px;
+		top: 20px;
+		width: 33px;
+		height: 29px;
+		background-image: url("data:image/svg+xml,%3Csvg width='33' height='29' viewBox='0 0 33 29' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.1' d='M11.4133 0L13.907 4.128C8.6319 7.68 5.85051 11.328 5.7546 17.472C6.04233 17.376 6.33006 17.376 6.7137 17.376C9.68691 17.376 12.3724 19.296 12.3724 22.752C12.3724 26.496 10.0706 28.608 6.7137 28.608C2.49366 28.608 0 25.152 0 19.008C0 10.464 4.02822 4.32 11.4133 0ZM30.2117 0L32.7053 4.128C27.5262 7.68 24.7448 11.328 24.6489 17.472C24.9366 17.376 25.2243 17.376 25.5121 17.376C28.4853 17.376 31.2667 19.296 31.2667 22.752C31.2667 26.496 28.8689 28.608 25.5121 28.608C21.292 28.608 18.8943 25.152 18.8943 19.008C18.8943 10.464 22.9225 4.32 30.2117 0Z' fill='%23222222'/%3E%3C/svg%3E");
+		background-size: contain;
+		background-repeat: no-repeat;
+
+		@include r.mq(md) {
+			left: 10px;
+			top: 10px;
+		}
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+		width: 33px;
+		height: 29px;
+		background-image: url("data:image/svg+xml,%3Csvg width='33' height='29' viewBox='0 0 33 29' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath opacity='0.1' d='M21.5867 29L19.093 24.872C24.3681 21.32 27.1495 17.672 27.2454 11.528C26.9577 11.624 26.6699 11.624 26.2863 11.624C23.3131 11.624 20.6276 9.704 20.6276 6.24799C20.6276 2.504 22.9295 0.391996 26.2863 0.391996C30.5063 0.391996 33 3.848 33 9.992C33 18.536 28.9718 24.68 21.5867 29ZM2.78834 29L0.294686 24.872C5.47383 21.32 8.25522 17.672 8.35113 11.528C8.0634 11.624 7.77567 11.624 7.48793 11.624C4.51472 11.624 1.73334 9.70399 1.73334 6.24799C1.73334 2.504 4.13109 0.391994 7.48793 0.391994C11.708 0.391995 14.1057 3.848 14.1057 9.992C14.1057 18.536 10.0775 24.68 2.78834 29Z' fill='%23222222'/%3E%3C/svg%3E");
+		background-size: contain;
+		background-repeat: no-repeat;
+
+		@include r.mq(md) {
+			right: 10px;
+			bottom: 10px;
+		}
+	}
+
+	p {
+		font-weight: v.$fw-medium;
+		font-size: f.rem(18);
+		line-height: v.$lh-l;
+
+		@include r.mq(md) {
+			font-size: f.rem(16);
+		}
+	}
+
+	cite {
+		margin-top: 16px;
+		display: block;
+		color: #707070;
+	}
+}
+@mixin table {
+	--space: 0;
+	margin-top: var(--space);
+
+	table {
+		width: 100%;
+		border-left: 1px solid #d9d9d9;
+		border-top: 1px solid #d9d9d9;
+		background-color: v.$color-white;
+	}
+
+	th,
+	td {
+		padding: 16px;
+		@include r.mq(md) {
+			padding: 8px;
+			font-size: f.rem(14);
+		}
+	}
+
+	th {
+		border-right: 1px solid #d9d9d9;
+		border-bottom: 1px solid #d9d9d9;
+		background-color: #e9edee;
+	}
+
+	td {
+		border-right: 1px solid #d9d9d9;
+		border-bottom: 1px solid #d9d9d9;
+	}
+
+	&:not(:first-child) {
+		--space: 40px;
+
+		@include r.mq(md) {
+			--space: 24px;
+		}
+	}
+}

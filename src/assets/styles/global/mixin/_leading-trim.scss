@@ -1,6 +1,3 @@
-// Leading Trimミックスイン
-// 注意: display: block flowは実験的な仕様で、ブラウザサポートが限定的です
-
 @mixin leading-trim {
 	&::before,
 	&::after {

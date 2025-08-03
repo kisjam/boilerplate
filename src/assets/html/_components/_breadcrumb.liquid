@@ -1,27 +1,33 @@
 {% if breadcrumbs %}
-<nav class="breadcrumb" aria-label="Breadcrumb">
-	<ul class="breadcrumb__list">
+<nav class="c-breadcrumb">
+	<ol class="c-breadcrumb__list">
 		{% for crumb in breadcrumbs %}
-		<li class="breadcrumb__item">
+		<li class="c-breadcrumb__list-item">
 			{% if forloop.last %}
-			<span class="breadcrumb__current" aria-current="page">{{ crumb.text }}</span>
+			<a href="{{ crumb.url }}" class="c-breadcrumb__list-link" aria-current="page">{{ crumb.text }}</a>
 			{% else %}
-			<a href="{{ crumb.url }}" class="breadcrumb__link">{{ crumb.text }}</a>
+			<a href="{{ crumb.url }}" class="c-breadcrumb__list-link">{{ crumb.text }}</a>
 			{% endif %}
 		</li>
 		{% endfor %}
-	</ul>
+	</ol>
 </nav>
-{% elsif pageTitle %}
-<!-- Fallback: Simple breadcrumb if no array provided -->
-<nav class="breadcrumb" aria-label="Breadcrumb">
-	<ul class="breadcrumb__list">
-		<li class="breadcrumb__item">
-			<a href="/" class="breadcrumb__link">Home</a>
-		</li>
-		<li class="breadcrumb__item">
-			<span class="breadcrumb__current" aria-current="page">{{ pageTitle }}</span>
-		</li>
-	</ul>
-</nav>
+
+<!-- https://schema.org/BreadcrumbList -->
+<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement": [
+		{% for crumb in breadcrumbs %}
+		{
+			"@type": "ListItem",
+			"position": {{ forloop.index }},
+			"name": "{{ crumb.text }}",
+			"item": "{{ site.url }}{{ crumb.url }}"
+		}{% unless forloop.last %},{% endunless %}
+		{% endfor %}
+	]
+}
+</script>
 {% endif %}

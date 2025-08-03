@@ -1,0 +1,127 @@
+@use "global" as *;
+
+@layer layouts {
+	.l-site-cv {
+		position: relative;
+		z-index: 1;
+		padding-top: 96px;
+
+		@include mq(md, true) {
+			padding-inline: 30px;
+		}
+
+		@include mq(md) {
+			padding-top: 40px;
+		}
+
+		&::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 85px;
+			z-index: -1;
+			background-color: #f9f8fb;
+		}
+
+		&__inner {
+			display: flex;
+			align-items: flex-end;
+			border-radius: $radius;
+			background: 50% 50% no-repeat;
+			background-size: cover;
+			color: $color-white;
+			box-shadow: 0px 14px 24px 0px rgba(0, 0, 0, 0.25);
+			padding: 0 var(--padding-side);
+
+			@include mq(md, true) {
+				aspect-ratio: 1476 / 553;
+				background-image: url(../images/common/cv_bg_cover.webp);
+			}
+			@include mq(md) {
+				aspect-ratio: 375 / 427;
+				padding: vw(61, $viewport-sp) 24px 0;
+				background-image: url(../images/common/cv_bg_cover_sp.webp);
+			}
+		}
+		&__body {
+			max-width: $width-content;
+			width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+			padding-bottom: vw(106, $viewport-pc);
+			@include mq(md) {
+				padding-bottom: vw(191, $viewport-sp);
+			}
+		}
+
+		&__title {
+			font-weight: $fw-bold;
+			line-height: 1;
+			font-size: max(vw(36, $viewport-pc), rem(16));
+
+			@include mq(md) {
+				font-size: rem(20);
+				text-align: center;
+			}
+		}
+		&__desc {
+			margin-top: 22px;
+			font-weight: $fw-medium;
+			line-height: $lh-l;
+
+			@include mq(md) {
+				margin-top: 12px;
+				font-size: rem(13);
+				line-height: $lh;
+			}
+		}
+
+		&__button {
+			margin-top: 22px;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: 16px;
+
+			@include mq(md) {
+				gap: 12px;
+				margin: 12px auto 0;
+				display: grid;
+				width: fit-content;
+			}
+		}
+		&__contact {
+			@include mq(md) {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				justify-content: center;
+			}
+			&-phone {
+				&__link {
+					display: flex;
+					gap: 6px;
+					align-items: center;
+					color: $color-white;
+					text-decoration: none;
+				}
+				&__label {
+					font-size: rem(20);
+					font-weight: $fw-semibold;
+					line-height: 1;
+					font-family: $ff-poppins;
+				}
+			}
+			&-hour {
+				font-size: rem(11);
+				line-height: normal;
+
+				@include mq(md, true) {
+					margin-top: 4px;
+				}
+			}
+		}
+	}
+}

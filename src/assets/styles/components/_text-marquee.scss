@@ -1,0 +1,43 @@
+@use "global" as *;
+
+@layer components {
+	.c-text-marquee {
+		--width: 2700px;
+		--duration: 20s;
+
+		position: relative;
+		overflow: hidden;
+		line-height: 1;
+		font-size: rem(120);
+		font-family: $ff-syncopate;
+		color: rgba($color-white, 0.15);
+		white-space: nowrap;
+		letter-spacing: 0.04em;
+		pointer-events: none;
+
+		@include mq(md) {
+			--duration: 15s;
+			--width: 1700px;
+			font-size: rem(75);
+		}
+
+		&__label {
+			display: inline-block;
+			text-shadow: var(--width) 0 0 currentColor,
+				calc(var(--width) * 2) 0 0 currentColor;
+			animation-name: scrollingText;
+			animation-duration: var(--duration);
+			animation-timing-function: linear;
+			animation-iteration-count: infinite;
+		}
+
+		@keyframes scrollingText {
+			0% {
+				translate: 0 0;
+			}
+			100% {
+				translate: calc(var(--width) * -1) 0;
+			}
+		}
+	}
+}

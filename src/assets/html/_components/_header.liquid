@@ -1,17 +1,61 @@
-<header class="site-header">
-	<div class="site-header__inner">
-		<div class="site-header__logo">
-			<h1 class="header-logo"><a href="/">{{ site.name }}</a></h1>
+<header class="l-site-header">
+	<div class="l-site-header__inner">
+		<div class="l-site-header__header">
+			<h1 class="l-site-header__logo">
+				<a href="/" class="l-site-header__logo-link">
+					Boilerplate
+				</a>
+			</h1>
 		</div>
-		<div class="site-header__nav">
-			{% include '_components/_nav.liquid' %}
+		<div class="l-site-header__body">
+			<div class="l-site-header__link">
+				<div class="l-site-header__link-item">
+					<a href="#" class="l-site-header__link-link">ちょっとしたリンク</a>
+				</div>
+			</div>
+			<div class="l-site-header__contact">
+				<p class="l-site-header__contact-phone">
+					<a href="tel:03-6685-6155" class="l-site-header__contact-phone__link c-phone">
+						{% render "_icon", name: "external", size: "13", class: "-orange" %}
+						<span class="l-site-header__contact-phone__label">03-6685-6155</span>
+					</a>
+				</p>
+			</div>
 		</div>
-	</div>
-	<div class="site-header__menu-button">
-		<button class="site-menu-button">
-			<span class="site-menu-button__top"></span>
-			<span class="site-menu-button__middle"></span>
-			<span class="site-menu-button__bottom"></span>
-		</button>
+		<div class="l-site-header__search">
+			<button class="l-site-header__search-button">
+				{% render "_icon", name: "external", size: "19", class:"max-md:size-3" %}
+			</button>
+		</div>
+		<div class="l-site-header__menu-button">
+			<button class="l-site-menu-button">
+				<span class="l-site-menu-button__top"></span>
+				<span class="l-site-menu-button__middle"></span>
+				<span class="l-site-menu-button__bottom"></span>
+			</button>
+		</div>
 	</div>
 </header>
+
+<div class="l-site-menu">
+	<div class="l-site-menu__inner">
+		<div class="l-site-menu__body">
+			<ul class="l-site-menu__list">
+				<li class="l-site-menu__list-item">
+					<a href="/sample/" class="l-site-menu__list-link">サンプル</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<dialog class="c-modal-search" id="modal-search">
+	<div class="c-modal-search__inner">
+		<div class="c-modal-search__body">
+			<button class="c-modal-search__close"></button>
+			<div class="c-modal-search__body-inner">
+				モーダル
+			</div>
+		</div>
+	</div>
+</dialog>

@@ -3,15 +3,13 @@ import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "vite";
 import config from "../../build.config.js";
+import { logger } from "../utils.js";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 const rootDir = resolve(__dirname, "../..");
 
-// 引数で本番ビルドを制御
 const args = process.argv.slice(2);
 const isProd = args.includes("--prod");
-
-console.log(`ℹ Building JavaScript${isProd ? " (production)" : ""}...`);
 
 try {
 	await build({
@@ -24,7 +22,12 @@ try {
 					assetFileNames: "[name][extname]",
 				},
 			},
-			outDir: resolve(rootDir, config.dist, "assets/js"),
+			outDir: resolve(
+				rootDir,
+				config.dist,
+				config.basePath ? config.basePath.replace(/^\//, "") : "",
+				config.output.js,
+			),
 			emptyOutDir: false,
 			sourcemap: !isProd,
 			minify: isProd,
@@ -34,8 +37,8 @@ try {
 		},
 	});
 
-	console.log("✓ JavaScript build completed");
+	logger.success(`JavaScript: Compiled bundle.js`);
 } catch (error) {
-	console.error("❌ JavaScript build failed:", error);
+	logger.error(`JavaScript failed: ${error}`);
 	process.exit(1);
 }

@@ -3,28 +3,25 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { glob } from "glob";
 import config from "../../build.config.js";
+import { logger } from "../utils.js";
 
 async function buildSVGSprite() {
 	const startTime = performance.now();
 
 	try {
-		// SVGファイルを取得
-		const svgFiles = await glob("src/assets/icons/**/*.svg");
+		const svgFiles = await glob(path.join(config.assets.icons, config.svgSprite.globPattern));
 
 		if (svgFiles.length === 0) {
-			console.log("No SVG files found");
+			logger.info("No SVG files found");
 			return;
 		}
 
-		// スプライト開始タグ
 		let sprite = `<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">`;
 
-		// 各SVGファイルを処理
 		for (const file of svgFiles) {
 			const content = await fs.readFile(file, "utf8");
 			const fileName = path.basename(file, ".svg");
 
-			// SVGの内容を抽出して<symbol>でラップ
 			const svgMatch = content.match(/<svg[^>]*>([\s\S]*?)<\/svg>/);
 			if (svgMatch) {
 				const viewBoxMatch = content.match(/viewBox="([^"]*)"/);
@@ -39,14 +36,17 @@ async function buildSVGSprite() {
 
 		sprite += "\n</svg>";
 
-		// dist/assets/icons/ ディレクトリを作成
-		const outputDir = path.join(config.dist, "assets/icons");
+		const outputDir = path.join(config.dist, config.basePath || "", config.output.icons);
 		await fs.mkdir(outputDir, { recursive: true });
 
-		// スプライトファイルを書き込み
 		await fs.writeFile(path.join(outputDir, "sprite.svg"), sprite);
 
-		// Sass変数ファイルを生成
+		for (const file of svgFiles) {
+			const content = await fs.readFile(file, "utf8");
+			const fileName = path.basename(file);
+			await fs.writeFile(path.join(outputDir, fileName), content);
+		}
+
 		const iconNames = [];
 		for (const file of svgFiles) {
 			const fileName = path.basename(file, ".svg");
@@ -54,20 +54,20 @@ async function buildSVGSprite() {
 		}
 
 		let sassContent = "// [AUTO-GENERATED] This file is managed by build-svg-sprite.js\n";
+		sassContent += "// Individual SVG file paths for smart-svg\n";
 		for (const name of iconNames) {
 			const varName = `$icon-${name}`;
-			const varValue = `/assets/icons/sprite.svg#icon-${name}`;
+			const varValue = `${config.basePath || ""}/${config.output.icons}/${name}.svg`;
 			sassContent += `${varName}: "${varValue}";\n`;
 		}
 
-		// Sass変数ファイルを書き込み
 		const sassVarPath = path.join(config.assets.css, "global/variable-sass/_icons.scss");
 		await fs.writeFile(sassVarPath, sassContent);
 
 		const totalTime = Math.round(performance.now() - startTime);
-		console.log(`✓ SVG sprite generated (${totalTime}ms) - ${svgFiles.length} icons`);
+		logger.success(`SVG sprite generated (${totalTime}ms) - ${svgFiles.length} icons`);
 	} catch (error) {
-		console.error("SVG sprite generation failed:", error);
+		logger.error(`SVG sprite generation failed: ${error}`);
 		process.exit(1);
 	}
 }

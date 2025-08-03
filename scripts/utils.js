@@ -1,10 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
-import chalk from "chalk";
+import pc from "picocolors";
 
 const fsPromises = fs.promises;
 
-// ディレクトリ作成
 async function ensureDir(dir) {
 	try {
 		await fsPromises.mkdir(dir, { recursive: true });
@@ -13,7 +12,6 @@ async function ensureDir(dir) {
 	}
 }
 
-// JSONファイル読み込み
 async function readJSON(filePath) {
 	try {
 		const content = await fsPromises.readFile(filePath, "utf8");
@@ -26,7 +24,6 @@ async function readJSON(filePath) {
 	}
 }
 
-// JSONファイル書き込み
 async function writeJSON(filePath, data) {
 	try {
 		await fsPromises.writeFile(filePath, JSON.stringify(data, null, 2));
@@ -35,20 +32,18 @@ async function writeJSON(filePath, data) {
 	}
 }
 
-// ロガー
 const logger = {
-	info: (message) => console.log(chalk.blue("ℹ"), message),
-	success: (message) => console.log(chalk.green("✓"), message),
-	warning: (message) => console.log(chalk.yellow("⚠"), message),
-	error: (message) => console.error(chalk.red("✗"), message),
+	info: (message) => console.log(pc.blue("ℹ"), message),
+	success: (message) => console.log(pc.green("✓"), message),
+	warning: (message) => console.log(pc.yellow("⚠"), message),
+	error: (message) => console.error(pc.red("✗"), pc.red(message)),
 	debug: (message) => {
 		if (process.env.DEBUG) {
-			console.log(chalk.gray("▸"), message);
+			console.log(pc.gray("▸"), message);
 		}
 	},
 };
 
-// 並列処理ヘルパー
 async function processInParallel(items, processor, concurrency = 5) {
 	const results = [];
 	const queue = [...items];
@@ -80,7 +75,6 @@ async function processInParallel(items, processor, concurrency = 5) {
 	return Promise.all(results);
 }
 
-// ファイル存在チェック
 async function fileExists(filePath) {
 	try {
 		await fsPromises.access(filePath);
@@ -90,9 +84,16 @@ async function fileExists(filePath) {
 	}
 }
 
-// 相対パスを取得
 function getRelativePath(from, to) {
 	return path.relative(from, to).replace(/\\/g, "/");
 }
 
-export { ensureDir, readJSON, writeJSON, logger, processInParallel, fileExists, getRelativePath };
+export {
+	ensureDir,
+	readJSON,
+	writeJSON,
+	logger,
+	processInParallel,
+	fileExists,
+	getRelativePath,
+};

@@ -2,21 +2,29 @@
 export default {
 	src: "src",
 	dist: "dist",
+	basePath: "",
+	// basePath: "/lp",
 	assets: {
 		html: "src/assets/html",
 		css: "src/assets/styles",
 		js: "src/assets/scripts",
 		images: "src/assets/images",
+		icons: "src/assets/icons",
 	},
 	public: "src/public",
-	// sass-glob設定
+	output: {
+		css: "assets/css",
+		js: "assets/js",
+		images: "assets/images",
+		icons: "assets/icons",
+	},
 	sassGlob: {
-		// 自動的に_index.scssを生成するディレクトリ
-		// Note: foundationは手動管理のため含めない
 		directories: ["global", "components", "layouts", "pages", "utilities"],
 	},
 	tailwind: {
-		// Tailwind CSSの出力先
 		outputFile: "utilities/_tailwind.scss",
+	},
+	svgSprite: {
+		globPattern: "**/*.svg",
 	},
 };

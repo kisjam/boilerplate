@@ -1,45 +1,44 @@
 {% layout "_layouts/default.liquid" %}
-{% assign title = "ユニークなページタイトル" %}
-{% assign description = "ユニークなページディスクリプション" %}
 
 {% block contents %}
 
 <div class="p-top">
-	<div class="p-top__mv">
-		<div class="p-top-mv">
-			<h1 class="p-top-mv__title">Boilerplate</h1>
-		</div>
-	</div>
-	<div class="p-top__todo">
-		<div class="p-top-todo">
-			<div class="p-top-todo__item"></div>
-		</div>
-	</div>
-	<div class="p-top__examples">
-		<h2>Liquid</h2>
-		block全部
-		パンクズ
-		<h2 class="c-title-fill">CSS</h2>
-		<ul class="c-list-disc">
-			<li class="c-list-disc__item"><a href="/examples/tailwind.html">Tailwind</a></li>
-			<li class="c-list-disc__item"><a href="/examples/svg-icons.html">SVG Icons</a></li>
-		</ul>
 
+	<div class="p-top__mv">
+
+		<div class="p-top-mv">
+			<p class="c-text-marquee">
+				<span class="c-text-marquee__label">Boilerplate.</span>
+			</p>
+		</div>
 	</div>
-	<div class="p-top__components">
-		タブ
-		アコーディオン
-		トグル
-		アンカー
-		フォーム
-		カルーセル
-		ボタン
-		カード
-		モーダル
+	<div class="p-top__sample">
+		<p><a href="/sample/">サンプル</a></p>
 	</div>
-	<p class="p-top__hoge text-sky-100">hoge</p>
-	<p>foo</p>
-	<p class="text-sky-200">piuyo</p>
+	<div class="p-top__pickup">
+		<div class="p-top-pickup">
+			<div class="p-top-pickup__body">
+				<div class="c-carousel-horizontal-3 swiper">
+					<div class="c-carousel-horizontal-3__wrapper swiper-wrapper">
+						{% for i in (1..10) %}
+						<div class="c-carousel-horizontal-3__slide swiper-slide w-[240px]">
+							{% render "_card", url: "/sample/", title: "sample", category: "カテゴリ", class:"-lg" %}
+						</div>
+						{% endfor %}
+					</div>
+					<div class="c-carousel-horizontal-3__navigation">
+						<button class="c-carousel-horizontal-3__prev">
+							{% render "_icon", name: "external", size: "38", class: "-white" %}
+						</button>
+						<button class="c-carousel-horizontal-3__next">
+							{% render "_icon", name: "external", size: "38", class: "-white" %}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 {% endblock %}

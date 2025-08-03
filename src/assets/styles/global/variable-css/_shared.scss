@@ -2,14 +2,10 @@
 @use "../variable-sass/" as v;
 
 :root {
-	--font-size-base: #{v.$base-font-size}px;
-
 	--padding-side: 80px;
-	--height-header: 120px;
-
 	--leading-trim: calc((1em - 1lh) / 2);
 	--outer: min(
-		calc((((100vw - var(--scrollbar, 0)) - var(--width-content)) / 2) * -1),
+		calc((((100vw - var(--scrollbar, 0)) - #{v.$width-content}) / 2) * -1),
 		calc(var(--padding-side) * -1)
 	);
 
@@ -18,7 +14,6 @@
 	}
 
 	@include mq(md) {
-		--padding-side: 24px;
-		--height-header: 64px;
+		--padding-side: 12px;
 	}
 }

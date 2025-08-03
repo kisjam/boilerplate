@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/postcss";
 import autoprefixer from "autoprefixer";
 import postcss from "postcss";
 import config from "../../build.config.js";
+import { logger } from "../utils.js";
 
 async function buildTailwind() {
 	const startTime = performance.now();
@@ -26,9 +27,9 @@ async function buildTailwind() {
 		await fs.writeFile(path.join(config.assets.css, config.tailwind.outputFile), processed.css);
 
 		const totalTime = Math.round(performance.now() - startTime);
-		console.log(`✓ Tailwind build completed (${totalTime}ms)`);
+		logger.success(`Tailwind build completed (${totalTime}ms)`);
 	} catch (error) {
-		console.error("Tailwind build failed:", error);
+		logger.error(`Tailwind build failed: ${error}`);
 		process.exit(1);
 	}
 }

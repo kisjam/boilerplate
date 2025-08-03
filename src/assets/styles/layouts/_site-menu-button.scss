@@ -1,0 +1,53 @@
+@use "global" as *;
+
+@layer layouts {
+	.l-site-menu-button {
+		$this: &;
+		position: relative;
+		width: 50px;
+		height: 50px;
+		border: none;
+		border-radius: 50%;
+		background-color: $color-white;
+		cursor: pointer;
+		body.is-scrolled &:not(.is-open) {
+			filter: drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.25));
+		}
+
+		&.is-open {
+			background: none;
+
+			#{$this}__top {
+				transform: translate(-50%, -1px) rotate(45deg);
+			}
+			#{$this}__middle {
+				opacity: 0;
+			}
+			#{$this}__bottom {
+				transform: translate(-50%, -1px) rotate(-45deg);
+			}
+		}
+
+		&__top,
+		&__middle,
+		&__bottom {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 33px;
+			height: 3px;
+			background-color: $color-orange;
+			transition: opacity $duration ease, transform $duration ease,
+				filter $duration ease;
+		}
+		&__top {
+			transform: translate(-50%, 9px);
+		}
+		&__middle {
+			transform: translate(-50%, -1px);
+		}
+		&__bottom {
+			transform: translate(-50%, -11px);
+		}
+	}
+}

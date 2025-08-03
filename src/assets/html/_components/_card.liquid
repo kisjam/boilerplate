@@ -1,23 +1,24 @@
-<div class="card">
-  {% if image %}
-    <div class="card__image">
-      <img src="{{ image }}" alt="{{ title }}">
-    </div>
-  {% endif %}
-  
-  <div class="card__body">
-    {% if title %}
-      <h3 class="card__title">{{ title }}</h3>
-    {% endif %}
-    
-    {% if content %}
-      <div class="card__content">
-        {{ content }}
-      </div>
-    {% endif %}
-    
-    {% if link %}
-      <a href="{{ link }}" class="card__link">Learn More</a>
-    {% endif %}
-  </div>
+<div class="c-card{% if class %} {{ class }}{% endif %}">
+	<a href="{{ url | default: '#' }}" class="c-card__link">
+		<div class="c-card__header">
+			<div class="c-card__thumb">
+				<img src="{{ image | default: '/assets/images/dummy/cat.webp' }}" alt="{{ alt | default: '' }}" width="{{ width | default: 1280 }}" height="{{ height | default: 896 }}">
+			</div>
+			{% if show_new %}
+			<div class="c-card__new">NEW</div>
+			{% endif %}
+			{% if rank %}
+			<div class="c-card__rank">{{ rank }}</div>
+			{% endif %}
+		</div>
+		<div class="c-card__body">
+			{% if category %}
+			<div class="c-card__category">
+				<div class="c-card__category-item">{{ category }}</div>
+			</div>
+			{% endif %}
+			<h2 class="c-card__title">{{ title | default: 'タイトルが入ります' }}</h2>
+			<p class="c-card__date">{{ date | default: '2025.00.00' }}</p>
+		</div>
+	</a>
 </div>

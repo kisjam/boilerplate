@@ -1,0 +1,12 @@
+@use "global" as *;
+@layer components {
+	.c-page-body {
+		container-type: inline-size;
+		padding-inline: var(--padding-side);
+
+		&__inner {
+			max-width: $width-content-xs;
+			margin-inline: auto;
+		}
+	}
+}

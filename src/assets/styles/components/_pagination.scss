@@ -1,0 +1,49 @@
+@use "global" as *;
+
+@layer components {
+	.c-pagination {
+		margin-top: 40px;
+		@include mq(md) {
+			margin-top: 32px;
+		}
+		&__inner {
+		}
+		&__list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 24px;
+
+			@include mq(md) {
+				justify-content: center;
+			}
+		}
+		&__page {
+			&-link {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 40px;
+				height: 40px;
+				border-radius: 50%;
+				text-decoration: none;
+				font-family: $ff-poppins;
+				font-weight: $fw-semibold;
+				color: $color-black;
+				font-size: rem(12);
+				transition: background-color $duration ease, color $duration ease;
+
+				@include hover {
+					background-color: $color-orange;
+					color: $color-white;
+				}
+
+				&.-current {
+					background-color: $color-orange;
+					color: $color-white;
+				}
+			}
+			&-dots {
+			}
+		}
+	}
+}

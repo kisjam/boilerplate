@@ -1,10 +1,13 @@
-@use "../global" as *;
+@use "global" as *;
 
 @layer base {
+	html {
+		scroll-padding-top: 100px;
+	}
 	body {
-		font-family: var(--font-sans);
-		color: var(--color-text);
-		font-size: var(--font-size-base);
+		font-family: $ff-noto-sans;
+		color: $color-black;
+		font-size: rem(16);
 		text-size-adjust: none;
 		-webkit-text-size-adjust: none;
 		-webkit-font-smoothing: antialiased;
@@ -21,6 +24,12 @@
 	}
 
 	a {
-		color: var(--color-text);
+		@include hover {
+			text-decoration: none;
+		}
+	}
+
+	strong {
+		font-weight: $fw-bold;
 	}
 }

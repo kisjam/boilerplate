@@ -1,28 +1,18 @@
 @use "../../global" as *;
 
 @layer components {
-	/*
-	/* Input text
-	/*
-	----------------------------------------------------------------- */
-	.input-text {
-		appearance: none;
+	.c-input-text {
+		&__field {
+			width: 100%;
+			border-radius: $radius-s;
+			background-color: #ebebeb;
+			border: none;
+			font-size: rem(14);
+			padding: 6px 10px;
 
-		&:focus {
-			outline: none;
-		}
-
-		&::-ms-clear {
-			visibility: hidden;
-		}
-
-		&::-ms-reveal {
-			visibility: hidden;
-		}
-
-		&:disabled {
-			opacity: 0.2;
-			pointer-events: none;
+			@include mq(md) {
+				font-size: rem(16);
+			}
 		}
 	}
 }

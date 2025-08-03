@@ -1,5 +1,5 @@
 @use "../variable-sass/" as var;
-@use "_media-query" as m;
+@use "responsive" as m;
 
 @mixin grid-container {
 	display: grid;

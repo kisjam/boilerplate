@@ -1,0 +1,9 @@
+@use "global" as *;
+
+@layer components {
+	.c-phone {
+		body.is-laptop & {
+			pointer-events: none;
+		}
+	}
+}

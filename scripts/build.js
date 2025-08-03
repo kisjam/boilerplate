@@ -1,34 +1,34 @@
 #!/usr/bin/env node
 import { spawn } from "node:child_process";
+import { logger } from "./utils.js";
 
-// 引数で本番ビルドを制御
 const args = process.argv.slice(2);
 const isProd = args.includes("--prod");
 
-console.log(`Building project${isProd ? " (production)" : ""}...`);
+logger.info(`Building project${isProd ? " (production)" : ""}...`);
 
-// まずクリーンアップを実行
 const cleanCommand = "node scripts/tasks/clean.js";
 console.log(`\n1. Cleaning: ${cleanCommand}`);
 const cleanChild = spawn(cleanCommand, { shell: true, stdio: "inherit" });
 
 cleanChild.on("exit", async (code) => {
 	if (code !== 0) {
-		console.error("Clean failed");
+		logger.error("Clean failed");
 		process.exit(code);
 	}
 
-	// sass-globを実行（初回は強制更新）
 	console.log("\n2. Running sass-glob...");
-	const sassGlobChild = spawn("node scripts/tasks/sass-glob.js --force", { shell: true, stdio: "inherit" });
+	const sassGlobChild = spawn("node scripts/tasks/sass-glob.js --force", {
+		shell: true,
+		stdio: "inherit",
+	});
 
 	sassGlobChild.on("exit", async (sassGlobCode) => {
 		if (sassGlobCode !== 0) {
-			console.error("sass-glob failed");
+			logger.error("sass-glob failed");
 			process.exit(sassGlobCode);
 		}
 
-		// ビルドタスクを並列実行
 		const tasks = [
 			"node scripts/tasks/build-copy.js",
 			`node scripts/tasks/build-js.js${isProd ? " --prod" : ""}`,
@@ -58,10 +58,10 @@ cleanChild.on("exit", async (code) => {
 
 		try {
 			await Promise.all(buildPromises);
-			console.log("\n✓ Build completed successfully!");
+			logger.success("Build completed successfully!");
 			process.exit(0);
 		} catch (error) {
-			console.error("\n❌ Build failed:", error.message);
+			logger.error(`Build failed: ${error.message}`);
 			process.exit(1);
 		}
 	});

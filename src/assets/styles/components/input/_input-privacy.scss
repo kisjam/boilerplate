@@ -1,0 +1,27 @@
+@use "../../global" as *;
+
+@layer components {
+	.c-input-privacy {
+		$this: &;
+		display: flex;
+		gap: 4px;
+		width: fit-content;
+		margin-left: auto;
+		margin-right: auto;
+		cursor: pointer;
+
+		&__icon {
+		}
+
+		&__label {
+			font-size: rem(18);
+			line-height: $lh;
+			font-weight: $fw-medium;
+		}
+
+		&__group {
+			display: grid;
+			gap: 4px;
+		}
+	}
+}

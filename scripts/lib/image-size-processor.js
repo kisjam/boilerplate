@@ -2,7 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import imageSize from "image-size";
 
-// キャッシュ（ビルド中のメモリキャッシュ）
 const sizeCache = new Map();
 
 /**
@@ -11,19 +10,16 @@ const sizeCache = new Map();
  * @returns {{width: number, height: number} | null}
  */
 function getImageSize(imagePath) {
-	// キャッシュチェック
 	if (sizeCache.has(imagePath)) {
 		return sizeCache.get(imagePath);
 	}
 
 	try {
-		// ファイルの存在確認
 		if (!fs.existsSync(imagePath)) {
 			console.warn(`Image not found: ${imagePath}`);
 			return null;
 		}
 
-		// ファイルを読み込んでBufferとして渡す
 		const buffer = fs.readFileSync(imagePath);
 		const dimensions = imageSize(buffer);
 		const result = {
@@ -31,7 +27,6 @@ function getImageSize(imagePath) {
 			height: dimensions.height,
 		};
 
-		// キャッシュに保存
 		sizeCache.set(imagePath, result);
 		return result;
 	} catch (error) {
@@ -47,16 +42,13 @@ function getImageSize(imagePath) {
  * @returns {string} - 処理済みのHTML
  */
 function processImageSizes(html, baseDir) {
-	// img要素を検索する正規表現
 	const imgRegex = /<img([^>]*)>/g;
 
 	return html.replace(imgRegex, (match, attributes) => {
-		// すでにwidth/heightがある場合はスキップ
 		if (/\bwidth\s*=/.test(attributes) && /\bheight\s*=/.test(attributes)) {
 			return match;
 		}
 
-		// src属性を抽出
 		const srcMatch = /\bsrc\s*=\s*["']([^"']+)["']/.exec(attributes);
 		if (!srcMatch) {
 			return match;
@@ -64,24 +56,19 @@ function processImageSizes(html, baseDir) {
 
 		const src = srcMatch[1];
 
-		// 外部URLはスキップ
 		if (src.startsWith("http://") || src.startsWith("https://") || src.startsWith("//")) {
 			return match;
 		}
 
-		// 画像パスを解決
 		const imagePath = src.startsWith("/")
 			? path.join(baseDir, "dist", src)
 			: path.join(baseDir, "dist", path.dirname(src), path.basename(src));
 
-		// サイズ取得
 		const size = getImageSize(imagePath);
 		if (!size) {
 			return match;
 		}
 
-		// width/height属性を追加
-		// 既存の属性を保持しつつ、新しい属性を追加
 		const newAttributes = `${attributes} width="${size.width}" height="${size.height}"`;
 
 		return `<img${newAttributes}>`;

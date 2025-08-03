@@ -1,47 +1,100 @@
-@use "../global" as *;
+@use "global" as *;
 
 @layer components {
-	.button {
-		position: relative;
+	.c-button {
+		$this: &;
+		--background-color: #121d59;
+		--border-color: #121d59;
+		--color: #{$color-white};
+		--hover-background-color: #{$color-white};
+		--hover-color: #121d59;
+		--hover-border-color: #121d59;
 
-		a,
-		button {
-			--fill-color: #fff;
-			appearance: none;
-			position: relative;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: 60px;
-			width: 100%;
-			text-decoration: none;
-			background: $color-black;
-			color: $color-white;
-			border: none;
-			max-width: 200px;
-			margin-left: auto;
-			margin-right: auto;
-			transition: color 0.3s ease;
-			cursor: pointer;
-
-			&::after {
-				// @include smart-svg.show-with-pseudo(
-				// 	"https://cdn.svgporn.com/logos/react.svg",
-				// 	2em,
-				// 	var(--fill-color)
-				// );
-				position: absolute;
-				right: 16px;
-				top: 50%;
-				transform: translateY(-50%);
-				transition: background-color 0.3s ease;
+		&.-white {
+			--background-color: #{$color-white};
+			--color: #121d59;
+			--border-color: #{$color-white};
+			--hover-background-color: #121d59;
+			--hover-color: #{$color-white};
+		}
+		&.-orange {
+			--background-color: #{$color-orange};
+			--border-color: #{$color-orange};
+			--color: #{$color-white};
+			--hover-background-color: #{$color-white};
+			--hover-border-color: #{$color-orange};
+			--hover-color: #{$color-orange};
+		}
+		&.-liquid {
+			#{$this}__link {
+				width: 100%;
+				min-width: 0;
 			}
-
-			&:hover {
-				&::after {
-					--fill-color: #f00;
+		}
+		&.-md-liquid {
+			#{$this}__link {
+				@include mq(md) {
+					width: 100%;
+					min-width: 0;
 				}
 			}
+		}
+		&.-mv {
+			#{$this}__link {
+				min-height: 78px;
+				min-width: 290px;
+				padding-inline: 20px;
+				font-size: rem(16);
+				@include mq(md) {
+					font-size: rem(14);
+					min-height: 50px;
+				}
+			}
+		}
+		&.-tite {
+			#{$this}__link {
+				min-width: 164px;
+			}
+		}
+		&.-c {
+			#{$this}__link {
+				margin-inline: auto;
+			}
+		}
+		&__link {
+			background-color: var(--background-color);
+			color: var(--color);
+			border-radius: $radius;
+			min-height: 49px;
+			min-width: 227px;
+			font-size: rem(14);
+			width: fit-content;
+			padding-inline: 15px;
+			text-decoration: none;
+			display: flex;
+			gap: 8px;
+			align-items: center;
+			text-align: left;
+			cursor: pointer;
+			font-weight: $fw-medium;
+			border: 1px solid var(--border-color);
+			transition: color $duration ease, background-color $duration ease,
+				border-color $duration ease;
+
+			@include hover {
+				background-color: var(--hover-background-color);
+				color: var(--hover-color);
+				border-color: var(--hover-border-color);
+			}
+
+			&.is-processing {
+				opacity: 0.6;
+				cursor: not-allowed;
+				pointer-events: none;
+			}
+		}
+		&__label {
+			flex-grow: 1;
 		}
 	}
 }

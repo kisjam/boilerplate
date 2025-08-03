@@ -1,0 +1,41 @@
+@use "config" as *;
+@use "global" as *;
+@use "components";
+
+body {
+	font-family: $ff-noto-sans;
+	padding: 40px;
+}
+
+strong {
+	font-weight: $fw-bold;
+}
+p:not([class]) {
+	@include p;
+}
+h2.wp-block-heading {
+	@include h2;
+}
+h3.wp-block-heading {
+	@include h3;
+}
+h4.wp-block-heading {
+	@include h4;
+}
+.wp-block-image {
+	@include image;
+}
+ul.wp-block-list,
+ul:not([class]) {
+	@include ul;
+}
+ol.wp-block-list,
+ol:not([class]) {
+	@include ol;
+}
+.wp-block-quote {
+	@include quote;
+}
+.wp-block-table {
+	@include table;
+}

@@ -1,9 +1,28 @@
-@use "../global" as *;
+@use "global" as *;
 @layer components {
 	.icon {
 		display: inline-block;
 		fill: currentColor;
 		vertical-align: middle;
 		transition: fill $duration ease;
+
+		&.-orange {
+			color: $color-orange;
+		}
+		&.-assort {
+			color: $color-assort;
+		}
+		&.-white {
+			color: $color-white;
+		}
+		&.-green {
+			color: #43a174;
+		}
+		&.-blue {
+			color: #56a6dc;
+		}
+		&.-black {
+			color: $color-black;
+		}
 	}
 }

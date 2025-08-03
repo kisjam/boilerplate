@@ -5,35 +5,29 @@ import { fileURLToPath } from "node:url";
 import chokidar from "chokidar";
 import config from "../build.config.js";
 import { startServer } from "./tasks/serve.js";
+import { logger } from "./utils.js";
 
-// Get the directory of this script
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..");
 
-// ================================
-// Helper Functions
-// ================================
-
 /**
- * タスクを実行する
- * @param {string} command - 実行するコマンド
+ * @param {string} command
  */
 function runTask(command) {
 	const child = spawn(command, { shell: true, stdio: "inherit" });
 
 	child.on("exit", (code) => {
 		if (code !== 0) {
-			console.error(`❌ Task failed: ${command}`);
+			logger.error(`Task failed: ${command}`);
 		}
 	});
 }
 
 /**
- * ファイル監視の設定を作成
- * @param {string} watchPath - 監視するパス
- * @param {object} options - chokidarのオプション
- * @param {object} handlers - イベントハンドラー
+ * @param {string} watchPath
+ * @param {object} options
+ * @param {object} handlers
  * @returns {chokidar.FSWatcher}
  */
 function createWatcher(watchPath, options, handlers) {
@@ -51,13 +45,8 @@ function createWatcher(watchPath, options, handlers) {
 	return watcher;
 }
 
-// ================================
-// Main Process
-// ================================
-
 console.log("🚀 Starting development environment...");
 
-// 初回ビルド
 console.log("📦 Initial build...");
 const buildChild = spawn("node scripts/build.js", {
 	shell: true,
@@ -66,84 +55,63 @@ const buildChild = spawn("node scripts/build.js", {
 
 buildChild.on("exit", async (code) => {
 	if (code !== 0) {
-		console.error("❌ Initial build failed - continuing with development server");
+		logger.error("Initial build failed - continuing with development server");
 	} else {
-		console.log("✓ Initial build completed");
+		logger.success("Initial build completed");
 	}
 
-	// BrowserSyncを統合されたserve.jsから起動
 	try {
 		await startServer();
 	} catch (_err) {
-		console.error("❌ Failed to start development server");
+		logger.error("Failed to start development server");
 		process.exit(1);
 	}
 
 	console.log("👀 Watching for changes...");
 
-	// ================================
-	// Watch Configuration
-	// ================================
-
-	// パスの設定
 	const paths = {
 		css: path.resolve(projectRoot, config.assets.css),
 		js: path.resolve(projectRoot, config.assets.js),
 		html: path.resolve(projectRoot, config.assets.html),
 		images: path.resolve(projectRoot, config.assets.images),
-		icons: path.resolve(projectRoot, "src/assets/icons"),
+		icons: path.resolve(projectRoot, config.assets.icons),
 		public: path.resolve(projectRoot, config.public),
 	};
 
-	console.log("📁 Watching paths:");
-	console.log(`   CSS: ${paths.css} (*.scss, *.sass)`);
-	console.log(`   JS: ${paths.js} (*.ts, *.js)`);
-	console.log(`   HTML: ${paths.html} (*.liquid)`);
-	console.log(`   Images: ${paths.images}`);
-	console.log(`   Icons: ${paths.icons} (*.svg)`);
-	console.log(`   Static: ${paths.public}`);
-
 	const watchers = [
-		// CSS監視 - chokidar v4では直接ディレクトリを監視
 		createWatcher(
 			paths.css,
 			{
-				ignored: (filePath, stats) => {
-					// 削除されたファイルの場合statsはundefinedになるので、パスのみで判定
-					if (!stats) {
-						return !filePath.endsWith(".scss");
-					}
-					return stats.isFile() && !filePath.endsWith(".scss");
-				},
+				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".scss"),
 				persistent: true,
 				usePolling: true,
 				interval: 100,
 				binaryInterval: 300,
 			},
 			{
-				change: (_filePath) => {
+				change: (filePath) => {
+					logger.info(`CSS: Changed ${path.basename(filePath)}`);
 					runTask("node scripts/tasks/build-css.js");
 				},
 				add: (_filePath) => {
-					// SCSSファイルの追加時はsass-globを実行
 					runTask("node scripts/tasks/sass-glob.js");
 					runTask("node scripts/tasks/build-css.js");
 				},
 				unlink: (_filePath) => {
-					// SCSSファイルの削除時はsass-globを実行
 					runTask("node scripts/tasks/sass-glob.js");
 					runTask("node scripts/tasks/build-css.js");
 				},
-				error: (error) => console.error(`❌ CSS watcher error: ${error}`),
-				ready: () => console.log("✓ CSS watcher ready"),
-			},
+				error: (error) => logger.error(`CSS watcher error: ${error}`),
+				ready: () =>
+					logger.success(`CSS watcher ready: ${paths.css} (*.scss, *.sass)`),
+			}
 		),
 
-		// JS監視
 		createWatcher(
 			paths.js,
 			{
-				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
+				ignored: (path, stats) =>
+					stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
 				usePolling: true,
 				interval: 100,
 				binaryInterval: 300,
@@ -155,22 +123,20 @@ buildChild.on("exit", async (code) => {
 			{
 				change: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
-					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				add: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
-					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 				},
-				ready: () => console.log("✓ JS watcher ready"),
-			},
+				ready: () =>
+					logger.success(`JS watcher ready: ${paths.js} (*.ts, *.js)`),
+			}
 		),
 
-		// HTML監視
 		createWatcher(
 			paths.html,
 			{
@@ -196,32 +162,30 @@ buildChild.on("exit", async (code) => {
 					} else {
 						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
 					}
-					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				add: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
 					const isShared =
-						relativePath.startsWith("_components/") || relativePath.startsWith("_layouts/");
+						relativePath.startsWith("_components/") ||
+						relativePath.startsWith("_layouts/");
 
 					if (isShared) {
 						runTask("node scripts/tasks/build-html.js");
 					} else {
 						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
 					}
-					// Tailwind CSS再ビルド（クラス変更対応）
 					runTask("node scripts/tasks/build-tailwind.js");
 				},
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-html.js");
 				},
 				ready: () => {
-					console.log("✓ HTML watcher ready");
+					logger.success(`HTML watcher ready: ${paths.html} (*.liquid)`);
 				},
-			},
+			}
 		),
 
-		// 画像監視
 		createWatcher(
 			paths.images,
 			{
@@ -234,24 +198,29 @@ buildChild.on("exit", async (code) => {
 				},
 			},
 			{
-				change: (_filePath) => {
-					runTask("node scripts/tasks/build-images.js");
+				change: (filePath) => {
+					runTask(`node scripts/tasks/build-images.js --single "${filePath}"`);
+					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
+						runTask(
+							`node scripts/tasks/build-images-webp.js --single "${filePath}"`
+						);
+					}
 				},
 				add: (filePath) => {
-					runTask("node scripts/tasks/build-images.js");
-					// JPG/PNG の場合は WebP 変換も実行
+					runTask(`node scripts/tasks/build-images.js --single "${filePath}"`);
 					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
-						runTask("node scripts/tasks/build-images-webp.js");
+						runTask(
+							`node scripts/tasks/build-images-webp.js --single "${filePath}"`
+						);
 					}
 				},
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-images.js");
 				},
-				ready: () => console.log("✓ Image watcher ready"),
-			},
+				ready: () => logger.success(`Image watcher ready: ${paths.images}`),
+			}
 		),
 
-		// 静的ファイル監視
 		createWatcher(
 			paths.public,
 			{
@@ -273,11 +242,11 @@ buildChild.on("exit", async (code) => {
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
-				ready: () => console.log("✓ Static file watcher ready"),
-			},
+				ready: () =>
+					logger.success(`Static file watcher ready: ${paths.public}`),
+			}
 		),
 
-		// アイコン監視
 		createWatcher(
 			paths.icons,
 			{
@@ -300,14 +269,14 @@ buildChild.on("exit", async (code) => {
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-svg-sprite.js");
 				},
-				ready: () => console.log("✓ Icon watcher ready"),
-			},
+				ready: () =>
+					logger.success(`Icon watcher ready: ${paths.icons} (*.svg)`),
+			}
 		),
 	];
 
-	// Ctrl+C で終了
 	process.on("SIGINT", () => {
-		console.log("\n🍺 Shutting down...");
+		logger.info("\n🍺 Shutting down...");
 		watchers.forEach((watcher) => watcher.close());
 		process.exit(0);
 	});

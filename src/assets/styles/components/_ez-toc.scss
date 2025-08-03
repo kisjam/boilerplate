@@ -1,0 +1,113 @@
+@use "global" as *;
+
+@layer components {
+	#ez-toc-container,
+	.ez-toc-counter {
+		margin-top: 48px;
+		margin-bottom: 48px;
+		background-color: #e9edee;
+		border-radius: $radius;
+		padding: 30px;
+		font-weight: $fw-medium;
+
+		@include mq(md) {
+			margin-top: 40px;
+			margin-bottom: 40px;
+			padding: 24px 16px 16px;
+		}
+	}
+
+	.ez-toc-title-container {
+		display: flex;
+		gap: 8px;
+		align-items: center;
+	}
+	.ez-toc-title {
+		font-size: rem(28);
+		line-height: 1;
+		letter-spacing: $ls;
+		font-weight: $fw-regular;
+		font-family: $ff-syncopate;
+
+		@include mq(md) {
+			font-size: rem(24);
+		}
+	}
+	.ez-toc-title-toggle {
+	}
+	.ez-toc-btn {
+		position: relative;
+		top: -4px;
+		text-decoration: none;
+		font-size: rem(14);
+		font-weight: $fw-medium;
+		line-height: 1;
+		color: $color-black;
+		display: flex;
+		@include hover {
+			text-decoration: underline;
+		}
+		&::after {
+			content: "[目次を閉じる]";
+		}
+	}
+	.ez-toc-icon-toggle-span {
+		display: none;
+	}
+	.ez-toc-heading-level-2 {
+		counter-increment: toc1;
+		position: relative;
+		padding-top: 24px;
+		padding-bottom: 24px;
+		padding-left: 20px;
+
+		@include mq(md) {
+			padding-top: 12px;
+			padding-bottom: 12px;
+		}
+
+		&:not(:first-child) {
+			border-top: 1px solid rgba(34, 34, 34, 0.3);
+		}
+
+		&::after {
+			content: counter(toc1) ".";
+			position: absolute;
+			left: 0;
+			top: 24px;
+
+			@include mq(md) {
+				top: 12px;
+			}
+		}
+	}
+	.ez-toc-list-level-3 {
+	}
+	.ez-toc-heading-level-3 {
+		position: relative;
+		counter-increment: toc2;
+		margin-top: 16px;
+		padding-left: 32px;
+
+		@include mq(md) {
+			font-size: rem(14);
+			margin-top: 12px;
+		}
+
+		&::after {
+			content: counter(toc1) "." counter(toc2);
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+	}
+	.ez-toc-link {
+		color: $color-black;
+		text-decoration: none;
+		transition: color $duration ease;
+
+		@include hover {
+			color: #707070;
+		}
+	}
+}

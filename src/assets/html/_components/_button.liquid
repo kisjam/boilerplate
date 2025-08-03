@@ -1,3 +1,41 @@
-<button class="button button--{{ type | default: 'default' }}" {% if disabled %}disabled{% endif %} {% if onClick %}onclick="{{ onClick }}" {% endif %}>
-	{{ text }}
-</button>
+{% comment %}
+ボタンコンポーネント
+Parameters:
+- tag: 'a' | 'button' (default: 'a')
+- href: リンク先URL (tagがaの場合)
+- label: ボタンのラベルテキスト
+- icon: アイコン名（オプション）
+- iconSize: アイコンサイズ（オプション、デフォルト: 19）
+- iconClass: アイコンに追加するクラス（オプション）- 例: "-white", "-primary"
+- target: リンクのtarget属性（オプション）
+- class: ボタンに追加するクラス（オプション）- 例: "-orange -tite", "-white -liquid", "js-button-guard"
+- onClick: クリックイベント（tagがbuttonの場合）
+- disabled: 無効化フラグ（tagがbuttonの場合）
+
+使用例:
+{% render "_button", href: "/contact/", label: "お問い合わせ", icon: "arrow_circle_right_sm", class: "-white -liquid" %}
+{% render "_button", href: "/contact/", label: "お問い合わせ", icon: "arrow_circle_right_sm", class: "-orange -tite", iconClass: "-white" %}
+{% render "_button", tag: "button", label: "確認画面へ", icon: "arrow_circle_right_sm", class: "-c js-button-guard" %}
+{% endcomment %}
+
+{% assign tag = tag | default: 'a' %}
+{% assign iconSize = iconSize | default: 19 %}
+{% assign baseClass = 'c-button' %}
+
+<div class="{{ baseClass }} {% if class %}{{ class }}{% endif %}">
+	{% if tag == 'a' %}
+	<a href="{{ href }}" class="{{ baseClass }}__link" {% if target %} target="{{ target }}" {% endif %}>
+      <span class="{{ baseClass }}__label">{{ label }}</span>
+      {% if icon %}
+        {% render "_icon", name: icon, size: iconSize, class: iconClass, label: label %}
+      {% endif %}
+    </a>
+	{% else %}
+	<button class="{{ baseClass }}__link" {% if disabled %}disabled{% endif %} {% if onClick %}onclick="{{ onClick }}" {% endif %}>
+		<span class="{{ baseClass }}__label">{{ label }}</span>
+		{% if icon %}
+		{% render "_icon", name: icon, size: iconSize, class: iconClass, label: label %}
+		{% endif %}
+	</button>
+	{% endif %}
+</div>

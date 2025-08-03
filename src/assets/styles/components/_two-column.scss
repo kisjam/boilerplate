@@ -1,0 +1,44 @@
+@use "global" as *;
+
+@layer components {
+	.c-two-column {
+		$this: &;
+		padding-inline: var(--padding-side);
+
+		&__inner {
+			max-width: $width-content;
+			margin-left: auto;
+			margin-right: auto;
+
+			@include mq(lg, true) {
+				display: grid;
+				grid-template-areas: "main sub" "bottom bottom";
+				grid-template-columns: 1fr 350px;
+				gap: 0 60px;
+			}
+		}
+
+		&__main {
+			container-type: inline-size;
+			@include mq(lg, true) {
+				grid-area: main;
+			}
+		}
+		&__sub {
+			container-type: inline-size;
+			@include mq(lg, true) {
+				grid-area: sub;
+			}
+			@include mq(md) {
+				margin-top: 40px;
+			}
+		}
+		&__bottom {
+			margin-left: var(--outer);
+			margin-right: var(--outer);
+			@include mq(lg, true) {
+				grid-area: bottom;
+			}
+		}
+	}
+}

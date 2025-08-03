@@ -1,6 +1,8 @@
 $base-font-size: 16;
 
 $ff-noto-sans: "Noto Sans JP", sans-serif;
+$ff-poppins: "Poppins", sans-serif;
+$ff-syncopate: "Syncopate", sans-serif;
 $ff-noto-serif: "Noto Serif JP", serif;
 
 $fw-thin: 100;
@@ -11,8 +13,11 @@ $fw-semibold: 600;
 $fw-bold: 700;
 $fw-black: 900;
 
-$color-black: #333;
+$color-black: #222;
 $color-white: #fff;
+$color-assort: #121d59;
+$color-orange: #ff6600;
+$color-red: #ff6666;
 
 $breakpoints: (
 	2xl: 1536px,
@@ -22,8 +27,21 @@ $breakpoints: (
 	sm: 640px,
 );
 
-$width-content: 1280px;
-$viewport-pc: 1920;
+$width-content: 1230px;
+$width-content-s: 980px;
+$width-content-xs: 820px;
+$viewport-pc: 1536;
 $viewport-sp: 375;
+
+$ratio: "690 / 500";
+
+$lh-l: 2;
+$lh: 1.75;
+$lh-s: 1.4;
+
+$ls: 0.04em;
+
+$radius: 6px;
+$radius-s: 4px;
 
 $duration: 300ms;

@@ -1,0 +1,49 @@
+@use "global" as *;
+
+@layer components {
+	.c-carousel-horizontal {
+		&__slide {
+			& > * {
+				height: 100%;
+			}
+		}
+		&__navigation {
+			position: absolute;
+			right: 0;
+			top: -80px;
+			display: flex;
+			gap: 24px;
+
+			@include mq(md) {
+				position: static;
+				gap: 32px;
+				margin-top: 24px;
+				justify-content: center;
+			}
+		}
+		&__prev,
+		&__next {
+			padding: 0;
+			background: none;
+			border: none;
+			margin: 0;
+			color: $color-assort;
+			cursor: pointer;
+			@include hover-opacity(0.7);
+		}
+	}
+}
+.c-carousel-horizontal {
+	&.swiper {
+		overflow: visible;
+	}
+	&__slide {
+		&.swiper-slide {
+			width: 226px;
+			height: auto;
+			@include mq(md) {
+				width: auto;
+			}
+		}
+	}
+}

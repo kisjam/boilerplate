@@ -1,53 +1,24 @@
 @use "../../global" as *;
 
 @layer components {
-	/*
-	/* Input Checkbox
-
-		<label class="input-checkbox">
-			<input type="checkbox" class="input-checkbox__input" name="piyo">
-			<span class="input-checkbox__label">チェックボックスのサンプル</span>
-		</label>
-
-	/*
-	----------------------------------------------------------------- */
-	.input-checkbox {
+	.c-input-checkbox {
 		$this: &;
+		display: flex;
+		gap: 4px;
+		width: fit-content;
 		cursor: pointer;
 
-		&__input {
-			display: none;
-
-			&:checked + #{$this}__label {
-				&::before {
-					background: #f00;
-				}
-			}
+		&__icon {
 		}
 
 		&__label {
-			position: relative;
-			display: flex;
-			align-items: center;
-			padding-left: 40px;
-			height: 48px;
+			font-size: rem(14);
+			line-height: $lh;
+		}
 
-			&::before {
-				content: "";
-				position: absolute;
-				left: 0;
-				top: 50%;
-				transform: translateY(-50%);
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 24px;
-				height: 24px;
-				border-radius: 12px;
-				background: #eee;
-				box-sizing: border-box;
-				font-size: 1.4rem;
-			}
+		&__group {
+			display: grid;
+			gap: 4px;
 		}
 	}
 }

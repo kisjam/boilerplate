@@ -1,0 +1,78 @@
+@use "global" as *;
+
+@layer layouts {
+	.l-category-header {
+		margin-inline: 40px;
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		background-color: $color-assort;
+		border-radius: 0 0 $radius $radius;
+
+		@include mq(md) {
+			position: relative;
+			margin: 0;
+		}
+
+		&__list {
+			display: flex;
+			justify-content: center;
+			// flex-wrap: wrap;
+			&-item {
+				position: relative;
+				padding: 10px 16px;
+				max-width: 256px;
+				width: 100%;
+
+				@include mq(lg) {
+					max-width: 200px;
+				}
+				@include mq(md) {
+					padding: 4px 16px;
+					max-width: none;
+					width: fit-content;
+				}
+
+				&:not(:first-child) {
+					&::before {
+						content: "";
+						position: absolute;
+						left: 0;
+						top: 50%;
+						translate: 0 -50%;
+						width: 1px;
+						height: 24px;
+						background-color: $color-white;
+
+						@include mq(md) {
+							height: 16px;
+						}
+					}
+				}
+			}
+			&-link {
+				display: flex;
+				justify-content: center;
+				color: $color-white;
+				text-decoration: none;
+				border-radius: $radius;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				font-size: rem(18);
+				font-weight: $fw-bold;
+				line-height: 1;
+				transition: background-color $duration ease;
+
+				@include mq(md) {
+					font-size: rem(12);
+					padding-top: 8px;
+					padding-bottom: 8px;
+				}
+
+				@include hover {
+					background-color: rgba($color-white, 0.2);
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,57 @@
+@use "global" as *;
+
+@layer components {
+	.c-editor {
+		p:not([class]) {
+			@include p;
+		}
+		h2.wp-block-heading {
+			@include h2;
+		}
+		h3.wp-block-heading {
+			@include h3;
+		}
+		h4.wp-block-heading {
+			@include h4;
+		}
+		.wp-block-image {
+			@include image;
+		}
+		ul.wp-block-list,
+		ul:not([class]) {
+			@include ul;
+		}
+		ol.wp-block-list,
+		ol:not([class]) {
+			@include ol;
+		}
+		.wp-block-quote {
+			@include quote;
+		}
+		.wp-block-table {
+			@include table;
+		}
+
+		// Default Styles
+		.alignleft {
+			float: left;
+			margin: 0 1em 1em 0;
+		}
+
+		.alignright {
+			float: right;
+			margin: 0 0 1em 1em;
+		}
+
+		.aligncenter {
+			display: block;
+			width: fit-content;
+			margin: 0 auto;
+			clear: both;
+		}
+
+		.alignnone {
+			margin: 0;
+		}
+	}
+}

@@ -1,0 +1,33 @@
+{% layout "_layouts/default.liquid" %}
+{% assign breadcrumbs = '[
+{"text": "ホーム", "url": "/"},
+{"text": "サンプル", "url": "/sample/"}
+]' | parse_json %}
+
+{% block contents %}
+
+{{ timestamp }}
+{{ filename }}
+<div class="c-page-header">
+	<div class="c-page-header__inner">
+		<div class="c-page-header__body">
+			<div class="c-page-header__body-inner">
+				<h1 class="c-page-header__title">サンプル</h1>
+			</div>
+			<div class="c-page-header__breadcrumb">
+				{% render "_breadcrumb", breadcrumbs: breadcrumbs %}
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="c-page-body">
+	<div class="c-page-body__inner">
+		<div class="p-sample">
+			hoge
+		</div>
+	</div>
+</div>
+
+{% endblock %}

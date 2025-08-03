@@ -1,5 +1,10 @@
-// ホバーエフェクトミックスイン
-// 使用非推奨: Tailwindのhover:を使用してください
+@mixin hover {
+	@media (any-hover: hover) {
+		&:hover {
+			@content;
+		}
+	}
+}
 
 @mixin hover-opacity($opacity: 0.8) {
 	transition: opacity 0.3s ease;

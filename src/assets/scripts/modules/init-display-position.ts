@@ -1,6 +1,6 @@
 import { u } from "./utility";
 
-const initDisplayPosition = (): void => {
+export const initDisplayPosition = (): void => {
 	const hash: string = window.location.hash;
 
 	if (hash === "") return;
@@ -13,11 +13,12 @@ const initDisplayPosition = (): void => {
 		if (targetElem === null) return;
 
 		setTimeout(() => {
-			window.scrollTo(0, targetElem.getBoundingClientRect().top + u.wy + u.scrollGap);
+			window.scrollTo(
+				0,
+				targetElem.getBoundingClientRect().top + u.wy + u.scrollGap
+			);
 		}, 10);
 
 		history.replaceState(null, "", hash);
 	});
 };
-
-export default initDisplayPosition;

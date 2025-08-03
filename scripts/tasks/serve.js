@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import bs from "browser-sync";
 import config from "../../build.config.js";
+import { logger } from "../utils.js";
 
 const browserSync = bs.create();
 
@@ -23,10 +24,10 @@ export function startServer(customOptions = {}) {
 	return new Promise((resolve, reject) => {
 		browserSync.init(finalOptions, (err, bs) => {
 			if (err) {
-				console.error("BrowserSync failed to start:", err);
+				logger.error(`BrowserSync failed to start: ${err}`);
 				reject(err);
 			} else {
-				console.log("✓ Development server started");
+				logger.success("Development server started");
 				resolve(bs);
 			}
 		});

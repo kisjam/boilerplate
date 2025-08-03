@@ -1,0 +1,42 @@
+@use "global" as *;
+@layer components {
+	.c-breadcrumb {
+		$this: &;
+
+		&__list {
+			display: flex;
+			overflow: auto;
+		}
+		&__list-item {
+			position: relative;
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+
+			&:not(:last-child) {
+				&::after {
+					content: "";
+					display: block;
+					width: 18px;
+					height: 1px;
+					background-color: $color-white;
+					margin-inline: 10px;
+				}
+			}
+			&:last-child {
+				#{$this}__list-link {
+					opacity: 0.5;
+					pointer-events: none;
+				}
+			}
+		}
+		&__list-link {
+			color: $color-white;
+			text-decoration: none;
+			font-size: rem(14);
+			@include hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
