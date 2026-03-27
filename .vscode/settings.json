@@ -1,0 +1,36 @@
+{
+	"files.watcherExclude": {
+		"**/node_modules/**": true,
+		"**/dist/**": true,
+		"**/wp-includes/**": true,
+		"**/wp-admin/**": true,
+		"**/wp-content/plugins/**": true,
+		"**/wp-content/uploads/**": true,
+		"**/.git/**": true
+	},
+	"search.exclude": {
+		"**/node_modules/**": true,
+		"**/dist/**": true,
+		"**/wp-includes/**": true,
+		"**/wp-admin/**": true,
+		"**/wp-content/plugins/**": true,
+		"**/wp-content/uploads/**": true
+	},
+	"tailwindCSS.files.exclude": [
+		"**/.git/**",
+		"**/node_modules/**",
+		"**/dist/**",
+		"**/wp-includes/**",
+		"**/wp-admin/**",
+		"**/wp-content/plugins/**",
+		"**/wp-content/uploads/**"
+	],
+	"tailwindCSS.includeLanguages": {
+		"liquid": "html",
+		"scss": "css"
+	},
+	"editor.formatOnType": false,
+	"editor.codeActionsOnSave": {
+		"quickfix.biome": "explicit"
+	}
+}
