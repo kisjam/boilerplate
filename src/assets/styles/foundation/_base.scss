@@ -2,7 +2,7 @@
 
 @layer base {
 	html {
-		scroll-padding-top: 100px;
+		scroll-behavior: smooth;
 	}
 	body {
 		font-family: $ff-noto-sans;
@@ -16,6 +16,24 @@
 		overflow-wrap: anywhere;
 		word-break: normal;
 		line-break: strict;
+
+		&::before {
+			content: "";
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, 0.5);
+			z-index: 99;
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity $duration ease;
+		}
+
+		&:has(.l-site-nav__list-item.is-open) {
+			&::before {
+				opacity: 1;
+				pointer-events: auto;
+			}
+		}
 	}
 
 	img {
@@ -31,5 +49,9 @@
 
 	strong {
 		font-weight: $fw-bold;
+	}
+
+	[id] {
+		scroll-margin-top: calc(var(--header-height, 100px) + 40px);
 	}
 }

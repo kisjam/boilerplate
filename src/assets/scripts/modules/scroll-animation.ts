@@ -7,7 +7,7 @@ interface ScrollAnimationOptions {
 	fireRange: number;
 }
 
-export default class ScrollAnimation {
+export class ScrollAnimation {
 	private option: ScrollAnimationOptions;
 	private observer: IntersectionObserver | null = null;
 	private scrollHandlers: Map<HTMLElement, () => void> = new Map();

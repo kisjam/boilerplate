@@ -1,13 +1,12 @@
 {% layout "_layouts/default.liquid" %}
 {% assign breadcrumbs = '[
 {"text": "ホーム", "url": "/"},
+{"text": "サンプル", "url": "/sample/"},
 {"text": "サンプル", "url": "/sample/"}
 ]' | parse_json %}
 
 {% block contents %}
 
-{{ timestamp }}
-{{ filename }}
 <div class="c-page-header">
 	<div class="c-page-header__inner">
 		<div class="c-page-header__body">
@@ -15,7 +14,7 @@
 				<h1 class="c-page-header__title">サンプル</h1>
 			</div>
 			<div class="c-page-header__breadcrumb">
-				{% render "_breadcrumb", breadcrumbs: breadcrumbs %}
+				{% render "_breadcrumb", data: breadcrumbs %}
 			</div>
 		</div>
 	</div>
@@ -25,7 +24,41 @@
 <div class="c-page-body">
 	<div class="c-page-body__inner">
 		<div class="p-sample">
-			hoge
+			<dl>
+				<div>
+					<dt>timestamp</dt>
+					<dd>{{ timestamp }}</dd>
+				</div>
+				<div>
+					<dt>filename</dt>
+					<dd>{{ filename }}</dd>
+				</div>
+			</dl>
+			<p><a href="#anchor">ページ内リンク</a></p>
+			<h2 id="anchor">ページ内リンクの遷移先</h2>
+			<h2>LiquidJSコンポーネント</h2>
+			<h3>アイコン</h3>
+			{% render "_icon", icon: 'external' %}
+
+
+			<h2>汎用UI</h2>
+			<h2>タブ</h2>
+			<h2>アコーディオン</h2>
+			<h2>モーダル</h2>
+			<button data-modal-open="modal-01">モーダルを開く</button>
+			<div class="c-modal" id="modal-01">
+				<div class="c-modal__inner">
+					<div class="c-modal__body">
+						<p class="c-text">ここに説明文が入ります。</p>
+					</div>
+					<button class="c-modal__close" data-modal-close><span class="sr-only">閉じる</span></button>
+				</div>
+			</div>
+			<h2>Toggle</h2>
+			<button data-toggle="#toggle">Toggle</button>
+			<div id="toggle">
+				Toggle されるコンテンツ
+			</div>
 		</div>
 	</div>
 </div>

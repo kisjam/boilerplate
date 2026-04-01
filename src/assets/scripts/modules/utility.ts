@@ -200,7 +200,7 @@ export const slideUp = (
 	element.style.overflow = "hidden";
 	element.style.transitionProperty = "height, margin, padding";
 	element.style.transitionDuration = `${duration}ms`;
-	element.style.transitionTimingFunction = "ease-out";
+	element.style.transitionTimingFunction = "cubic-bezier(0.165, 0.84, 0.44, 1)"; // easeOutQuart
 
 	// 値を0に設定
 	requestAnimationFrame(() => {
@@ -270,7 +270,7 @@ export const slideDown = (
 	// トランジション設定
 	element.style.transitionProperty = "height, margin, padding";
 	element.style.transitionDuration = `${duration}ms`;
-	element.style.transitionTimingFunction = "ease-out";
+	element.style.transitionTimingFunction = "cubic-bezier(0.165, 0.84, 0.44, 1)"; // easeOutQuart
 
 	// 値を設定
 	requestAnimationFrame(() => {
@@ -369,7 +369,7 @@ export const addScrolledClass = (): void => {
 
 		if (shouldBeScrolled !== isScrolled) {
 			isScrolled = shouldBeScrolled;
-			
+
 			if (isScrolled) {
 				document.body.classList.add("is-scrolled");
 			} else {

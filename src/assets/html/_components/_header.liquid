@@ -23,7 +23,7 @@
 			</div>
 		</div>
 		<div class="l-site-header__search">
-			<button class="l-site-header__search-button">
+			<button class="l-site-header__search-button" data-modal-open="modal-search">
 				{% render "_icon", name: "external", size: "19", class:"max-md:size-3" %}
 			</button>
 		</div>
@@ -52,10 +52,16 @@
 <dialog class="c-modal-search" id="modal-search">
 	<div class="c-modal-search__inner">
 		<div class="c-modal-search__body">
-			<button class="c-modal-search__close"></button>
+			<button class="c-modal-search__close" data-modal-close></button>
 			<div class="c-modal-search__body-inner">
 				モーダル
 			</div>
 		</div>
 	</div>
 </dialog>
+
+
+・スマホ用メニューが別で必要かどうか
+・開閉はクリックかホバーか
+・アイコンのみにトグルがあるかどうか
+・メニュー用トグルがPCでも表示されているかどうか

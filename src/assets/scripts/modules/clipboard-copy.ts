@@ -3,8 +3,6 @@
  * data-copy-clipboard属性を持つ要素をクリックしたときにクリップボードにコピー
  */
 
-import { showMessage } from "./message";
-
 export function initClipboardCopy(): void {
 	const copyElements = document.querySelectorAll("[data-copy-clipboard]");
 
@@ -35,12 +33,30 @@ async function handleCopyClick(event: Event): Promise<void> {
 			await copyTextFallback(textToCopy);
 		}
 
-		// コピー成功のメッセージ表示
-		showMessage(`コピーしました: ${textToCopy}`);
+		showToast(`コピーしました: ${textToCopy}`);
 	} catch (error) {
 		console.error("クリップボードへのコピーに失敗しました:", error);
-		showMessage("クリップボードへのコピーに失敗しました");
+		showToast("クリップボードへのコピーに失敗しました");
 	}
+}
+
+function showToast(message: string): void {
+	const toast = document.createElement("div");
+	toast.textContent = message;
+	toast.className =
+		"fixed bottom-6 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm px-4 py-2 rounded shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none z-50";
+	document.body.appendChild(toast);
+
+	requestAnimationFrame(() => {
+		toast.classList.remove("opacity-0");
+		toast.classList.add("opacity-100");
+	});
+
+	setTimeout(() => {
+		toast.classList.remove("opacity-100");
+		toast.classList.add("opacity-0");
+		toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+	}, 2000);
 }
 
 function copyTextFallback(text: string): Promise<void> {

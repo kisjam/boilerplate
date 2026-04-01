@@ -1,0 +1,78 @@
+@use "global" as *;
+@use "smart-svg";
+
+@layer components {
+	:root.is-modal-open {
+		overflow: hidden;
+		scrollbar-gutter: stable;
+	}
+
+	.c-modal {
+		display: none;
+		position: fixed;
+		inset: 0;
+		z-index: 2000;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+
+		&.is-open {
+			display: flex;
+		}
+
+		&__backdrop {
+			position: fixed;
+			inset: 0;
+			z-index: -1;
+			background-color: rgba(#040404, 0.3);
+		}
+
+		&__inner {
+			position: relative;
+		}
+
+		&__body {
+			overflow: auto;
+			background-color: white;
+			margin-inline: auto;
+			padding: 40px;
+			width: 880px;
+			max-width: calc(100% - 40px);
+			max-height: 80vh;
+
+			@include mq(md) {
+				width: auto;
+				max-height: 80vh;
+				padding: 24px;
+			}
+		}
+
+		&__close {
+			position: absolute;
+			right: 0;
+			top: 0;
+			transform: translate(0, -50%);
+			display: flex;
+			width: 58px;
+			height: 58px;
+			align-items: center;
+			justify-content: center;
+			background: white;
+			border-radius: 58px;
+			color: black;
+			cursor: pointer;
+			transition:
+				background-color $duration ease,
+				color $duration ease;
+
+			@include mq(md) {
+				width: 40px;
+				height: 40px;
+			}
+
+			@include hover {
+				background-color: gray;
+			}
+		}
+	}
+}

@@ -1,246 +1,155 @@
-import { u } from "./utility";
-
 interface ModalOptions {
 	closeOnBackdropClick?: boolean;
-	closeOnEscapeKey?: boolean;
-	preventScroll?: boolean;
-	focusTrap?: boolean;
-	triggerSelector?: string;
-	closeSelector?: string;
-	beforeOpen?: () => void;
-	afterOpen?: () => void;
-	beforeClose?: () => void;
-	afterClose?: () => void;
 }
 
-const DEFAULT_OPTIONS: Required<ModalOptions> = {
-	closeOnBackdropClick: true,
-	closeOnEscapeKey: true,
-	preventScroll: true,
-	focusTrap: true,
-	triggerSelector: "",
-	closeSelector: "",
-	beforeOpen: () => {},
-	afterOpen: () => {},
-	beforeClose: () => {},
-	afterClose: () => {},
-};
 export class Modal {
-	private element: HTMLElement;
-	private options: Required<ModalOptions>;
-	private isOpen: boolean = false;
-	private previousActiveElement: Element | null = null;
-	private focusableElements: HTMLElement[] = [];
-	private originalBodyStyles: Partial<CSSStyleDeclaration> = {};
+	private currentDialog: HTMLElement | null = null;
+	private lastFocusedElement: HTMLElement | null = null;
+	private closeOnBackdropClick: boolean;
+	private clickHandler: (e: MouseEvent) => void;
+	private keydownHandler: (e: KeyboardEvent) => void;
 
-	constructor(element: HTMLElement | string, options: ModalOptions = {}) {
-		if (typeof element === "string") {
-			const el = document.querySelector(element) as HTMLElement;
-			if (!el) {
-				throw new Error(`Modal element not found: ${element}`);
-			}
-			this.element = el;
-		} else {
-			this.element = element;
-		}
+	constructor(options: ModalOptions = {}) {
+		this.closeOnBackdropClick = options.closeOnBackdropClick ?? true;
 
-		this.options = { ...DEFAULT_OPTIONS, ...options };
+		this.clickHandler = this.handleClick.bind(this);
+		this.keydownHandler = this.handleKeydown.bind(this);
+
+		if (!document.querySelector("[data-modal-open]")) return;
+
+		this.setupAria();
 		this.init();
 	}
 
-	private init(): void {
-		this.element.setAttribute("aria-hidden", "true");
-		this.element.setAttribute("role", "dialog");
-		this.element.setAttribute("aria-modal", "true");
+	private setupAria(): void {
+		document
+			.querySelectorAll<HTMLElement>("[data-modal-open]")
+			.forEach((button) => {
+				const targetId = button.getAttribute("data-modal-open");
+				if (!targetId) return;
 
-		this.setupEventListeners();
-	}
+				button.setAttribute("aria-haspopup", "dialog");
+				button.setAttribute("aria-controls", targetId);
 
-	private setupEventListeners(): void {
-		if (this.options.closeOnEscapeKey) {
-			document.addEventListener("keydown", this.handleEscapeKey.bind(this));
-		}
+				const dialog = document.getElementById(targetId);
+				if (!dialog) return;
 
-		if (this.options.closeOnBackdropClick) {
-			this.element.addEventListener("click", this.handleBackdropClick.bind(this));
-		}
+				dialog.setAttribute("data-modal-dialog", "");
+				dialog.setAttribute("role", "dialog");
+				dialog.setAttribute("aria-modal", "true");
+				dialog.setAttribute("aria-hidden", "true");
 
-		if (this.options.focusTrap) {
-			this.element.addEventListener("keydown", this.handleFocusTrap.bind(this));
-		}
-
-		if (this.options.triggerSelector) {
-			this.setupTriggerButtons();
-		}
-
-		if (this.options.closeSelector) {
-			this.setupCloseButtons();
-		}
-	}
-
-	private setupTriggerButtons(): void {
-		const triggerButtons = document.querySelectorAll(this.options.triggerSelector);
-		triggerButtons.forEach(button => {
-			button.addEventListener("click", (e) => {
-				e.preventDefault();
-				this.open();
-			});
-		});
-	}
-
-	private setupCloseButtons(): void {
-		const closeButtons = document.querySelectorAll(this.options.closeSelector);
-		closeButtons.forEach(button => {
-			button.addEventListener("click", (e) => {
-				e.preventDefault();
-				this.close();
-			});
-		});
-	}
-
-	private handleBackdropClick(event: MouseEvent): void {
-		if (event.target === this.element) {
-			this.close();
-		}
-	}
-
-	private handleEscapeKey(event: KeyboardEvent): void {
-		if (event.key === "Escape" && this.isOpen) {
-			this.close();
-		}
-	}
-
-	private handleFocusTrap(event: KeyboardEvent): void {
-		if (event.key !== "Tab" || this.focusableElements.length === 0) return;
-
-		const firstElement = this.focusableElements[0];
-		const lastElement = this.focusableElements[this.focusableElements.length - 1];
-
-		if (event.shiftKey) {
-			if (document.activeElement === firstElement) {
-				event.preventDefault();
-				lastElement.focus();
-			}
-		} else {
-			if (document.activeElement === lastElement) {
-				event.preventDefault();
-				firstElement.focus();
-			}
-		}
-	}
-
-	private getFocusableElements(): HTMLElement[] {
-		const selectors = [
-			'button:not([disabled])',
-			'[href]',
-			'input:not([disabled])',
-			'select:not([disabled])',
-			'textarea:not([disabled])',
-			'[tabindex]:not([tabindex="-1"])',
-		];
-
-		return Array.from(this.element.querySelectorAll(selectors.join(", "))) as HTMLElement[];
-	}
-
-	private preventScroll(): void {
-		if (!this.options.preventScroll) return;
-
-		this.originalBodyStyles = {
-			overflow: document.body.style.overflow,
-			paddingRight: document.body.style.paddingRight,
-		};
-
-		const scrollbarWidth = u.getScrollbarWidth();
-		document.body.style.overflow = "hidden";
-		document.body.style.paddingRight = `${scrollbarWidth}px`;
-	}
-
-	private restoreScroll(): void {
-		if (!this.options.preventScroll) return;
-
-		document.body.style.overflow = this.originalBodyStyles.overflow || "";
-		document.body.style.paddingRight = this.originalBodyStyles.paddingRight || "";
-	}
-
-	public open(): void {
-		if (this.isOpen) return;
-
-		this.options.beforeOpen();
-		this.previousActiveElement = document.activeElement;
-		this.preventScroll();
-
-		this.element.setAttribute("open", "");
-		this.element.setAttribute("aria-hidden", "false");
-
-		this.focusableElements = this.getFocusableElements();
-
-		if (this.focusableElements.length > 0) {
-			this.focusableElements[0].focus();
-		}
-
-		this.isOpen = true;
-		this.options.afterOpen();
-	}
-
-	public close(): void {
-		if (!this.isOpen) return;
-
-		this.options.beforeClose();
-
-		this.element.removeAttribute("open");
-
-		const handleTransitionEnd = (event: TransitionEvent): void => {
-			if (event.target !== this.element) return;
-
-			this.element.removeEventListener("transitionend", handleTransitionEnd);
-			this.element.setAttribute("aria-hidden", "true");
-
-			this.restoreScroll();
-
-			if (this.previousActiveElement instanceof HTMLElement) {
-				this.previousActiveElement.focus();
-			}
-
-			this.isOpen = false;
-			this.options.afterClose();
-		};
-
-		this.element.addEventListener("transitionend", handleTransitionEnd);
-
-		setTimeout(() => {
-			if (this.isOpen) {
-				this.element.removeEventListener("transitionend", handleTransitionEnd);
-				this.element.setAttribute("aria-hidden", "true");
-				this.restoreScroll();
-
-				if (this.previousActiveElement instanceof HTMLElement) {
-					this.previousActiveElement.focus();
+				if (!dialog.querySelector("[data-modal-backdrop]")) {
+					const backdrop = document.createElement("div");
+					backdrop.classList.add("c-modal__backdrop");
+					backdrop.setAttribute("data-modal-backdrop", "");
+					backdrop.setAttribute("aria-hidden", "true");
+					dialog.insertBefore(backdrop, dialog.firstChild);
 				}
-
-				this.isOpen = false;
-				this.options.afterClose();
-			}
-		}, 600);
+			});
 	}
 
-	public toggle(): void {
-		if (this.isOpen) {
-			this.close();
-		} else {
-			this.open();
+	private init(): void {
+		document.addEventListener("click", this.clickHandler);
+		document.addEventListener("keydown", this.keydownHandler);
+	}
+
+	private handleClick(e: MouseEvent): void {
+		const target = e.target as HTMLElement;
+
+		const openButton = target.closest<HTMLElement>("[data-modal-open]");
+		if (openButton && !openButton.closest("[data-modal-dialog]")) {
+			this.lastFocusedElement = openButton;
+			this.open(openButton.getAttribute("data-modal-open")!);
+			return;
+		}
+
+		if (target.closest("[data-modal-close]")) {
+			if (this.currentDialog) this.close(this.currentDialog);
+			return;
+		}
+
+		if (this.closeOnBackdropClick && target.closest("[data-modal-backdrop]")) {
+			if (this.currentDialog) this.close(this.currentDialog);
 		}
 	}
 
-	public getIsOpen(): boolean {
-		return this.isOpen;
+	private handleKeydown(e: KeyboardEvent): void {
+		if (!this.currentDialog) return;
+		if (e.key === "Escape") {
+			this.close(this.currentDialog);
+		} else if (e.key === "Tab") {
+			this.trapFocus(e, this.currentDialog);
+		}
 	}
 
-	public destroy(): void {
-		this.close();
-		document.removeEventListener("keydown", this.handleEscapeKey.bind(this));
+	private trapFocus(e: KeyboardEvent, dialog: HTMLElement): void {
+		const selectors =
+			'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+		const focusable = Array.from(
+			dialog.querySelectorAll<HTMLElement>(selectors),
+		).filter((el) => el.offsetParent !== null);
+
+		if (focusable.length === 0) return;
+
+		const first = focusable[0];
+		const last = focusable[focusable.length - 1];
+
+		if (e.shiftKey) {
+			if (document.activeElement === first) {
+				e.preventDefault();
+				last.focus();
+			}
+		} else {
+			if (document.activeElement === last) {
+				e.preventDefault();
+				first.focus();
+			}
+		}
+	}
+
+	open(targetId: string): void {
+		if (this.currentDialog) {
+			this.currentDialog.classList.remove("is-open");
+			this.currentDialog.setAttribute("aria-hidden", "true");
+		}
+
+		const dialog = document.getElementById(targetId);
+		if (!dialog) return;
+
+		dialog.classList.add("is-open");
+		dialog.setAttribute("aria-hidden", "false");
+
+		document.documentElement.classList.add("is-modal-open");
+
+		this.currentDialog = dialog;
+
+		const closeButton = dialog.querySelector<HTMLElement>("[data-modal-close]");
+		if (closeButton) {
+			closeButton.focus();
+		} else {
+			dialog.setAttribute("tabindex", "-1");
+			dialog.focus();
+		}
+	}
+
+	close(dialog: HTMLElement): void {
+		dialog.classList.remove("is-open");
+		dialog.setAttribute("aria-hidden", "true");
+
+		document.documentElement.classList.remove("is-modal-open");
+
+		this.currentDialog = null;
+
+		if (this.lastFocusedElement) {
+			this.lastFocusedElement.focus();
+			this.lastFocusedElement = null;
+		}
+	}
+
+	destroy(): void {
+		if (this.currentDialog) this.close(this.currentDialog);
+		document.removeEventListener("click", this.clickHandler);
+		document.removeEventListener("keydown", this.keydownHandler);
 	}
 }
-
-export const createModal = (element: HTMLElement | string, options?: ModalOptions): Modal => {
-	return new Modal(element, options);
-};

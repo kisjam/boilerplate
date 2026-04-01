@@ -1,7 +1,7 @@
-{% if breadcrumbs %}
+{% if data %}
 <nav class="c-breadcrumb">
 	<ol class="c-breadcrumb__list">
-		{% for crumb in breadcrumbs %}
+		{% for crumb in data %}
 		<li class="c-breadcrumb__list-item">
 			{% if forloop.last %}
 			<a href="{{ crumb.url }}" class="c-breadcrumb__list-link" aria-current="page">{{ crumb.text }}</a>
@@ -19,7 +19,7 @@
 	"@context": "https://schema.org",
 	"@type": "BreadcrumbList",
 	"itemListElement": [
-		{% for crumb in breadcrumbs %}
+		{% for crumb in data %}
 		{
 			"@type": "ListItem",
 			"position": {{ forloop.index }},

@@ -24,6 +24,7 @@
 		"glob": "^11.0.2",
 		"image-size": "^2.0.2",
 		"liquidjs": "^10.21.1",
+		"picocolors": "^1.1.1",
 		"postcss": "^8.5.4",
 		"sass": "^1.55.0",
 		"sharp": "^0.33.3",
@@ -31,7 +32,6 @@
 		"swiper": "^11.2.10",
 		"tailwindcss": "^4.1.8",
 		"typescript": "^5.8.3",
-		"vite": "^6.3.5",
-		"picocolors": "^1.1.1"
+		"vite": "^6.3.5"
 	}
 }
