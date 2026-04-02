@@ -19,7 +19,14 @@ export default {
 		icons: "assets/icons",
 	},
 	sassGlob: {
-		directories: ["global", "components", "layouts", "pages", "utilities"],
+		directories: [
+			"global",
+			"components",
+			"layouts",
+			"pages",
+			"utilities",
+			"sample",
+		],
 	},
 	tailwind: {
 		outputFile: "utilities/_tailwind.scss",

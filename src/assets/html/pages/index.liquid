@@ -15,29 +15,6 @@
 	<div class="p-top__sample">
 		<p><a href="/sample/">サンプル</a></p>
 	</div>
-	<div class="p-top__pickup">
-		<div class="p-top-pickup">
-			<div class="p-top-pickup__body">
-				<div class="c-carousel-horizontal-3 swiper">
-					<div class="c-carousel-horizontal-3__wrapper swiper-wrapper">
-						{% for i in (1..10) %}
-						<div class="c-carousel-horizontal-3__slide swiper-slide w-[240px]">
-							{% render "_card", url: "/sample/", title: "sample", category: "カテゴリ", class:"-lg" %}
-						</div>
-						{% endfor %}
-					</div>
-					<div class="c-carousel-horizontal-3__navigation">
-						<button class="c-carousel-horizontal-3__prev">
-							{% render "_icon", name: "external", size: "38", class: "-white" %}
-						</button>
-						<button class="c-carousel-horizontal-3__next">
-							{% render "_icon", name: "external", size: "38", class: "-white" %}
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
 </div>
 

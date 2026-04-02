@@ -15,7 +15,7 @@
 
 ```bash
 # 依存関係インストール
-npm install
+npm ci
 
 # 開発環境起動（ビルド + サーバー + ファイル監視）
 npm run dev

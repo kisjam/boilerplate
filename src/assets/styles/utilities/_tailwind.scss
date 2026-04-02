@@ -56,9 +56,6 @@
 .inline {
   display: inline;
 }
-.w-\[240px\] {
-  width: 240px;
-}
 .-translate-x-1\/2 {
   --tw-translate-x: calc(calc(1 / 2 * 100%) * -1);
   translate: var(--tw-translate-x) var(--tw-translate-y);
@@ -108,6 +105,11 @@
   --tw-duration: 300ms;
   -webkit-transition-duration: 300ms;
   transition-duration: 300ms;
+}
+.max-md\:hidden {
+  @media (width < 48rem) {
+    display: none;
+  }
 }
 .max-md\:size-3 {
   @media (width < 48rem) {
