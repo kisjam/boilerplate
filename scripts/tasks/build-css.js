@@ -10,19 +10,13 @@ import { logger } from "../utils.js";
 async function buildCSS() {
 	const isProd = process.argv.includes("--prod");
 	const startTime = performance.now();
-	const outputDir = path.join(
-		config.dist,
-		config.basePath || "",
-		config.output.css
-	);
+	const outputDir = path.join(config.dist, config.basePath || "", config.output.css);
 
 	try {
 		await fs.mkdir(outputDir, { recursive: true });
 
 		const files = await fs.readdir(config.assets.css);
-		const scssFiles = files.filter(
-			(file) => file.endsWith(".scss") && !file.startsWith("_")
-		);
+		const scssFiles = files.filter((file) => file.endsWith(".scss") && !file.startsWith("_"));
 
 		if (scssFiles.length === 0) {
 			logger.info("No SCSS files found");
@@ -59,9 +53,7 @@ async function buildCSS() {
 		}
 
 		const totalTime = Math.round(performance.now() - startTime);
-		const fileList = scssFiles
-			.map((f) => f.replace(".scss", ".css"))
-			.join(", ");
+		const fileList = scssFiles.map((f) => f.replace(".scss", ".css")).join(", ");
 		logger.success(`CSS: Compiled ${fileList} (${totalTime}ms)`);
 	} catch (error) {
 		logger.error(`CSS failed: ${error}`);

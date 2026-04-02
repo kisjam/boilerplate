@@ -1,4 +1,4 @@
-import { slideUp, slideDown } from "./utility";
+import { slideDown, slideUp } from "./utility";
 
 export class Accordion {
 	buttonEl: HTMLButtonElement;
@@ -11,9 +11,7 @@ export class Accordion {
 
 		const panelId = this.buttonEl.getAttribute("data-accordion");
 		if (!panelId) {
-			throw new Error(
-				"Accordion button does not have a 'data-accordion' attribute."
-			);
+			throw new Error("Accordion button does not have a 'data-accordion' attribute.");
 		}
 
 		const isExpanded = this.buttonEl.getAttribute("aria-expanded") || "false";
@@ -28,10 +26,7 @@ export class Accordion {
 		this.panelEl = panelEl as HTMLElement;
 
 		this.panelEl.setAttribute("aria-labelledby", this.buttonEl.id);
-		this.panelEl.setAttribute(
-			"aria-hidden",
-			isExpanded === "true" ? "false" : "true"
-		);
+		this.panelEl.setAttribute("aria-hidden", isExpanded === "true" ? "false" : "true");
 		this.panelEl.style.display = isExpanded === "true" ? "block" : "none";
 		this.closeButtonEl = this.panelEl.querySelector("[data-accordion-close]");
 

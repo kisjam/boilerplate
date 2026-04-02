@@ -27,7 +27,7 @@ async function buildCopy() {
 				const srcPath = path.join(srcDir, file);
 				const distPath = path.join(distDir, file);
 
-						await fs.mkdir(path.dirname(distPath), { recursive: true });
+				await fs.mkdir(path.dirname(distPath), { recursive: true });
 
 				await fs.copyFile(srcPath, distPath);
 			}),

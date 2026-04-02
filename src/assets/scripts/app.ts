@@ -1,25 +1,25 @@
 // import Accordion from "./modules/accordion";
 // import CheckScrolled from "./modules/check-scrolled";
+
+import Swiper from "swiper";
+import { Navigation, Pagination } from "swiper/modules";
+import { Accordion } from "./modules/accordion";
+import { initClipboardCopy } from "./modules/clipboard-copy";
 import { initDisplayPosition } from "./modules/init-display-position";
+import { Modal } from "./modules/modal";
+import { createNav } from "./modules/nav";
 import { initToggle } from "./modules/toggle";
-import { updateHeaderHeight } from "./modules/header-height";
 import {
 	addDeviceClass,
 	addLoadedClass,
 	addScrollbarWidth,
 	addScrolledClass,
 } from "./modules/utility";
-import { Modal } from "./modules/modal";
-import { createNav } from "./modules/nav";
-import { initClipboardCopy } from "./modules/clipboard-copy";
-import { Accordion } from "./modules/accordion";
-import Swiper from "swiper";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 
 new Modal();
 
-const navMenu = createNav(".l-site-menu", ".l-site-menu-button", {
+const _navMenu = createNav(".l-site-menu", ".l-site-menu-button", {
 	preventScroll: true,
 	closeOnLinkClick: true,
 });
@@ -32,10 +32,8 @@ const navMenu = createNav(".l-site-menu", ".l-site-menu-button", {
 // 	menuSelector: ".site-header__nav",
 // });
 
-const carouselHorizontal3s = document.querySelectorAll(
-	".c-carousel-horizontal-3",
-);
-carouselHorizontal3s.forEach((swiperEl, index) => {
+const carouselHorizontal3s = document.querySelectorAll(".c-carousel-horizontal-3");
+carouselHorizontal3s.forEach((swiperEl, _index) => {
 	new Swiper(swiperEl as HTMLElement, {
 		modules: [Navigation, Pagination],
 		enabled: false,
@@ -46,12 +44,8 @@ carouselHorizontal3s.forEach((swiperEl, index) => {
 				slidesPerView: "auto",
 				spaceBetween: 24,
 				navigation: {
-					nextEl: swiperEl.querySelector(
-						".c-carousel-horizontal-3__next",
-					) as HTMLElement,
-					prevEl: swiperEl.querySelector(
-						".c-carousel-horizontal-3__prev",
-					) as HTMLElement,
+					nextEl: swiperEl.querySelector(".c-carousel-horizontal-3__next") as HTMLElement,
+					prevEl: swiperEl.querySelector(".c-carousel-horizontal-3__prev") as HTMLElement,
 				},
 			},
 		},

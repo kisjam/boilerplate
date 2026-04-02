@@ -22,31 +22,29 @@ export class Modal {
 	}
 
 	private setupAria(): void {
-		document
-			.querySelectorAll<HTMLElement>("[data-modal-open]")
-			.forEach((button) => {
-				const targetId = button.getAttribute("data-modal-open");
-				if (!targetId) return;
+		document.querySelectorAll<HTMLElement>("[data-modal-open]").forEach((button) => {
+			const targetId = button.getAttribute("data-modal-open");
+			if (!targetId) return;
 
-				button.setAttribute("aria-haspopup", "dialog");
-				button.setAttribute("aria-controls", targetId);
+			button.setAttribute("aria-haspopup", "dialog");
+			button.setAttribute("aria-controls", targetId);
 
-				const dialog = document.getElementById(targetId);
-				if (!dialog) return;
+			const dialog = document.getElementById(targetId);
+			if (!dialog) return;
 
-				dialog.setAttribute("data-modal-dialog", "");
-				dialog.setAttribute("role", "dialog");
-				dialog.setAttribute("aria-modal", "true");
-				dialog.setAttribute("aria-hidden", "true");
+			dialog.setAttribute("data-modal-dialog", "");
+			dialog.setAttribute("role", "dialog");
+			dialog.setAttribute("aria-modal", "true");
+			dialog.setAttribute("aria-hidden", "true");
 
-				if (!dialog.querySelector("[data-modal-backdrop]")) {
-					const backdrop = document.createElement("div");
-					backdrop.classList.add("c-modal__backdrop");
-					backdrop.setAttribute("data-modal-backdrop", "");
-					backdrop.setAttribute("aria-hidden", "true");
-					dialog.insertBefore(backdrop, dialog.firstChild);
-				}
-			});
+			if (!dialog.querySelector("[data-modal-backdrop]")) {
+				const backdrop = document.createElement("div");
+				backdrop.classList.add("c-modal__backdrop");
+				backdrop.setAttribute("data-modal-backdrop", "");
+				backdrop.setAttribute("aria-hidden", "true");
+				dialog.insertBefore(backdrop, dialog.firstChild);
+			}
+		});
 	}
 
 	private init(): void {
@@ -86,9 +84,9 @@ export class Modal {
 	private trapFocus(e: KeyboardEvent, dialog: HTMLElement): void {
 		const selectors =
 			'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
-		const focusable = Array.from(
-			dialog.querySelectorAll<HTMLElement>(selectors),
-		).filter((el) => el.offsetParent !== null);
+		const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(selectors)).filter(
+			(el) => el.offsetParent !== null,
+		);
 
 		if (focusable.length === 0) return;
 

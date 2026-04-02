@@ -102,16 +102,14 @@ buildChild.on("exit", async (code) => {
 					runTask("node scripts/tasks/build-css.js");
 				},
 				error: (error) => logger.error(`CSS watcher error: ${error}`),
-				ready: () =>
-					logger.success(`CSS watcher ready: ${paths.css} (*.scss, *.sass)`),
-			}
+				ready: () => logger.success(`CSS watcher ready: ${paths.css} (*.scss, *.sass)`),
+			},
 		),
 
 		createWatcher(
 			paths.js,
 			{
-				ignored: (path, stats) =>
-					stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
+				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
 				usePolling: true,
 				interval: 100,
 				binaryInterval: 300,
@@ -132,9 +130,8 @@ buildChild.on("exit", async (code) => {
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-js.js");
 				},
-				ready: () =>
-					logger.success(`JS watcher ready: ${paths.js} (*.ts, *.js)`),
-			}
+				ready: () => logger.success(`JS watcher ready: ${paths.js} (*.ts, *.js)`),
+			},
 		),
 
 		createWatcher(
@@ -167,8 +164,7 @@ buildChild.on("exit", async (code) => {
 				add: (filePath) => {
 					const relativePath = path.relative(paths.html, filePath);
 					const isShared =
-						relativePath.startsWith("_components/") ||
-						relativePath.startsWith("_layouts/");
+						relativePath.startsWith("_components/") || relativePath.startsWith("_layouts/");
 
 					if (isShared) {
 						runTask("node scripts/tasks/build-html.js");
@@ -183,7 +179,7 @@ buildChild.on("exit", async (code) => {
 				ready: () => {
 					logger.success(`HTML watcher ready: ${paths.html} (*.liquid)`);
 				},
-			}
+			},
 		),
 
 		createWatcher(
@@ -201,24 +197,20 @@ buildChild.on("exit", async (code) => {
 				change: (filePath) => {
 					runTask(`node scripts/tasks/build-images.js --single "${filePath}"`);
 					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
-						runTask(
-							`node scripts/tasks/build-images-webp.js --single "${filePath}"`
-						);
+						runTask(`node scripts/tasks/build-images-webp.js --single "${filePath}"`);
 					}
 				},
 				add: (filePath) => {
 					runTask(`node scripts/tasks/build-images.js --single "${filePath}"`);
 					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
-						runTask(
-							`node scripts/tasks/build-images-webp.js --single "${filePath}"`
-						);
+						runTask(`node scripts/tasks/build-images-webp.js --single "${filePath}"`);
 					}
 				},
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-images.js");
 				},
 				ready: () => logger.success(`Image watcher ready: ${paths.images}`),
-			}
+			},
 		),
 
 		createWatcher(
@@ -242,9 +234,8 @@ buildChild.on("exit", async (code) => {
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-copy.js");
 				},
-				ready: () =>
-					logger.success(`Static file watcher ready: ${paths.public}`),
-			}
+				ready: () => logger.success(`Static file watcher ready: ${paths.public}`),
+			},
 		),
 
 		createWatcher(
@@ -269,15 +260,14 @@ buildChild.on("exit", async (code) => {
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/build-svg-sprite.js");
 				},
-				ready: () =>
-					logger.success(`Icon watcher ready: ${paths.icons} (*.svg)`),
-			}
+				ready: () => logger.success(`Icon watcher ready: ${paths.icons} (*.svg)`),
+			},
 		),
 	];
 
 	process.on("SIGINT", () => {
 		logger.info("\n🍺 Shutting down...");
-		watchers.forEach((watcher) => watcher.close());
+		for (const watcher of watchers) watcher.close();
 		process.exit(0);
 	});
 });

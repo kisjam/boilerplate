@@ -3,6 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { glob } from "glob";
 import { Liquid } from "liquidjs";
+import * as prettier from "prettier";
 import config from "../../build.config.js";
 import { processImageSizes } from "../lib/image-size-processor.js";
 import { ensureDir, logger, processInParallel, readJSON } from "../utils.js";
@@ -33,17 +34,11 @@ engine.registerFilter("parse_json", (input) => {
 async function processHTMLFile(file, siteData) {
 	const inputPath = path.join(srcDir, file);
 	const relativePath = path.relative(path.join(srcDir, "pages"), inputPath);
-	const outputPath = path.join(
-		distDir,
-		relativePath.replace(".liquid", ".html")
-	);
+	const outputPath = path.join(distDir, relativePath.replace(".liquid", ".html"));
 
 	try {
 		const templateContent = await fsPromises.readFile(inputPath, "utf8");
-		const filenameParts = file
-			.replace("pages/", "")
-			.replace(".liquid", "")
-			.split("/");
+		const filenameParts = file.replace("pages/", "").replace(".liquid", "").split("/");
 
 		const data = {
 			...siteData,
@@ -52,6 +47,16 @@ async function processHTMLFile(file, siteData) {
 
 		let html = await engine.parseAndRender(templateContent, data);
 		html = processImageSizes(html, process.cwd());
+		try {
+			html = await prettier.format(html, {
+				parser: "html",
+				printWidth: 120,
+				tabWidth: 2,
+				useTabs: true,
+			});
+		} catch {
+			// prettier parse error はスキップして元のHTMLを使用
+		}
 
 		await ensureDir(path.dirname(outputPath));
 		await fsPromises.writeFile(outputPath, html);
@@ -66,9 +71,7 @@ async function processHTMLFile(file, siteData) {
 async function main() {
 	try {
 		const args = process.argv.slice(2);
-		const singleFileIndex = args.findIndex(
-			(arg) => arg === "--single" || arg === "-s"
-		);
+		const singleFileIndex = args.findIndex((arg) => arg === "--single" || arg === "-s");
 		let singleFilePath = null;
 
 		if (singleFileIndex !== -1) {
@@ -102,12 +105,9 @@ async function main() {
 				fullPath = path.join(srcDir, singleFilePath);
 			}
 
-			if (
-				!relativePath.startsWith("pages/") ||
-				!relativePath.endsWith(".liquid")
-			) {
+			if (!relativePath.startsWith("pages/") || !relativePath.endsWith(".liquid")) {
 				logger.error(
-					`Invalid file path: ${singleFilePath}. Must be a .liquid file in pages directory.`
+					`Invalid file path: ${singleFilePath}. Must be a .liquid file in pages directory.`,
 				);
 				process.exit(1);
 			}
@@ -127,11 +127,7 @@ async function main() {
 			}
 		}
 
-		const builtFiles = await processInParallel(
-			files,
-			(file) => processHTMLFile(file, siteData),
-			5
-		);
+		const builtFiles = await processInParallel(files, (file) => processHTMLFile(file, siteData), 5);
 
 		if (files.length === 1) {
 			logger.success(`Built: ${builtFiles[0]}`);

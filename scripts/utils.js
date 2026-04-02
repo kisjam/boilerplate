@@ -88,12 +88,4 @@ function getRelativePath(from, to) {
 	return path.relative(from, to).replace(/\\/g, "/");
 }
 
-export {
-	ensureDir,
-	readJSON,
-	writeJSON,
-	logger,
-	processInParallel,
-	fileExists,
-	getRelativePath,
-};
+export { ensureDir, fileExists, getRelativePath, logger, processInParallel, readJSON, writeJSON };

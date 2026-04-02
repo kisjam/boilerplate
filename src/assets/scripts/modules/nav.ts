@@ -29,11 +29,7 @@ export class Nav {
 	private boundHandleEscape: (e: KeyboardEvent) => void;
 	private boundHandleMediaChange: () => void;
 
-	constructor(
-		navSelector: string,
-		toggleSelector: string,
-		options: NavOptions = {},
-	) {
+	constructor(navSelector: string, toggleSelector: string, options: NavOptions = {}) {
 		const navEl = document.querySelector(navSelector) as HTMLElement;
 		const toggleEl = document.querySelector(toggleSelector) as HTMLElement;
 
@@ -61,10 +57,7 @@ export class Nav {
 	}
 
 	private init(): void {
-		this.toggleButton.setAttribute(
-			"aria-controls",
-			this.navElement.id || "navigation",
-		);
+		this.toggleButton.setAttribute("aria-controls", this.navElement.id || "navigation");
 		this.applyViewportState();
 		this.setupEventListeners();
 	}
@@ -219,18 +212,15 @@ export class MegaMenu {
 	private mq: MediaQueryList;
 	private closeDelay: number;
 	private desktopTrigger: "hover" | "click";
-	private handlers: Map<
-		HTMLElement,
-		{ enter: () => void; leave: () => void; click: () => void }
-	> = new Map();
+	private handlers: Map<HTMLElement, { enter: () => void; leave: () => void; click: () => void }> =
+		new Map();
 	private boundHandleEscape: (e: KeyboardEvent) => void;
 	private boundHandleMediaChange: () => void;
 	private boundHandleOutsideClick: (e: MouseEvent) => void;
 
 	constructor(navSelector: string, options: MegaMenuOptions | number = {}) {
 		// 後方互換: 第2引数が数値の場合は closeDelay として扱う
-		const opts: MegaMenuOptions =
-			typeof options === "number" ? { closeDelay: options } : options;
+		const opts: MegaMenuOptions = typeof options === "number" ? { closeDelay: options } : options;
 		const navEl = document.querySelector(navSelector) as HTMLElement;
 		if (!navEl) throw new Error(`MegaMenu: element not found: ${navSelector}`);
 
@@ -246,14 +236,10 @@ export class MegaMenu {
 	}
 
 	private init(): void {
-		const listItems = this.navElement.querySelectorAll(
-			".l-site-nav__list-item",
-		);
+		const listItems = this.navElement.querySelectorAll(".l-site-nav__list-item");
 
 		listItems.forEach((li) => {
-			const trigger = li.querySelector(
-				":scope > [aria-controls]",
-			) as HTMLButtonElement | null;
+			const trigger = li.querySelector(":scope > [aria-controls]") as HTMLButtonElement | null;
 			if (!trigger) return;
 
 			const childId = trigger.getAttribute("aria-controls")!;
@@ -384,7 +370,7 @@ export class MegaMenu {
 	}
 
 	public closeAll(): void {
-		this.items.forEach((item) => this.close(item));
+		for (const item of this.items) this.close(item);
 	}
 
 	public destroy(): void {

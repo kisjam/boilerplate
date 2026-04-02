@@ -41,7 +41,9 @@ function handleToggleClick(event: Event): void {
 function handleOutsideClick(event: MouseEvent): void {
 	const clicked = event.target as Node;
 
-	for (const trigger of document.querySelectorAll<HTMLElement>("[data-toggle][data-toggle-outside-close]")) {
+	for (const trigger of document.querySelectorAll<HTMLElement>(
+		"[data-toggle][data-toggle-outside-close]",
+	)) {
 		const selector = trigger.dataset.toggle;
 		if (!selector) continue;
 		const targets = getTargets(selector);

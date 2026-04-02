@@ -1,8 +1,6 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"organizeImports": {
-		"enabled": true
-	},
+	"$schema": "https://biomejs.dev/schemas/2.4.10/schema.json",
+	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -22,7 +20,7 @@
 				"noForEach": "off"
 			}
 		},
-		"ignore": ["dist", "node_modules", "*.min.js"]
+		"includes": ["**", "!**/dist", "!**/node_modules", "!**/*.min.js"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -31,7 +29,7 @@
 		"indentWidth": 2,
 		"lineWidth": 100,
 		"lineEnding": "lf",
-		"ignore": ["dist", "node_modules"]
+		"includes": ["**", "!**/dist", "!**/node_modules"]
 	},
 	"javascript": {
 		"formatter": {
@@ -43,6 +41,6 @@
 		}
 	},
 	"files": {
-		"ignore": ["dist", "node_modules", ".git", "*.log"]
+		"includes": ["**", "!**/dist", "!**/node_modules", "!**/.git", "!**/*.log"]
 	}
 }

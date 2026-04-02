@@ -82,4 +82,4 @@ function clearCache() {
 	sizeCache.clear();
 }
 
-export { getImageSize, processImageSizes, clearCache };
+export { clearCache, getImageSize, processImageSizes };

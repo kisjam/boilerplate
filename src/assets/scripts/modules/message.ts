@@ -58,13 +58,13 @@ export function hideMessage(): void {
 
 	// アニメーション終了後に要素を削除
 	currentMessage.classList.remove("-show");
-	
+
 	const messageToRemove = currentMessage;
 	currentMessage = null;
 
 	// トランジション終了後に要素を削除
 	setTimeout(() => {
-		if (messageToRemove && messageToRemove.parentNode) {
+		if (messageToRemove?.parentNode) {
 			messageToRemove.parentNode.removeChild(messageToRemove);
 		}
 	}, 300); // CSSのtransition時間と合わせる
