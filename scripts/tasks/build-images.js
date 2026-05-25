@@ -37,6 +37,12 @@ async function buildImages() {
 				process.exit(1);
 			}
 
+			const ext = path.extname(relativePath).toLowerCase();
+			if (ext === ".jpg" || ext === ".jpeg" || ext === ".png") {
+				logger.info(`Skipped (webp): ${path.basename(relativePath)}`);
+				return;
+			}
+
 			const srcPath = fullPath;
 			const distPath = path.join(distDir, relativePath);
 
@@ -49,6 +55,7 @@ async function buildImages() {
 			const files = await glob("**/*", {
 				cwd: srcDir,
 				nodir: true,
+				ignore: ["**/*.jpg", "**/*.jpeg", "**/*.png"],
 			});
 
 			if (files.length === 0) {

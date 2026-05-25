@@ -1,6 +1,6 @@
 import { u } from "./utility";
 
-export const initDisplayPosition = (): void => {
+export const init = (): void => {
 	const hash: string = window.location.hash;
 
 	if (hash === "") return;

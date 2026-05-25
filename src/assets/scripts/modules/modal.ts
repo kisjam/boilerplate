@@ -1,3 +1,7 @@
+export function init(options?: ModalOptions): void {
+	new Modal(options);
+}
+
 interface ModalOptions {
 	closeOnBackdropClick?: boolean;
 }

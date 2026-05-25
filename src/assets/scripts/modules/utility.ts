@@ -96,7 +96,7 @@ export const u = new Utility();
 /**
  * スクロールバー幅をCSS変数として設定
  */
-export const addScrollbarWidth = (): void => {
+export const initScrollbarWidth = (): void => {
 	let rafId: number | null = null;
 
 	const updateScrollbarWidth = (): void => {
@@ -349,7 +349,7 @@ export const throttle = <T extends (...args: unknown[]) => void>(
 /**
  * スクロール時にis-scrolledクラスを管理
  */
-export const addScrolledClass = (): void => {
+export const initScrolledClass = (): void => {
 	const SCROLL_THRESHOLD = 100;
 	let isScrolled = false;
 

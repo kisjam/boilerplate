@@ -1,5 +1,15 @@
 import { slideDown, slideUp } from "./utility";
 
+export function init(): void {
+	for (const el of document.querySelectorAll("[data-accordion]")) {
+		if (el instanceof HTMLButtonElement) {
+			new Accordion(el);
+		} else {
+			console.warn("Invalid element type for Accordion:", el);
+		}
+	}
+}
+
 export class Accordion {
 	buttonEl: HTMLButtonElement;
 	panelEl: HTMLElement;

@@ -6,7 +6,7 @@
  * data-toggle-outside-close をトリガーに付けると targets外クリックで閉じる
  */
 
-export function initToggle(): void {
+export function init(): void {
 	for (const trigger of document.querySelectorAll<HTMLElement>("[data-toggle]")) {
 		const selector = trigger.dataset.toggle;
 		if (!selector) continue;

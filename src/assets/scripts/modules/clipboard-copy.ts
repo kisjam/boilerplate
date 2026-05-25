@@ -3,7 +3,7 @@
  * data-copy-clipboard属性を持つ要素をクリックしたときにクリップボードにコピー
  */
 
-export function initClipboardCopy(): void {
+export function init(): void {
 	const copyElements = document.querySelectorAll("[data-copy-clipboard]");
 
 	for (const element of copyElements) {
