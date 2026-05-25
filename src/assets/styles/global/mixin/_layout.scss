@@ -1,0 +1,7 @@
+@use "../variable-sass/" as v;
+
+@mixin content {
+	max-width: v.$width-content;
+	margin-left: auto;
+	margin-right: auto;
+}

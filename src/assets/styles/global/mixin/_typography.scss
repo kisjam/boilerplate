@@ -1,0 +1,10 @@
+@use "sass:math";
+@use "../variable-sass/" as v;
+@use "./font" as f;
+
+@mixin serif-basic-bold {
+	font-family: v.$ff-noto-serif;
+	font-weight: v.$fw-bold;
+	line-height: v.$lh;
+	font-size: f.rem(16);
+}

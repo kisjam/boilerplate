@@ -1,0 +1,295 @@
+@use "global" as *;
+@use "smart-svg";
+
+@layer layouts {
+	.l-site-nav {
+		$this: &;
+
+		@include mq(md) {
+			padding: 0 var(--padding-side);
+		}
+		&__list {
+			display: flex;
+			gap: 30px;
+
+			@include mq(lg) {
+				gap: 16px;
+			}
+			@include mq(md) {
+				display: block;
+			}
+
+			&-item {
+				@include mq(md) {
+					border-bottom: 1px solid $color-white;
+				}
+			}
+
+			&-link,
+			&-button {
+				--scale: 0;
+				position: relative;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				text-decoration: none;
+				background: none;
+				border: none;
+
+				padding: 9px 0 14px;
+				margin: 0;
+				color: $color-white;
+				font-family: $ff-noto-serif;
+				line-height: $lh;
+				font-weight: $fw-bold;
+				text-align: left;
+				transition:
+					color $duration ease,
+					border-color $duration ease;
+				cursor: pointer;
+
+				@include mq(lg) {
+					font-size: rem(14);
+				}
+				@include mq(md) {
+					width: 100%;
+					font-size: rem(14);
+					padding: 24px 0;
+				}
+
+				@include hover {
+					--scale: 1;
+					&::after {
+						transform-origin: left top;
+					}
+				}
+
+				&.is-open {
+					@include mq(md, true) {
+						border-bottom-color: $color-white;
+					}
+					@include mq(md) {
+						#{$this}__list-icon {
+							rotate: 180deg;
+						}
+					}
+				}
+				&::after {
+					content: "";
+					position: absolute;
+					left: 0;
+					bottom: 0;
+					height: 5px;
+					width: 100%;
+					background-color: $color-white;
+					transform: scaleX(var(--scale));
+					transition: transform $duration ease;
+					transform-origin: right top;
+				}
+			}
+			&-link {
+			}
+			&-label {
+				@include mq(md) {
+					flex-grow: 1;
+				}
+			}
+			&-icon {
+				line-height: 0;
+				transition: rotate $duration ease;
+			}
+		}
+		&__child {
+			width: 100%;
+			display: grid;
+			grid-template-rows: 0fr;
+			transition: grid-template-rows $duration-l ease;
+
+			@include mq(md, true) {
+				position: absolute;
+				top: 100%;
+				left: 0;
+			}
+
+			&-inner {
+				overflow: hidden;
+			}
+
+			&.is-open {
+				grid-template-rows: 1fr;
+			}
+		}
+
+		&-child {
+			padding: 40px var(--padding-side);
+			background-color: $color-assort;
+			border-top: 1px solid $color-white;
+
+			@include mq(md) {
+				padding: 30px 20px;
+				border: none;
+				background-color: rgba($color-white, 0.1);
+			}
+
+			&__inner {
+				@include content;
+			}
+			&__title {
+				font-family: $ff-noto-serif;
+				font-size: rem(20);
+				font-weight: $fw-bold;
+				line-height: $lh;
+
+				@include mq(md) {
+					display: none;
+				}
+			}
+			&__body {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 56px;
+				margin-top: 20px;
+
+				@include mq(md) {
+					gap: 24px;
+					display: grid;
+					margin-top: 0;
+				}
+			}
+
+			&__thumb {
+				@include mq(md) {
+					display: none;
+				}
+			}
+
+			&__list {
+				display: grid;
+				gap: 8px;
+				align-content: start;
+				@include mq(md) {
+					gap: 24px;
+				}
+
+				&-item {
+					position: relative;
+					padding-left: 10px;
+					&::after {
+						content: "";
+						position: absolute;
+						left: 0;
+						top: 12px;
+						width: 5px;
+						height: 5px;
+						border-radius: 50%;
+						background-color: currentColor;
+					}
+				}
+				&-link {
+					--scale: 0;
+					position: relative;
+					text-decoration: none;
+					@include serif-basic-bold;
+
+					@include hover {
+						--scale: 1;
+						&::after {
+							transform-origin: left top;
+						}
+					}
+
+					&::after {
+						content: "";
+						position: absolute;
+						left: 0;
+						bottom: 0;
+						width: 100%;
+						height: 1px;
+						background-color: currentColor;
+						transform: scaleX(var(--scale));
+						transition: transform $duration ease;
+						transform-origin: right top;
+					}
+				}
+			}
+			&__sublist {
+				display: grid;
+				gap: 6px;
+				grid-auto-flow: column;
+				grid-template-rows: repeat(4, auto);
+
+				&-link {
+					--scale: 0;
+					position: relative;
+					text-decoration: none;
+					font-family: $ff-noto-serif;
+					font-weight: $fw-bold;
+					font-size: rem(14);
+					padding-left: 10px;
+
+					@include hover {
+						--scale: 1;
+						&::after {
+							transform-origin: left top;
+						}
+					}
+
+					&::after {
+						content: "";
+						position: absolute;
+						left: 10px;
+						right: 0;
+						bottom: 0;
+						height: 1px;
+						background-color: currentColor;
+						transform: scaleX(var(--scale));
+						transition: transform $duration ease;
+						transform-origin: right top;
+					}
+
+					&::before {
+						content: "";
+						position: absolute;
+						left: 0;
+						top: 50%;
+						width: 4px;
+						height: 1px;
+						background-color: $color-white;
+					}
+				}
+			}
+		}
+
+		&-footer {
+			@include mq(md, true) {
+				display: none;
+			}
+			@include mq(md) {
+				margin-top: 40px;
+			}
+
+			&__reserve {
+				display: grid;
+				gap: 8px;
+			}
+			&__phone {
+				margin-top: 16px;
+				&-link {
+					text-decoration: none;
+				}
+				&-number {
+					font-family: $ff-lora;
+					text-align: center;
+					font-size: rem(24);
+					line-height: 1;
+				}
+				&-open {
+					margin-top: 6px;
+					font-size: rem(12);
+					line-height: $lh-s;
+					text-align: center;
+				}
+			}
+		}
+	}
+}

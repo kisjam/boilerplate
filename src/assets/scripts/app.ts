@@ -6,7 +6,7 @@ import { init as accordion } from "./modules/accordion";
 import { init as clipboardCopy } from "./modules/clipboard-copy";
 import { init as displayPosition } from "./modules/init-display-position";
 import { init as modal } from "./modules/modal";
-import { createNav } from "./modules/nav";
+import { createNav, createMegaMenu } from "./modules/nav";
 import { init as toggle } from "./modules/toggle";
 import {
 	addDeviceClass,

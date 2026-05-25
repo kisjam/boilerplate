@@ -1,0 +1,323 @@
+@use "../variable-sass" as *;
+@use "./font" as *;
+@use "./responsive" as *;
+
+@mixin text {
+	line-height: $lh;
+	@include mq(md) {
+		font-size: rem(14);
+	}
+	&:not(:last-child) {
+		margin-bottom: 20px;
+	}
+	&.-red {
+		color: $color-pink;
+	}
+	&.-lg {
+		font-size: rem(20);
+	}
+	&.-sm {
+		font-size: rem(12);
+	}
+	&.-c {
+		text-align: center;
+	}
+	&.-l {
+		text-align: left;
+	}
+	&.-r {
+		text-align: right;
+	}
+}
+@mixin h2 {
+	line-height: $lh;
+	font-size: rem(32);
+	font-family: $ff-noto-serif;
+
+	@include mq(md) {
+		font-size: rem(24);
+	}
+
+	&:not(:first-child) {
+		margin-top: 80px;
+		@include mq(md) {
+			margin-top: 40px;
+		}
+	}
+	&:not(:last-child) {
+		margin-bottom: 60px;
+		@include mq(md) {
+			margin-bottom: 32px;
+		}
+	}
+	&.-border {
+		text-align: center;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #797261;
+	}
+	&.-c {
+		text-align: center;
+	}
+}
+@mixin h3 {
+	position: relative;
+	line-height: 1.5;
+	font-size: rem(24);
+	font-family: $ff-noto-serif;
+	padding-left: 20px;
+
+	@include mq(md) {
+		font-size: rem(18);
+		padding-left: 18px;
+	}
+
+	&:not(:first-child) {
+		margin-top: 60px;
+
+		@include mq(md) {
+			margin-top: 40px;
+		}
+	}
+	&:not(:last-child) {
+		margin-bottom: 40px;
+		@include mq(md) {
+			margin-bottom: 32px;
+		}
+	}
+
+	&:not(.-c) {
+		&::after {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			width: 6px;
+			background-color: $color-assort;
+
+			@include mq(md) {
+				width: 4px;
+			}
+		}
+	}
+
+	&.-c {
+		text-align: center;
+		padding-bottom: 10px;
+		padding-left: 0;
+
+		@include mq(md) {
+			padding-bottom: 8px;
+			padding-left: 0;
+		}
+		&::after {
+			content: "";
+
+			position: absolute;
+			bottom: 0;
+			left: 50%;
+			translate: -50% 0;
+			height: 2px;
+			width: 60px;
+			background-color: currentColor;
+
+			@include mq(md) {
+				width: 40px;
+			}
+		}
+	}
+}
+@mixin h4 {
+	position: relative;
+	line-height: $lh-s;
+	font-size: rem(18);
+	font-family: $ff-noto-serif;
+	padding-left: 14px;
+	font-weight: $fw-bold;
+
+	@include mq(md) {
+		font-size: rem(14);
+		padding-left: 10px;
+	}
+
+	&:not(:first-child) {
+		margin-top: 40px;
+		@include mq(md) {
+			margin-top: 32px;
+		}
+	}
+	&:not(:last-child) {
+		margin-bottom: 20px;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 6px;
+		background-color: $color-beige;
+
+		@include mq(md) {
+			width: 4px;
+		}
+	}
+	&.-darker {
+		&::after {
+			background-color: $color-assort-darker;
+		}
+	}
+	&.-no-border {
+		padding-left: 0;
+		&::after {
+			content: none;
+		}
+	}
+}
+
+@mixin ul {
+	list-style: disc;
+	padding-left: 20px;
+
+	@include mq(md) {
+		font-size: rem(14);
+	}
+
+	&:not(:first-child) {
+		margin-top: 20px;
+	}
+
+	&:not(:last-child) {
+		margin-bottom: 20px;
+	}
+
+	li {
+		padding-left: 8px;
+		line-height: $lh;
+
+		&:not(:last-child) {
+			margin-bottom: 10px;
+		}
+	}
+	ul {
+		margin-top: 10px;
+	}
+
+	&.-notice {
+		color: #d28787;
+	}
+}
+
+@mixin ol {
+	list-style: decimal;
+	padding-left: 20px;
+
+	@include mq(md) {
+		font-size: rem(14);
+	}
+
+	&:not(:last-child) {
+		margin-bottom: 20px;
+	}
+
+	li {
+		padding-left: 8px;
+		line-height: $lh;
+		&:not(:last-child) {
+			margin-bottom: 10px;
+		}
+	}
+}
+
+@mixin quote {
+	margin-top: 60px;
+	background-color: $color-gray-light;
+	padding: 20px 20px 20px 26px;
+	border-left: 6px solid $color-black;
+
+	@include mq(md) {
+		margin-top: 40px;
+		font-size: rem(14);
+	}
+
+	&__cite {
+		color: #999;
+		margin-top: 20px;
+	}
+}
+@mixin image {
+	text-align: center;
+	&:not(:first-child) {
+		margin-top: 40px;
+		@include mq(md) {
+			margin-top: 24px;
+		}
+	}
+	&:not(:last-child) {
+		margin-bottom: 40px;
+		@include mq(md) {
+			margin-bottom: 24px;
+		}
+	}
+}
+@mixin table {
+	overflow: auto;
+	width: 100%;
+
+	@include mq(md) {
+		font-size: rem(14);
+	}
+
+	&:not(:first-child) {
+		margin-top: 40px;
+	}
+	&:not(:last-child) {
+		margin-bottom: 40px;
+	}
+
+	table {
+		width: 100%;
+		min-width: 820px;
+		border-top: 1px solid $color-assort-darker;
+
+		th,
+		td {
+			border-bottom: 1px solid $color-assort-darker;
+			padding: 20px;
+			text-align: left;
+			vertical-align: top;
+			line-height: $lh;
+			@include mq(md) {
+				padding: 16px;
+			}
+		}
+		th {
+			background-color: $color-beige;
+			width: 300px;
+			@include mq(md) {
+				width: 240px;
+			}
+			&:not(:has(+ td)):not(:last-child) {
+				border-right: 1px solid $color-assort-darker;
+			}
+		}
+		thead th {
+			width: auto;
+			color: $color-white;
+			background: $color-assort-darker;
+			&:not(:last-child) {
+				border-right: 1px solid $color-white;
+			}
+		}
+		td {
+			background-color: $color-white;
+			&:not(:last-child) {
+				border-right: 1px solid $color-assort-darker;
+			}
+		}
+
+		.c-table.js-swipe & {
+		}
+	}
+}

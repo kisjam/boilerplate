@@ -1,9 +1,10 @@
 // Build configuration
 export default {
+	// proxy: "http://hoge:8888/",
 	src: "src",
 	dist: "dist",
-	basePath: "",
-	// basePath: "/lp",
+	// basePath: "",
+	basePath: "/money",
 	assets: {
 		html: "src/assets/html",
 		css: "src/assets/styles",
