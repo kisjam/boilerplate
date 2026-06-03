@@ -11,7 +11,19 @@ async function buildTailwind() {
 	const startTime = performance.now();
 
 	try {
-		const tailwindCSS = `/* Tailwind CSS - Theme & Utilities */\n@import "tailwindcss/theme";\n@import "tailwindcss/utilities";`;
+		const tailwindCSS = `
+			/* Tailwind CSS - Theme & Utilities */
+			@theme {
+				--spacing: 1px;
+				--breakpoint-sm: 641px;
+				--breakpoint-md: 769px;
+				--breakpoint-lg: 1025px;
+				--breakpoint-xl: 1281px;
+				--breakpoint-2xl: 1537px;
+			}
+			@import "tailwindcss/theme";
+			@import "tailwindcss/utilities";
+		`;
 		const processed = await postcss([
 			tailwindcss,
 			autoprefixer({
@@ -24,7 +36,10 @@ async function buildTailwind() {
 			map: false,
 		});
 
-		await fs.writeFile(path.join(config.assets.css, config.tailwind.outputFile), processed.css);
+		await fs.writeFile(
+			path.join(config.assets.css, config.tailwind.outputFile),
+			processed.css,
+		);
 
 		const totalTime = Math.round(performance.now() - startTime);
 		logger.success(`Tailwind build completed (${totalTime}ms)`);

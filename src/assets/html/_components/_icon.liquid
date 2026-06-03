@@ -19,5 +19,5 @@ Parameters:
 {%- endunless -%}
 
 <svg class="icon -{{ name }} {{ icon_class }}" width="{{ icon_size }}" height="{{ icon_size }}" {%- if label %} aria-label="{{ label }}" {% else %} aria-hidden="true" {% endif -%}>
-	<use href="/assets/icons/sprite.svg?v={{ timestamp }}#icon-{{ name }}"></use>
+	<use href="/assets/icons/sprite.svg#icon-{{ name }}"></use>
 </svg>

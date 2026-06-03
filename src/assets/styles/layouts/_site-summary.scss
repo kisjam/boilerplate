@@ -3,7 +3,7 @@
 @layer layouts {
 	.l-site-summary {
 		position: relative;
-		padding: 181px var(--padding-side) 96px;
+		padding: 181px var(--page-gutter) 96px;
 		margin-top: -85px;
 
 		@include mq(md) {
@@ -27,7 +27,7 @@
 			box-shadow: 12px 12px 24px 0px rgba(0, 0, 0, 0.25);
 			max-width: 980px;
 			margin-inline: auto;
-			padding: 56px var(--padding-side) 56px;
+			padding: 56px var(--page-gutter) 56px;
 
 			@include mq(md) {
 				padding: 24px 16px 32px;

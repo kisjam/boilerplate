@@ -30,7 +30,7 @@
 		}
 
 		&__inner {
-			padding: 120px var(--padding-side);
+			padding: 120px var(--page-gutter);
 			@include mq(md) {
 				padding-top: 104px;
 				padding-bottom: 104px;

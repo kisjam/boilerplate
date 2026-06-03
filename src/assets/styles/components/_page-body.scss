@@ -2,7 +2,7 @@
 @layer components {
 	.c-page-body {
 		container-type: inline-size;
-		padding-inline: var(--padding-side);
+		padding-inline: var(--page-gutter);
 
 		&__inner {
 			max-width: $width-content-xs;

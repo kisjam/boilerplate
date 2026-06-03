@@ -77,7 +77,8 @@ class Utility {
 	 */
 	getScrollbarWidth(): number {
 		if (this.cachedScrollbarWidth === null) {
-			this.cachedScrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+			this.cachedScrollbarWidth =
+				window.innerWidth - document.documentElement.clientWidth;
 		}
 		return this.cachedScrollbarWidth;
 	}
@@ -106,7 +107,10 @@ export const initScrollbarWidth = (): void => {
 
 		rafId = requestAnimationFrame(() => {
 			const scrollbarWidth = u.getScrollbarWidth();
-			document.documentElement.style.setProperty("--scrollbar", `${scrollbarWidth}px`);
+			document.documentElement.style.setProperty(
+				"--scrollbar",
+				`${scrollbarWidth}px`,
+			);
 			rafId = null;
 		});
 	};
@@ -175,7 +179,10 @@ export const addDeviceClass = (): void => {
 /**
  * 要素をスライドアップ（非表示）
  */
-export const slideUp = (element: HTMLElement, options: SlideOptions = {}): void => {
+export const slideUp = (
+	element: HTMLElement,
+	options: SlideOptions = {},
+): void => {
 	const { duration = ANIMATION_DURATION_DEFAULT, onComplete } = options;
 
 	// 既に非表示の場合は何もしない
@@ -230,7 +237,10 @@ export const slideUp = (element: HTMLElement, options: SlideOptions = {}): void 
 /**
  * 要素をスライドダウン（表示）
  */
-export const slideDown = (element: HTMLElement, options: SlideOptions = {}): void => {
+export const slideDown = (
+	element: HTMLElement,
+	options: SlideOptions = {},
+): void => {
 	const { duration = ANIMATION_DURATION_DEFAULT, onComplete } = options;
 
 	// 既に表示されている場合は何もしない
@@ -344,6 +354,35 @@ export const throttle = <T extends (...args: unknown[]) => void>(
 			}, limit);
 		}
 	};
+};
+
+/**
+ * 上スクロール時にis-scroll-upクラスを管理
+ */
+export const initScrollDirectionClass = (): void => {
+	let lastScrollY = window.scrollY;
+	let isScrollUp = false;
+
+	const handleScroll = (): void => {
+		const currentScroll = window.scrollY;
+		const shouldBeScrollUp = currentScroll < lastScrollY;
+		lastScrollY = currentScroll;
+
+		if (shouldBeScrollUp !== isScrollUp) {
+			isScrollUp = shouldBeScrollUp;
+
+			if (isScrollUp) {
+				document.body.classList.add("is-scroll-up");
+				document.body.classList.remove("is-scroll-down");
+			} else {
+				document.body.classList.remove("is-scroll-up");
+				document.body.classList.add("is-scroll-down");
+			}
+		}
+	};
+
+	const throttledScroll = throttle(handleScroll, 16);
+	window.addEventListener("scroll", throttledScroll, { passive: true });
 };
 
 /**

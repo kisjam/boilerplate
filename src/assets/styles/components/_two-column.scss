@@ -3,7 +3,7 @@
 @layer components {
 	.c-two-column {
 		$this: &;
-		padding-inline: var(--padding-side);
+		padding-inline: var(--page-gutter);
 
 		&__inner {
 			max-width: $width-content;
@@ -34,8 +34,8 @@
 			}
 		}
 		&__bottom {
-			margin-left: var(--outer);
-			margin-right: var(--outer);
+			margin-left: var(--bleed);
+			margin-right: var(--bleed);
 			@include mq(lg, true) {
 				grid-area: bottom;
 			}

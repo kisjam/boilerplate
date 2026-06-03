@@ -2,18 +2,18 @@
 @use "../variable-sass/" as v;
 
 :root {
-	--padding-side: 80px;
+	--page-gutter: 80px;
 	--leading-trim: calc((1em - 1lh) / 2);
-	--outer: min(
+	--bleed: min(
 		calc((((100vw - var(--scrollbar, 0)) - #{v.$width-content}) / 2) * -1),
-		calc(var(--padding-side) * -1)
+		calc(var(--page-gutter) * -1)
 	);
 
 	@include mq(lg) {
-		--padding-side: 40px;
+		--page-gutter: 40px;
 	}
 
 	@include mq(md) {
-		--padding-side: 12px;
+		--page-gutter: 12px;
 	}
 }

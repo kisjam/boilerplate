@@ -6,7 +6,7 @@
 		$this: &;
 
 		@include mq(md) {
-			padding: 0 var(--padding-side);
+			padding: 0 var(--page-gutter);
 		}
 		&__list {
 			display: flex;
@@ -121,7 +121,7 @@
 		}
 
 		&-child {
-			padding: 40px var(--padding-side);
+			padding: 40px var(--page-gutter);
 			background-color: $color-assort;
 			border-top: 1px solid $color-white;
 
