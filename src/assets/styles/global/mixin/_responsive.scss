@@ -1,91 +1,60 @@
+@use "sass:list";
 @use "sass:map";
 @use "sass:meta";
 @use "../variable-sass/" as var;
 
-@mixin mq($point, $min: false) {
+@function _bp-min($key) {
+	@if (map.get(var.$breakpoints, $key)) {
+		@return map.get(var.$breakpoints, $key) + 1;
+	} @else {
+		@return $key;
+	}
+}
+
+@function _bp-max($key) {
+	@if (map.get(var.$breakpoints, $key)) {
+		@return map.get(var.$breakpoints, $key);
+	} @else {
+		@return $key;
+	}
+}
+
+@function _build-condition($point, $min) {
 	@if (meta.type-of($point) == list) {
-		$bp1: "";
-		$bp2: "";
+		$bp1: _bp-min(list.nth($point, 1));
+		$bp2: _bp-max(list.nth($point, 2));
+		@return "(width >= #{$bp1}) and (width <= #{$bp2})";
+	} @else if ($min) {
+		$bp: _bp-min($point);
+		@return "(width >= #{$bp})";
+	} @else {
+		$bp: _bp-max($point);
+		@return "(width <= #{$bp})";
+	}
+}
 
-		@if (map.get(var.$breakpoints, nth($point, 1))) {
-			$bp1: map.get(var.$breakpoints, nth($point, 1)) + 1;
-		} @else {
-			$bp1: nth($point, 1);
-		}
-
-		@if (map.get(var.$breakpoints, nth($point, 2))) {
-			$bp2: map.get(var.$breakpoints, nth($point, 2));
-		} @else {
-			$bp2: nth($point, 2);
-		}
-
-		@media (width >= $bp1) and (width <= $bp2) {
+@mixin _query($condition, $type) {
+	@if ($type == "media") {
+		@media #{$condition} {
 			@content;
 		}
-	} @else if ($min) {
-		@if (map.get(var.$breakpoints, $point)) {
-			@media (width >= (map.get(var.$breakpoints, $point)+1)) {
-				@content;
-			}
-		} @else {
-			@media (width >= $point) {
-				@content;
-			}
-		}
 	} @else {
-		@if (map.get(var.$breakpoints, $point)) {
-			@media (width <= map.get(var.$breakpoints, $point)) {
-				@content;
-			}
-		} @else {
-			@media (width <= $point) {
-				@content;
-			}
+		@container #{$condition} {
+			@content;
 		}
 	}
 }
 
+@mixin mq($point, $min: false) {
+	$condition: _build-condition($point, $min);
+	@include _query($condition, "media") {
+		@content;
+	}
+}
+
 @mixin cq($point, $min: false) {
-	@if (meta.type-of($point) == list) {
-		$bp1: "";
-		$bp2: "";
-
-		@if (map.get(var.$breakpoints, nth($point, 1))) {
-			$bp1: map.get(var.$breakpoints, nth($point, 1)) + 1;
-		} @else {
-			$bp1: nth($point, 1);
-		}
-
-		@if (map.get(var.$breakpoints, nth($point, 2))) {
-			$bp2: map.get(var.$breakpoints, nth($point, 2));
-		} @else {
-			$bp2: nth($point, 2);
-		}
-
-		@container (width >= #{$bp1}) and (width <= #{$bp2}) {
-			@content;
-		}
-	} @else if ($min) {
-		@if (map.get(var.$breakpoints, $point)) {
-			$bp: map.get(var.$breakpoints, $point) + 1;
-			@container (width >= #{$bp}) {
-				@content;
-			}
-		} @else {
-			@container (width >= #{$point}) {
-				@content;
-			}
-		}
-	} @else {
-		@if (map.get(var.$breakpoints, $point)) {
-			$bp: map.get(var.$breakpoints, $point);
-			@container (width <= #{$bp}) {
-				@content;
-			}
-		} @else {
-			@container (width <= #{$point}) {
-				@content;
-			}
-		}
+	$condition: _build-condition($point, $min);
+	@include _query($condition, "container") {
+		@content;
 	}
 }
