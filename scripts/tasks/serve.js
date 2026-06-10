@@ -11,9 +11,7 @@ const _args = process.argv.slice(2);
 // APIとして使える形に変更
 export function startServer(customOptions = {}) {
 	const finalOptions = {
-		...(config.proxy
-			? { proxy: config.proxy }
-			: { server: { baseDir: config.dist } }),
+		...(config.proxy ? { proxy: config.proxy } : { server: { baseDir: config.dist } }),
 		...(config.basePath ? { startPath: config.basePath } : {}),
 		files: [`${config.dist}/**/*`],
 		open: customOptions.open ?? "external",

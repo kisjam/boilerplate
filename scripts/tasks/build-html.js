@@ -58,7 +58,10 @@ async function processHTMLFile(file, siteData) {
 			// prettier parse error はスキップして元のHTMLを使用
 		}
 
-		html = html.replace(/<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)([^>]*?)\s*\/>/gi, "<$1$2>");
+		html = html.replace(
+			/<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)([^>]*?)\s*\/>/gi,
+			"<$1$2>",
+		);
 
 		await ensureDir(path.dirname(outputPath));
 		await fsPromises.writeFile(outputPath, html);

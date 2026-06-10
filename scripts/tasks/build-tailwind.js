@@ -36,10 +36,7 @@ async function buildTailwind() {
 			map: false,
 		});
 
-		await fs.writeFile(
-			path.join(config.assets.css, config.tailwind.outputFile),
-			processed.css,
-		);
+		await fs.writeFile(path.join(config.assets.css, config.tailwind.outputFile), processed.css);
 
 		const totalTime = Math.round(performance.now() - startTime);
 		logger.success(`Tailwind build completed (${totalTime}ms)`);

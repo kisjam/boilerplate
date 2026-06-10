@@ -77,8 +77,7 @@ class Utility {
 	 */
 	getScrollbarWidth(): number {
 		if (this.cachedScrollbarWidth === null) {
-			this.cachedScrollbarWidth =
-				window.innerWidth - document.documentElement.clientWidth;
+			this.cachedScrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 		}
 		return this.cachedScrollbarWidth;
 	}
@@ -107,10 +106,7 @@ export const initScrollbarWidth = (): void => {
 
 		rafId = requestAnimationFrame(() => {
 			const scrollbarWidth = u.getScrollbarWidth();
-			document.documentElement.style.setProperty(
-				"--scrollbar",
-				`${scrollbarWidth}px`,
-			);
+			document.documentElement.style.setProperty("--scrollbar", `${scrollbarWidth}px`);
 			rafId = null;
 		});
 	};
@@ -179,10 +175,7 @@ export const addDeviceClass = (): void => {
 /**
  * 要素をスライドアップ（非表示）
  */
-export const slideUp = (
-	element: HTMLElement,
-	options: SlideOptions = {},
-): void => {
+export const slideUp = (element: HTMLElement, options: SlideOptions = {}): void => {
 	const { duration = ANIMATION_DURATION_DEFAULT, onComplete } = options;
 
 	// 既に非表示の場合は何もしない
@@ -237,10 +230,7 @@ export const slideUp = (
 /**
  * 要素をスライドダウン（表示）
  */
-export const slideDown = (
-	element: HTMLElement,
-	options: SlideOptions = {},
-): void => {
+export const slideDown = (element: HTMLElement, options: SlideOptions = {}): void => {
 	const { duration = ANIMATION_DURATION_DEFAULT, onComplete } = options;
 
 	// 既に表示されている場合は何もしない

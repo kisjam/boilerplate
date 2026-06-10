@@ -15,7 +15,9 @@
  * document.querySelectorAll<HTMLElement>("[data-tab]").forEach((el) => new Tab(el));
  */
 export function init(): void {
-	document.querySelectorAll<HTMLElement>("[data-tab]").forEach((el) => new Tab(el));
+	document.querySelectorAll<HTMLElement>("[data-tab]").forEach((el) => {
+		new Tab(el);
+	});
 }
 
 export class Tab {
