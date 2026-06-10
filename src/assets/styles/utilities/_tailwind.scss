@@ -1,9 +1,14 @@
 /*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
 @layer properties;
 :root, :host {
+  --spacing: 1px;
+  --breakpoint-sm: 641px;
+  --breakpoint-md: 769px;
+  --breakpoint-lg: 1025px;
+  --breakpoint-xl: 1281px;
+  --breakpoint-2xl: 1537px;
   --color-gray-800: oklch(27.8% 0.033 256.848);
   --color-white: #fff;
-  --spacing: 0.25rem;
   --text-sm: 0.875rem;
   --text-sm--line-height: calc(1.25 / 0.875);
   --default-transition-duration: 150ms;
@@ -101,14 +106,8 @@
   transition-duration: 300ms;
 }
 .max-md\:hidden {
-  @media (width < 48rem) {
+  @media (width < 769px) {
     display: none;
-  }
-}
-.max-md\:size-3 {
-  @media (width < 48rem) {
-    width: calc(var(--spacing) * 3);
-    height: calc(var(--spacing) * 3);
   }
 }
 @property --tw-translate-x {
@@ -239,3 +238,4 @@
     }
   }
 }
+		
