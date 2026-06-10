@@ -26,6 +26,20 @@ OG URL construction
 {% assign _pageUrl = site.url %}
 {% endif %}
 
+{% comment %}
+OG image construction - page specific or site default, OGP requires a full URL
+{% endcomment %}
+{% assign _ogImageRaw = pageOgImage | default: social.og.image %}
+{% if _ogImageRaw != "" %}
+{% if _ogImageRaw contains "http" %}
+{% assign _ogImage = _ogImageRaw %}
+{% else %}
+{% assign _ogImage = site.url | append: _ogImageRaw %}
+{% endif %}
+{% else %}
+{% assign _ogImage = "" %}
+{% endif %}
+
 <meta charset="{{ site.charset }}">
 <meta name="viewport" content="{{ site.viewport }}">
 <meta name="format-detection" content="telephone=no">
@@ -34,7 +48,7 @@ OG URL construction
 <!-- Open Graph -->
 <meta property="og:title" content="{{ pageTitle | default: site.name }}">
 <meta property="og:description" content="{{ _pageDescription }}">
-<meta property="og:image" content="{{ pageOgImage | default: social.og.image }}">
+{% if _ogImage != "" %}<meta property="og:image" content="{{ _ogImage }}">{% endif %}
 <meta property="og:type" content="{{ pageOgType | default: social.og.type }}">
 <meta property="og:url" content="{{ _pageUrl }}">
 <meta property="og:locale" content="{{ site.locale }}">
@@ -42,10 +56,10 @@ OG URL construction
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="{{ social.twitter.card }}">
-<meta name="twitter:site" content="{{ social.twitter.site }}">
+{% if social.twitter.site != "" %}<meta name="twitter:site" content="{{ social.twitter.site }}">{% endif %}
 <meta name="twitter:title" content="{{ pageTitle | default: site.name }}">
 <meta name="twitter:description" content="{{ _pageDescription }}">
-<meta name="twitter:image" content="{{ pageOgImage | default: social.og.image }}">
+{% if _ogImage != "" %}<meta name="twitter:image" content="{{ _ogImage }}">{% endif %}
 
 <title>{{ _pageTitle }}</title>
 
