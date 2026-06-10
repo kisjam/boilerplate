@@ -11,15 +11,17 @@ async function buildTailwind() {
 	const startTime = performance.now();
 
 	try {
+		const { default: tokens } = await import("../../design-tokens.js");
+		const breakpointLines = ["sm", "md", "lg", "xl", "2xl"]
+			.map((key) => `\t\t\t\t--breakpoint-${key}: ${tokens.breakpoints[key] + 1}px;`)
+			.join("\n");
+
 		const tailwindCSS = `
 			/* Tailwind CSS - Theme & Utilities */
-			@theme {
-				--spacing: 1px;
-				--breakpoint-sm: 641px;
-				--breakpoint-md: 769px;
-				--breakpoint-lg: 1025px;
-				--breakpoint-xl: 1281px;
-				--breakpoint-2xl: 1537px;
+			@source not inline("static");
+			@theme static {
+				--spacing: ${tokens.spacing}px;
+${breakpointLines}
 			}
 			@import "tailwindcss/theme";
 			@import "tailwindcss/utilities";

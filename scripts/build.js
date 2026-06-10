@@ -18,6 +18,7 @@ cleanChild.on("exit", async (code) => {
 	}
 
 	const generateTasks = [
+		"node scripts/tasks/build-tokens.js",
 		"node scripts/tasks/build-tailwind.js",
 		"node scripts/tasks/build-svg-sprite.js",
 	];

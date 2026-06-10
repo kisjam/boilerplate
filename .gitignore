@@ -14,3 +14,4 @@ src/assets/styles/utilities/**/_index.scss
 src/assets/styles/sample/**/_index.scss
 src/assets/styles/utilities/_tailwind.scss
 src/assets/styles/global/variable-sass/_icons.scss
+src/assets/styles/global/variable-sass/_breakpoints.scss

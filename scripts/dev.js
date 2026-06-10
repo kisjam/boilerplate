@@ -78,7 +78,30 @@ buildChild.on("exit", async (code) => {
 		public: path.resolve(projectRoot, config.public),
 	};
 
+	const designTokensPath = path.resolve(projectRoot, "design-tokens.js");
+
 	const watchers = [
+		createWatcher(
+			designTokensPath,
+			{
+				usePolling: true,
+				interval: 100,
+				binaryInterval: 300,
+				awaitWriteFinish: {
+					stabilityThreshold: 100,
+					pollInterval: 100,
+				},
+			},
+			{
+				change: (_filePath) => {
+					logger.info("design-tokens.js: Changed");
+					runTask("node scripts/tasks/build-tokens.js");
+					runTask("node scripts/tasks/build-tailwind.js");
+				},
+				ready: () => logger.success(`Design tokens watcher ready: ${designTokensPath}`),
+			},
+		),
+
 		createWatcher(
 			paths.css,
 			{
