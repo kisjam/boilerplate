@@ -187,7 +187,9 @@ export const createNav = (
 	navSelector: string,
 	toggleSelector: string,
 	options?: NavOptions,
-): Nav => {
+): Nav | null => {
+	if (!document.querySelector(navSelector)) return null;
+	if (!document.querySelector(toggleSelector)) return null;
 	return new Nav(navSelector, toggleSelector, options);
 };
 
@@ -396,6 +398,7 @@ export class MegaMenu {
 export const createMegaMenu = (
 	navSelector: string,
 	options?: MegaMenuOptions | number,
-): MegaMenu => {
+): MegaMenu | null => {
+	if (!document.querySelector(navSelector)) return null;
 	return new MegaMenu(navSelector, options);
 };
