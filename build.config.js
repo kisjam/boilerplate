@@ -3,8 +3,8 @@ export default {
 	// proxy: "http://hoge:8888/",
 	src: "src",
 	dist: "dist",
-	// basePath: "",
-	basePath: "/money",
+	// basePath: "/sub-dir", // サブディレクトリ配信時の例
+	basePath: "",
 	assets: {
 		html: "src/assets/html",
 		css: "src/assets/styles",
