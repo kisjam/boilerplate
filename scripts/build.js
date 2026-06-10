@@ -65,6 +65,7 @@ cleanChild.on("exit", async (code) => {
 			"node scripts/tasks/build-images.js",
 			"node scripts/tasks/build-images-webp.js",
 			"node scripts/tasks/build-html.js",
+			"node scripts/tasks/build-sitemap.js",
 		];
 
 		console.log("\n4. Building assets in parallel...");

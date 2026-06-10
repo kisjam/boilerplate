@@ -28,4 +28,7 @@ export default {
 	svgSprite: {
 		globPattern: "**/*.svg",
 	},
+	sitemap: {
+		exclude: ["sample/**"],
+	},
 };
