@@ -25,35 +25,23 @@
 								<span class="l-site-nav__list-label">メニュー項目01</span>
 								<span class="l-site-nav__list-icon">{% render "_icon", name: "triangle_down", size: "7" %}</span>
 							</button>
-							<div class="l-site-nav__child" id="nav-item01">
-								<div class="l-site-nav__child-inner">
-									<div class="l-site-nav-child">
-										<div class="l-site-nav-child__inner">
-											<p class="l-site-nav-child__title">メニュー項目01</p>
-											<div class="l-site-nav-child__body">
-												<figure class="l-site-nav-child__thumb">
-													<img src="/assets/images/common/nav_img_01.webp" alt="" width="266" height="150">
-												</figure>
-												<ul class="l-site-nav-child__list">
-													<li class="l-site-nav-child__list-item">
-														<a href="/item01/" class="l-site-nav-child__list-link">サブメニュー01</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item01/sub01/" class="l-site-nav-child__list-link">サブメニュー02</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item01/sub02/" class="l-site-nav-child__list-link">サブメニュー03</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item01/sub03/" class="l-site-nav-child__list-link">サブメニュー04</a>
-													</li>
-												</ul>
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							{%- capture nav01_body -%}
+<ul class="l-site-nav-child__list">
+								<li class="l-site-nav-child__list-item">
+									<a href="/item01/" class="l-site-nav-child__list-link">サブメニュー01</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item01/sub01/" class="l-site-nav-child__list-link">サブメニュー02</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item01/sub02/" class="l-site-nav-child__list-link">サブメニュー03</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item01/sub03/" class="l-site-nav-child__list-link">サブメニュー04</a>
+								</li>
+							</ul>
+							{%- endcapture -%}
+							{%- render "_header-nav-child", id: "nav-item01", title: "メニュー項目01", image: "/assets/images/common/nav_img_01.webp", body: nav01_body %}
 						</li>
 
 						<li class="l-site-nav__list-item">
@@ -61,76 +49,64 @@
 								<span class="l-site-nav__list-label">メニュー項目02</span>
 								<span class="l-site-nav__list-icon">{% render "_icon", name: "triangle_down", size: "7" %}</span>
 							</button>
-							<div class="l-site-nav__child" id="nav-item02">
-								<div class="l-site-nav__child-inner">
-									<div class="l-site-nav-child">
-										<div class="l-site-nav-child__inner">
-											<p class="l-site-nav-child__title">メニュー項目02</p>
-											<div class="l-site-nav-child__body">
-												<figure class="l-site-nav-child__thumb">
-													<img src="/assets/images/common/nav_img_02.webp" alt="" width="266" height="150">
-												</figure>
-												<ul class="l-site-nav-child__list">
-													<li class="l-site-nav-child__list-item">
-														<a href="/item02/" class="l-site-nav-child__list-link">サブメニュー01</a>
-														<ul class="l-site-nav-child__sublist">
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02/sub01/" class="l-site-nav-child__sublist-link">サブサブメニュー01</a>
-															</li>
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02/sub02/" class="l-site-nav-child__sublist-link">サブサブメニュー02</a>
-															</li>
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02/sub03/" class="l-site-nav-child__sublist-link">サブサブメニュー03</a>
-															</li>
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02/sub04/" class="l-site-nav-child__sublist-link">サブサブメニュー04</a>
-															</li>
-														</ul>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item02-2/" class="l-site-nav-child__list-link">サブメニュー02</a>
-													</li>
+							{%- capture nav02_body -%}
+<ul class="l-site-nav-child__list">
+								<li class="l-site-nav-child__list-item">
+									<a href="/item02/" class="l-site-nav-child__list-link">サブメニュー01</a>
+									<ul class="l-site-nav-child__sublist">
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02/sub01/" class="l-site-nav-child__sublist-link">サブサブメニュー01</a>
+										</li>
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02/sub02/" class="l-site-nav-child__sublist-link">サブサブメニュー02</a>
+										</li>
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02/sub03/" class="l-site-nav-child__sublist-link">サブサブメニュー03</a>
+										</li>
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02/sub04/" class="l-site-nav-child__sublist-link">サブサブメニュー04</a>
+										</li>
+									</ul>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item02-2/" class="l-site-nav-child__list-link">サブメニュー02</a>
+								</li>
 
-												</ul>
-												<ul class="l-site-nav-child__list">
-													<li class="l-site-nav-child__list-item">
-														<a href="/item02-3/" class="l-site-nav-child__list-link">サブメニュー03</a>
-														<ul class="l-site-nav-child__sublist">
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02-3/sub01/" class="l-site-nav-child__sublist-link">サブサブメニュー01</a>
-															</li>
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02-3/sub02/" class="l-site-nav-child__sublist-link">サブサブメニュー02</a>
-															</li>
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02-3/sub03/" class="l-site-nav-child__sublist-link">サブサブメニュー03</a>
-															</li>
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02-3/sub04/" class="l-site-nav-child__sublist-link">サブサブメニュー04</a>
-															</li>
-														</ul>
-													</li>
-												</ul>
-												<ul class="l-site-nav-child__list">
-													<li class="l-site-nav-child__list-item">
-														<a href="/item02-4/" class="l-site-nav-child__list-link">サブメニュー04</a>
-														<ul class="l-site-nav-child__sublist">
-															<li class="l-site-nav-child__sublist-item">
-																<a href="/item02-4/sub01/" class="l-site-nav-child__sublist-link">サブサブメニュー01</a>
-															</li>
-														</ul>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item02-5/" class="l-site-nav-child__list-link">サブメニュー05</a>
-													</li>
-												</ul>
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							</ul>
+							<ul class="l-site-nav-child__list">
+								<li class="l-site-nav-child__list-item">
+									<a href="/item02-3/" class="l-site-nav-child__list-link">サブメニュー03</a>
+									<ul class="l-site-nav-child__sublist">
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02-3/sub01/" class="l-site-nav-child__sublist-link">サブサブメニュー01</a>
+										</li>
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02-3/sub02/" class="l-site-nav-child__sublist-link">サブサブメニュー02</a>
+										</li>
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02-3/sub03/" class="l-site-nav-child__sublist-link">サブサブメニュー03</a>
+										</li>
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02-3/sub04/" class="l-site-nav-child__sublist-link">サブサブメニュー04</a>
+										</li>
+									</ul>
+								</li>
+							</ul>
+							<ul class="l-site-nav-child__list">
+								<li class="l-site-nav-child__list-item">
+									<a href="/item02-4/" class="l-site-nav-child__list-link">サブメニュー04</a>
+									<ul class="l-site-nav-child__sublist">
+										<li class="l-site-nav-child__sublist-item">
+											<a href="/item02-4/sub01/" class="l-site-nav-child__sublist-link">サブサブメニュー01</a>
+										</li>
+									</ul>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item02-5/" class="l-site-nav-child__list-link">サブメニュー05</a>
+								</li>
+							</ul>
+							{%- endcapture -%}
+							{%- render "_header-nav-child", id: "nav-item02", title: "メニュー項目02", image: "/assets/images/common/nav_img_02.webp", body: nav02_body %}
 						</li>
 
 						<li class="l-site-nav__list-item">
@@ -138,35 +114,23 @@
 								<span class="l-site-nav__list-label">メニュー項目03</span>
 								<span class="l-site-nav__list-icon">{% render "_icon", name: "triangle_down", size: "7" %}</span>
 							</button>
-							<div class="l-site-nav__child" id="nav-item03">
-								<div class="l-site-nav__child-inner">
-									<div class="l-site-nav-child">
-										<div class="l-site-nav-child__inner">
-											<p class="l-site-nav-child__title">メニュー項目03</p>
-											<div class="l-site-nav-child__body">
-												<figure class="l-site-nav-child__thumb">
-													<img src="/assets/images/common/nav_img_03.webp" alt="" width="266" height="150">
-												</figure>
-												<ul class="l-site-nav-child__list">
-													<li class="l-site-nav-child__list-item">
-														<a href="/item03/" class="l-site-nav-child__list-link">サブメニュー01</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item03/sub01/" class="l-site-nav-child__list-link">サブメニュー02</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item03/sub02/" class="l-site-nav-child__list-link">サブメニュー03</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item03/sub03/" class="l-site-nav-child__list-link">サブメニュー04</a>
-													</li>
-												</ul>
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							{%- capture nav03_body -%}
+<ul class="l-site-nav-child__list">
+								<li class="l-site-nav-child__list-item">
+									<a href="/item03/" class="l-site-nav-child__list-link">サブメニュー01</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item03/sub01/" class="l-site-nav-child__list-link">サブメニュー02</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item03/sub02/" class="l-site-nav-child__list-link">サブメニュー03</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item03/sub03/" class="l-site-nav-child__list-link">サブメニュー04</a>
+								</li>
+							</ul>
+							{%- endcapture -%}
+							{%- render "_header-nav-child", id: "nav-item03", title: "メニュー項目03", image: "/assets/images/common/nav_img_03.webp", body: nav03_body %}
 						</li>
 
 						<li class="l-site-nav__list-item">
@@ -174,32 +138,20 @@
 								<span class="l-site-nav__list-label">メニュー項目04</span>
 								<span class="l-site-nav__list-icon">{% render "_icon", name: "triangle_down", size: "7" %}</span>
 							</button>
-							<div class="l-site-nav__child" id="nav-item04">
-								<div class="l-site-nav__child-inner">
-									<div class="l-site-nav-child">
-										<div class="l-site-nav-child__inner">
-											<p class="l-site-nav-child__title">メニュー項目04</p>
-											<div class="l-site-nav-child__body">
-												<figure class="l-site-nav-child__thumb">
-													<img src="/assets/images/common/nav_img_04.webp" alt="" width="266" height="150">
-												</figure>
-												<ul class="l-site-nav-child__list">
-													<li class="l-site-nav-child__list-item">
-														<a href="/item04/sub01/" class="l-site-nav-child__list-link">サブメニュー01</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item04/sub02/" class="l-site-nav-child__list-link">サブメニュー02</a>
-													</li>
-													<li class="l-site-nav-child__list-item">
-														<a href="/item04/sub03/" class="l-site-nav-child__list-link">サブメニュー03</a>
-													</li>
-												</ul>
-
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+							{%- capture nav04_body -%}
+<ul class="l-site-nav-child__list">
+								<li class="l-site-nav-child__list-item">
+									<a href="/item04/sub01/" class="l-site-nav-child__list-link">サブメニュー01</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item04/sub02/" class="l-site-nav-child__list-link">サブメニュー02</a>
+								</li>
+								<li class="l-site-nav-child__list-item">
+									<a href="/item04/sub03/" class="l-site-nav-child__list-link">サブメニュー03</a>
+								</li>
+							</ul>
+							{%- endcapture -%}
+							{%- render "_header-nav-child", id: "nav-item04", title: "メニュー項目04", image: "/assets/images/common/nav_img_04.webp", body: nav04_body %}
 						</li>
 
 						<li class="l-site-nav__list-item">
@@ -212,39 +164,9 @@
 					</ul>
 					<div class="l-site-nav-footer">
 						<div class="l-site-nav-footer__reserve">
-							<div class="c-button -header-menu">
-								<a href="/reserve/" class="c-button__link">
-									<span class="c-button__icon-left">
-										{% render "_icon", name: "reserve", size: 17 %}
-									</span>
-									<span class="c-button__label">ボタンテキスト01</span>
-									<span class="c-button__icon-right">
-										{% render "_icon", name: "arrow_right", size: 19 %}
-									</span>
-								</a>
-							</div>
-							<div class="c-button -header-menu">
-								<a href="/reserve/monshin/" class="c-button__link">
-									<span class="c-button__icon-left">
-										{% render "_icon", name: "notes", size: 16 %}
-									</span>
-									<span class="c-button__label">ボタンテキスト02</span>
-									<span class="c-button__icon-right">
-										{% render "_icon", name: "arrow_right", size: 19 %}
-									</span>
-								</a>
-							</div>
-							<div class="c-button -header-menu">
-								<a href="/results/" class="c-button__link">
-									<span class="c-button__icon-left">
-										{% render "_icon", name: "device", size: 17 %}
-									</span>
-									<span class="c-button__label">ボタンテキスト03</span>
-									<span class="c-button__icon-right">
-										{% render "_icon", name: "arrow_right", size: 19 %}
-									</span>
-								</a>
-							</div>
+							{% render "_header-button", href: "/reserve/", icon: "reserve", icon_size: 17, label: "ボタンテキスト01" %}
+							{% render "_header-button", href: "/reserve/monshin/", icon: "notes", icon_size: 16, label: "ボタンテキスト02" %}
+							{% render "_header-button", href: "/results/", icon: "device", icon_size: 17, label: "ボタンテキスト03" %}
 							<div class="c-button -header-contact">
 								<a href="/contact/" class="c-button__link">
 									<span class="c-button__label">お問い合わせ</span>
