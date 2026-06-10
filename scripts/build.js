@@ -17,7 +17,35 @@ cleanChild.on("exit", async (code) => {
 		process.exit(code);
 	}
 
-	console.log("\n2. Running sass-glob...");
+	const generateTasks = [
+		"node scripts/tasks/build-tailwind.js",
+		"node scripts/tasks/build-svg-sprite.js",
+	];
+
+	console.log("\n2. Generating pre-requisite files in parallel...");
+
+	const generatePromises = generateTasks.map((task, index) => {
+		console.log(`   ${index + 1}. ${task}`);
+		return new Promise((resolve, reject) => {
+			const child = spawn(task, { shell: true, stdio: "inherit" });
+			child.on("exit", (exitCode) => {
+				if (exitCode === 0) {
+					resolve();
+				} else {
+					reject(new Error(`Task failed: ${task}`));
+				}
+			});
+		});
+	});
+
+	try {
+		await Promise.all(generatePromises);
+	} catch (error) {
+		logger.error(`Generate phase failed: ${error.message}`);
+		process.exit(1);
+	}
+
+	console.log("\n3. Running sass-glob...");
 	const sassGlobChild = spawn("node scripts/tasks/sass-glob.js --force", {
 		shell: true,
 		stdio: "inherit",
@@ -33,21 +61,19 @@ cleanChild.on("exit", async (code) => {
 			"node scripts/tasks/build-copy.js",
 			`node scripts/tasks/build-js.js${isProd ? " --prod" : ""}`,
 			`node scripts/tasks/build-css.js${isProd ? " --prod" : ""}`,
-			"node scripts/tasks/build-tailwind.js",
 			"node scripts/tasks/build-images.js",
 			"node scripts/tasks/build-images-webp.js",
-			"node scripts/tasks/build-svg-sprite.js",
 			"node scripts/tasks/build-html.js",
 		];
 
-		console.log("\n3. Building assets in parallel...");
+		console.log("\n4. Building assets in parallel...");
 
 		const buildPromises = tasks.map((task, index) => {
 			console.log(`   ${index + 1}. ${task}`);
 			return new Promise((resolve, reject) => {
 				const child = spawn(task, { shell: true, stdio: "inherit" });
-				child.on("exit", (code) => {
-					if (code === 0) {
+				child.on("exit", (exitCode) => {
+					if (exitCode === 0) {
 						resolve();
 					} else {
 						reject(new Error(`Task failed: ${task}`));
