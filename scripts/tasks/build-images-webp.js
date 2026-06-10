@@ -9,12 +9,13 @@ import { logger } from "../utils.js";
 const srcDir = config.assets.images;
 const distDir = path.join(config.dist, config.basePath || "", config.output.images);
 
-async function convertToWebP(file) {
+async function convertImage(file) {
 	const inputPath = path.join(srcDir, file);
 	const ext = path.extname(inputPath).toLowerCase();
 	const basename = path.basename(inputPath, ext);
 	const outputDir = path.join(distDir, path.dirname(file));
 	const outputWebP = path.join(outputDir, `${basename}.webp`);
+	const outputAvif = path.join(outputDir, `${basename}.avif`);
 
 	if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
 		return null;
@@ -23,9 +24,12 @@ async function convertToWebP(file) {
 	await fs.mkdir(outputDir, { recursive: true });
 
 	try {
-		await sharp(inputPath).webp({ quality: 80 }).toFile(outputWebP);
-		logger.success(`Converted: ${basename}.webp`);
-		return outputWebP;
+		await Promise.all([
+			sharp(inputPath).webp({ quality: 80 }).toFile(outputWebP),
+			sharp(inputPath).avif({ quality: 50 }).toFile(outputAvif),
+		]);
+		logger.success(`Converted: ${basename}.webp, ${basename}.avif`);
+		return { webp: outputWebP, avif: outputAvif };
 	} catch (error) {
 		logger.error(`Failed: ${file} - ${error.message}`);
 		return null;
@@ -55,13 +59,13 @@ async function buildImagesWebP() {
 				fullPath = path.join(srcDir, singleFilePath);
 			}
 
-			const fs = await import("node:fs");
-			if (!fs.default.existsSync(fullPath)) {
+			const fsSync = await import("node:fs");
+			if (!fsSync.default.existsSync(fullPath)) {
 				logger.error(`Not found: ${fullPath}`);
 				process.exit(1);
 			}
 
-			const result = await convertToWebP(relativePath);
+			const result = await convertImage(relativePath);
 			if (!result) {
 				logger.info(`Skipped: ${relativePath}`);
 			}
@@ -74,12 +78,12 @@ async function buildImagesWebP() {
 				return;
 			}
 
-			const results = await Promise.all(files.map((file) => convertToWebP(file)));
+			const results = await Promise.all(files.map((file) => convertImage(file)));
 			const converted = results.filter((r) => r !== null).length;
-			logger.success(`WebP: ${converted} files`);
+			logger.success(`WebP + AVIF: ${converted} files`);
 		}
 	} catch (error) {
-		logger.error(`WebP failed: ${error}`);
+		logger.error(`WebP/AVIF failed: ${error}`);
 		process.exit(1);
 	}
 }

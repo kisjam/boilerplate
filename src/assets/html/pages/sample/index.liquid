@@ -784,6 +784,16 @@
 				</div>
 
 				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">_picture.liquid</h3>
+					<p class="p-catalog__desc">
+						AVIF → WebP → 元画像の順でフォールバックする <code>&lt;picture&gt;</code> 要素。<code>src</code>（必須）・<code>alt</code>・<code>width</code>・<code>height</code>・<code>loading</code>（デフォルト <code>lazy</code>）・<code>class</code> を渡す。
+					</p>
+					<div class="p-catalog__demo">
+						{% render "_picture", src: "/assets/images/dummy/cat.jpg", alt: "ダミー画像（猫）", width: 1200, height: 800, loading: "lazy" %}
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
 					<h3 class="p-catalog__subsection-title">_template.liquid（汎用コンポーネント雛形）</h3>
 					<div class="p-catalog__demo">
 						{% render "_template" %}

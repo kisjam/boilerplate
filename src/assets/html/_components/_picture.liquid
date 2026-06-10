@@ -1,0 +1,32 @@
+{%- comment -%}
+Picture Component
+AVIF優先・WebPフォールバックのpicture要素を出力する。
+このビルドはjpg/pngの元画像をdistへコピーしないため、imgはWebPを参照する。
+Usage: {% render "_picture", src: "/assets/images/dummy/cat.jpg", alt: "説明", width: 1200, height: 800, loading: "lazy" %}
+
+Parameters:
+- src: 元画像パス（必須。.jpg/.jpeg/.png — 拡張子からavif/webpパスを導出）
+- alt: alt テキスト（省略時 ""）
+- width: 幅
+- height: 高さ
+- loading: "lazy" | "eager"（省略時 "lazy"）
+- class: 追加の CSS クラス
+{%- endcomment -%}
+
+{%- assign picture_alt = alt -%}
+{%- unless picture_alt -%}
+{%- assign picture_alt = "" -%}
+{%- endunless -%}
+
+{%- assign picture_loading = loading -%}
+{%- unless picture_loading -%}
+{%- assign picture_loading = "lazy" -%}
+{%- endunless -%}
+
+{%- assign picture_avif = src | replace: ".jpg", ".avif" | replace: ".jpeg", ".avif" | replace: ".png", ".avif" -%}
+{%- assign picture_webp = src | replace: ".jpg", ".webp" | replace: ".jpeg", ".webp" | replace: ".png", ".webp" -%}
+
+<picture>
+	<source srcset="{{ picture_avif }}" type="image/avif">
+	<img src="{{ picture_webp }}" alt="{{ picture_alt }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} loading="{{ picture_loading }}" decoding="async"{% if class %} class="{{ class }}"{% endif %}>
+</picture>
