@@ -1,0 +1,21 @@
+@use "global" as *;
+
+@layer components {
+	.c-skip-link {
+		position: fixed;
+		top: -100%;
+		left: 0;
+		z-index: 9999;
+		padding: 12px 20px;
+		background-color: $color-white;
+		color: $color-black;
+		font-size: rem(14);
+		font-weight: $fw-medium;
+		text-decoration: none;
+		outline-offset: 2px;
+
+		&:focus-visible {
+			top: 0;
+		}
+	}
+}

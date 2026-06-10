@@ -8,10 +8,11 @@
 
 	<body>
 		{%- block afterOpeningBody -%}{%- endblock -%}
+		<a href="#main" class="c-skip-link">本文へスキップ</a>
 
 		<div class="l-container">
 			{%- include '_components/_header.liquid' -%}
-			<main class="l-main">
+			<main class="l-main" id="main">
 				{% block contents %}{% endblock %}
 			</main>
 			{%- include '_components/_footer.liquid' -%}
