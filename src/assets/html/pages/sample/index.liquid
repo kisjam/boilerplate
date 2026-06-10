@@ -2,7 +2,7 @@
 {% assign breadcrumbs = '[
 {"text": "ホーム", "url": "/"},
 {"text": "サンプル", "url": "/sample/"},
-{"text": "サンプル", "url": "/sample/"}
+{"text": "コンポーネントカタログ", "url": "/sample/"}
 ]' | parse_json %}
 
 {% block contents %}
@@ -11,7 +11,7 @@
 	<div class="c-page-header__inner">
 		<div class="c-page-header__body">
 			<div class="c-page-header__body-inner">
-				<h1 class="c-page-header__title">サンプル</h1>
+				<h1 class="c-page-header__title">コンポーネントカタログ</h1>
 			</div>
 			<div class="c-page-header__breadcrumb">
 				{% render "_breadcrumb", data: breadcrumbs %}
@@ -20,53 +20,842 @@
 	</div>
 </div>
 
-
 <div class="c-page-body">
 	<div class="c-page-body__inner">
-		<div class="p-sample">
-			<dl>
-				<div>
-					<dt>timestamp</dt>
-					<dd>{{ timestamp }}</dd>
+		<div class="p-catalog">
+
+			<!-- ============================================================
+			     JSモジュール
+			     ============================================================ -->
+
+			<!-- Accordion -->
+			<section class="p-catalog__section" id="section-accordion">
+				<h2 class="p-catalog__section-title">アコーディオン（accordion.ts）</h2>
+				<p class="p-catalog__desc">
+					<code>[data-accordion]</code> を持つ <code>&lt;button&gt;</code> 要素がトリガー。
+					属性値にパネルの <code>id</code> を指定する。クリックで slideDown / slideUp が動く。
+					<code>[data-accordion-close]</code> を付けた子要素でパネルを閉じることもできる。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">基本</h3>
+					<div class="p-catalog__demo">
+						<button
+							class="p-catalog__accordion-btn"
+							id="accordion-btn-01"
+							data-accordion="accordion-panel-01"
+							aria-expanded="false"
+						>
+							アコーディオン 1
+						</button>
+						<div id="accordion-panel-01">
+							<div class="p-catalog__accordion-panel">
+								<p>アコーディオンのコンテンツが入ります。クリックで開閉します。</p>
+							</div>
+						</div>
+
+						<button
+							class="p-catalog__accordion-btn"
+							id="accordion-btn-02"
+							data-accordion="accordion-panel-02"
+							aria-expanded="false"
+							style="margin-top: 8px;"
+						>
+							アコーディオン 2
+						</button>
+						<div id="accordion-panel-02">
+							<div class="p-catalog__accordion-panel">
+								<p>2つ目のアコーディオンのコンテンツです。</p>
+								<button data-accordion-close style="margin-top: 8px; padding: 4px 12px; cursor: pointer;">パネルを閉じる</button>
+							</div>
+						</div>
+
+						<button
+							class="p-catalog__accordion-btn"
+							id="accordion-btn-03"
+							data-accordion="accordion-panel-03"
+							aria-expanded="true"
+							style="margin-top: 8px;"
+						>
+							デフォルトで開いているアコーディオン（aria-expanded="true"）
+						</button>
+						<div id="accordion-panel-03">
+							<div class="p-catalog__accordion-panel">
+								<p>初期状態で展開されているアコーディオンです。</p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<div>
-					<dt>filename</dt>
-					<dd>{{ filename }}</dd>
+			</section>
+
+			<!-- Tab -->
+			<section class="p-catalog__section" id="section-tab">
+				<h2 class="p-catalog__section-title">タブ（tab.ts）</h2>
+				<p class="p-catalog__desc">
+					<code>[data-tab]</code> ラッパーの中に <code>[data-tab-list]</code> とパネルを配置する。
+					タブボタンには <code>[data-tab-controls]="パネルID"</code> を付与。
+					デフォルト選択タブには <code>data-tab-default</code> を付ける。
+					キーボード操作（ArrowLeft / ArrowRight / Home / End）に対応。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">基本</h3>
+					<div class="p-catalog__demo">
+						<div data-tab>
+							<div class="p-catalog__tab-list" data-tab-list>
+								<button
+									class="p-catalog__tab-btn"
+									id="tab-cat-all"
+									data-tab-controls="panel-cat-all"
+									data-tab-default
+								>
+									すべて
+								</button>
+								<button
+									class="p-catalog__tab-btn"
+									id="tab-cat-news"
+									data-tab-controls="panel-cat-news"
+								>
+									お知らせ
+								</button>
+								<button
+									class="p-catalog__tab-btn"
+									id="tab-cat-blog"
+									data-tab-controls="panel-cat-blog"
+								>
+									ブログ
+								</button>
+							</div>
+							<div id="panel-cat-all" class="p-catalog__tab-panel">
+								<p>「すべて」タブのコンテンツです。</p>
+							</div>
+							<div id="panel-cat-news" class="p-catalog__tab-panel">
+								<p>「お知らせ」タブのコンテンツです。</p>
+							</div>
+							<div id="panel-cat-blog" class="p-catalog__tab-panel">
+								<p>「ブログ」タブのコンテンツです。</p>
+							</div>
+						</div>
+					</div>
 				</div>
-			</dl>
-			<p><a href="#anchor">ページ内リンク</a></p>
-			<h2 id="anchor">ページ内リンクの遷移先</h2>
-			<h2>LiquidJSコンポーネント</h2>
-			<h3>アイコン</h3>
-			{% render "_icon", icon: 'external' %}
+			</section>
 
-			<h3>汎用コンポーネントの雛形</h3>
-			{% render "_template" %}
+			<!-- Modal -->
+			<section class="p-catalog__section" id="section-modal">
+				<h2 class="p-catalog__section-title">モーダル（modal.ts）</h2>
+				<p class="p-catalog__desc">
+					開くボタンに <code>data-modal-open="ターゲットID"</code> を付与。
+					モーダル本体（<code>.c-modal</code>）の <code>id</code> がターゲットIDと一致する必要がある。
+					JS が <code>role="dialog"</code>・<code>aria-modal="true"</code>・<code>aria-hidden</code> を自動付与する。
+					閉じるボタンには <code>data-modal-close</code> を付ける。ESC キーでも閉じられる。
+				</p>
 
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">基本モーダル</h3>
+					<div class="p-catalog__demo">
+						<button class="c-button__link" data-modal-open="modal-catalog-01">
+							<span class="c-button__label">モーダルを開く</span>
+						</button>
+					</div>
+				</div>
 
-			<h2>汎用UI</h2>
-			<h2>タブ</h2>
-			<h2>アコーディオン</h2>
-			<h2>モーダル</h2>
-			<button data-modal-open="modal-01">モーダルを開く</button>
-			<div class="c-modal" id="modal-01">
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">画像入りモーダル</h3>
+					<div class="p-catalog__demo">
+						<button class="c-button__link" data-modal-open="modal-catalog-02">
+							<span class="c-button__label">画像入りモーダルを開く</span>
+						</button>
+					</div>
+				</div>
+			</section>
+
+			<!-- モーダル本体（DOMはどこに置いてもよい） -->
+			<div class="c-modal" id="modal-catalog-01">
 				<div class="c-modal__inner">
 					<div class="c-modal__body">
-						<p class="c-text">ここに説明文が入ります。</p>
+						<h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">モーダルタイトル</h2>
+						<p>ここにモーダルのコンテンツが入ります。フォーカストラップが有効で、ESC キーで閉じることができます。</p>
 					</div>
 					<button class="c-modal__close" data-modal-close><span class="sr-only">閉じる</span></button>
 				</div>
 			</div>
-			Dialog?
-			<h2>Toggle</h2>
-			<button data-toggle="#toggle">Toggle</button>
-			<div id="toggle">
-				Toggle されるコンテンツ
+
+			<div class="c-modal" id="modal-catalog-02">
+				<div class="c-modal__inner">
+					<div class="c-modal__body">
+						<h2 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 16px;">画像入りモーダル</h2>
+						<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" style="width: 100%; height: auto; display: block;">
+						<p style="margin-top: 12px;">画像とテキストが入ったモーダルのサンプルです。</p>
+					</div>
+					<button class="c-modal__close" data-modal-close><span class="sr-only">閉じる</span></button>
+				</div>
 			</div>
 
-			<h2>動作確認</h2>
-			<p>改行時の<br class="max-md:hidden">フォーマッターの挙動</p>
-			<input type="text" placeholder="末尾の/">
+			<!-- Toggle -->
+			<section class="p-catalog__section" id="section-toggle">
+				<h2 class="p-catalog__section-title">トグル（toggle.ts）</h2>
+				<p class="p-catalog__desc">
+					<code>data-toggle="CSSセレクタ"</code> を持つ要素がトリガー。クリックでターゲットに
+					<code>.is-expanded</code> / <code>.is-collapsed</code> をトグルする。
+					<code>data-toggle-outside-close</code> を追加するとターゲット外クリックで閉じる。
+					単一IDセレクタ（<code>#id</code>）の場合は <code>aria-controls</code> が自動付与される。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">基本トグル</h3>
+					<div class="p-catalog__demo">
+						<button
+							class="c-button__link"
+							data-toggle="#toggle-target-01"
+						>
+							<span class="c-button__label">トグル</span>
+						</button>
+						<div class="p-catalog__toggle-target is-collapsed" id="toggle-target-01">
+							トグルされるコンテンツ。<code>.is-expanded</code> / <code>.is-collapsed</code> クラスで表示制御してください。
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">外クリックで閉じる</h3>
+					<div class="p-catalog__demo">
+						<button
+							class="c-button__link"
+							data-toggle="#toggle-target-02"
+							data-toggle-outside-close
+						>
+							<span class="c-button__label">外クリックで閉じる</span>
+						</button>
+						<div class="p-catalog__toggle-target is-collapsed" id="toggle-target-02">
+							外側をクリックすると閉じます。<code>data-toggle-outside-close</code> 属性が有効です。
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Clipboard Copy -->
+			<section class="p-catalog__section" id="section-clipboard">
+				<h2 class="p-catalog__section-title">クリップボードコピー（clipboard-copy.ts）</h2>
+				<p class="p-catalog__desc">
+					<code>data-copy-clipboard="コピーするテキスト"</code> を持つ要素をクリックすると
+					属性値をクリップボードにコピーする。成功・失敗のトーストが自動表示される。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">基本</h3>
+					<div class="p-catalog__demo">
+						<div class="p-catalog__button-group">
+							<button
+								class="c-button__link"
+								data-copy-clipboard="https://example.com"
+							>
+								<span class="c-button__label">URLをコピー</span>
+							</button>
+							<button
+								class="c-button__link"
+								data-copy-clipboard="Hello, World!"
+							>
+								<span class="c-button__label">テキストをコピー</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Scroll Animation -->
+			<section class="p-catalog__section" id="section-scroll-animation">
+				<h2 class="p-catalog__section-title">スクロールアニメーション（ScrollAnimation クラス）</h2>
+				<p class="p-catalog__desc">
+					<code>.js-sa</code> クラスを付けた要素がビューポートに入ったとき <code>.-run</code> クラスが付与される。
+					CSSでアニメーションを定義する。<code>ScrollAnimation</code> クラスを直接インスタンス化して利用する。
+					<code>fireRange</code>（0〜1）でトリガー位置を調整できる。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">デモ要素（スクロールで .-run が付く）</h3>
+					<div class="p-catalog__demo">
+						<div
+							class="js-sa"
+							style="padding: 20px; background: #eee; border-radius: 6px; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; transform: translateY(20px);"
+						>
+							スクロールアニメーション対象要素（.js-sa）。<br>
+							ビューポートに入ると .-run が付与され、CSSでアニメーションが発火します。
+						</div>
+						<style>
+							.js-sa.-run {
+								opacity: 1 !important;
+								transform: translateY(0) !important;
+							}
+						</style>
+					</div>
+				</div>
+			</section>
+
+			<!-- Smooth Scroll / init-display-position -->
+			<section class="p-catalog__section" id="section-smooth-scroll">
+				<h2 class="p-catalog__section-title">スムーズスクロール・表示位置補正</h2>
+				<p class="p-catalog__desc">
+					<strong>smooth-scroll.ts</strong>: ページ内アンカーリンクをスムーズにスクロールする（ヘッダー高さを自動考慮）。<br>
+					<strong>init-display-position.ts</strong>: URLハッシュがある場合、ページロード時にヘッダー高さを考慮した位置に自動スクロールする。
+				</p>
+				<div class="p-catalog__demo">
+					<a href="#section-accordion" style="text-decoration: underline; color: #121d59;">「アコーディオン」セクションへスクロール（ページ内リンク）</a>
+				</div>
+			</section>
+
+
+			<!-- ============================================================
+			     CSS コンポーネント
+			     ============================================================ -->
+
+			<!-- c-button -->
+			<section class="p-catalog__section" id="section-button">
+				<h2 class="p-catalog__section-title">c-button（_button.scss）</h2>
+				<p class="p-catalog__desc">
+					<code>.c-button</code> ラッパーに <code>.c-button__link</code> を入れる構造。
+					モディファイアで色・サイズを変更する。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">色バリアント</h3>
+					<div class="p-catalog__demo">
+						<div class="p-catalog__button-group">
+							<div class="c-button">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">デフォルト（紺）</span>
+								</a>
+							</div>
+							<div class="c-button -white">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">.-white</span>
+								</a>
+							</div>
+							<div class="c-button -orange">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">.-orange</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">サイズ・配置モディファイア</h3>
+					<div class="p-catalog__demo">
+						<div class="p-catalog__button-group">
+							<div class="c-button -mv">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">.-mv（大型: min-height 78px）</span>
+								</a>
+							</div>
+							<div class="c-button -title">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">.-title（min-width 164px）</span>
+								</a>
+							</div>
+						</div>
+						<div style="margin-top: 12px;">
+							<div class="c-button -c">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">.-c（中央寄せ）</span>
+								</a>
+							</div>
+						</div>
+						<div style="max-width: 300px; margin-top: 12px;">
+							<div class="c-button -liquid">
+								<a href="#" class="c-button__link">
+									<span class="c-button__label">.-liquid（親幅に伸びる）</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">ボタン要素（submit等）</h3>
+					<div class="p-catalog__demo">
+						<div class="p-catalog__button-group">
+							<div class="c-button">
+								<button type="button" class="c-button__link">
+									<span class="c-button__label">button要素</span>
+								</button>
+							</div>
+							<div class="c-button">
+								<button type="button" class="c-button__link is-processing">
+									<span class="c-button__label">処理中（.is-processing）</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- c-editor -->
+			<section class="p-catalog__section" id="section-editor">
+				<h2 class="p-catalog__section-title">c-editor（_editor.scss）</h2>
+				<p class="p-catalog__desc">
+					WordPressブロックエディタの出力を想定したスタイル。
+					<code>.c-editor</code> の中に WP ブロック相当のマークアップを入れる。
+				</p>
+
+				<div class="p-catalog__demo">
+					<div class="c-editor">
+						<h2 class="wp-block-heading">見出し h2（.wp-block-heading）</h2>
+						<h3 class="wp-block-heading">見出し h3（.wp-block-heading）</h3>
+						<h4 class="wp-block-heading">見出し h4（.wp-block-heading）</h4>
+						<p>段落テキスト（p タグ）が入ります。WordPressの本文コンテンツを想定しています。</p>
+						<ul class="wp-block-list">
+							<li>リスト項目 1（.wp-block-list）</li>
+							<li>リスト項目 2</li>
+							<li>リスト項目 3</li>
+						</ul>
+						<ol class="wp-block-list">
+							<li>順序付きリスト 1（.wp-block-list）</li>
+							<li>順序付きリスト 2</li>
+						</ol>
+						<blockquote class="wp-block-quote">
+							<p>引用テキストが入ります（.wp-block-quote）。</p>
+						</blockquote>
+						<figure class="wp-block-table">
+							<table>
+								<thead>
+									<tr>
+										<th>項目</th>
+										<th>内容</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>テーブル行 1</td>
+										<td>内容 1（.wp-block-table）</td>
+									</tr>
+									<tr>
+										<td>テーブル行 2</td>
+										<td>内容 2</td>
+									</tr>
+								</tbody>
+							</table>
+						</figure>
+						<figure class="wp-block-image alignleft" style="max-width: 200px;">
+							<img src="/assets/images/dummy/cat.webp" alt="サンプル画像 alignleft">
+						</figure>
+						<p>画像回り込みのサンプル。<code>.alignleft</code> で左寄せ回り込みになります。テキストが画像の右に回り込むレイアウトです。</p>
+						<div style="clear: both;"></div>
+					</div>
+				</div>
+			</section>
+
+			<!-- c-carousel-horizontal-3 (Swiper) -->
+			<section class="p-catalog__section" id="section-carousel">
+				<h2 class="p-catalog__section-title">c-carousel-horizontal-3（Swiper、app.ts 初期化済み）</h2>
+				<p class="p-catalog__desc">
+					<code>.c-carousel-horizontal-3</code> を付けた要素が Swiper として初期化される。
+					スライドは <code>.swiper-wrapper</code> + <code>.swiper-slide</code>、
+					ナビゲーションは <code>.c-carousel-horizontal-3__prev</code> / <code>__next</code>。
+					769px 以下では無効（スクロールレイアウト）、それ以上で Swiper が有効になる。
+				</p>
+
+				<div class="p-catalog__demo" style="overflow: hidden;">
+					<div class="c-carousel-horizontal-3 swiper">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide" style="width: 200px;">
+								<div class="c-card">
+									<a href="#" class="c-card__link">
+										<div class="c-card__header">
+											<div class="c-card__thumb">
+												<img src="/assets/images/dummy/cat.webp" alt="サンプル画像 1" width="226" height="127">
+											</div>
+										</div>
+										<div class="c-card__body">
+											<p class="c-card__category">カテゴリ</p>
+											<p class="c-card__title">スライド 1 のタイトル</p>
+											<time class="c-card__date">2026.01.01</time>
+										</div>
+									</a>
+								</div>
+							</div>
+							<div class="swiper-slide" style="width: 200px;">
+								<div class="c-card">
+									<a href="#" class="c-card__link">
+										<div class="c-card__header">
+											<div class="c-card__thumb">
+												<img src="/assets/images/dummy/cat.webp" alt="サンプル画像 2" width="226" height="127">
+											</div>
+										</div>
+										<div class="c-card__body">
+											<p class="c-card__category">カテゴリ</p>
+											<p class="c-card__title">スライド 2 のタイトル</p>
+											<time class="c-card__date">2026.02.01</time>
+										</div>
+									</a>
+								</div>
+							</div>
+							<div class="swiper-slide" style="width: 200px;">
+								<div class="c-card">
+									<a href="#" class="c-card__link">
+										<div class="c-card__header">
+											<div class="c-card__thumb">
+												<img src="/assets/images/dummy/cat.webp" alt="サンプル画像 3" width="226" height="127">
+											</div>
+										</div>
+										<div class="c-card__body">
+											<p class="c-card__category">カテゴリ</p>
+											<p class="c-card__title">スライド 3 のタイトル</p>
+											<time class="c-card__date">2026.03.01</time>
+										</div>
+									</a>
+								</div>
+							</div>
+						</div>
+						<div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 16px; position: relative;">
+							<button class="c-carousel-horizontal-3__prev" aria-label="前へ">
+								{% render "_icon", icon: 'external' %}
+							</button>
+							<button class="c-carousel-horizontal-3__next" aria-label="次へ">
+								{% render "_icon", icon: 'external' %}
+							</button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- c-card -->
+			<section class="p-catalog__section" id="section-card">
+				<h2 class="p-catalog__section-title">c-card（sample/_card.scss）</h2>
+				<p class="p-catalog__desc">
+					記事・ランキングカードのコンポーネント。モディファイア: <code>.-lg</code>（大きめ）、<code>.-md-row</code>（SP横並び）、<code>.-cover</code>（画像覆い被せ）、<code>.-rank-1〜3</code>（ランク色）。
+				</p>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">基本カード / .-lg / .-cover</h3>
+					<div class="p-catalog__card-grid">
+						<div class="c-card">
+							<a href="#" class="c-card__link">
+								<div class="c-card__header">
+									<div class="c-card__thumb">
+										<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" width="400" height="225">
+									</div>
+								</div>
+								<div class="c-card__body">
+									<p class="c-card__category">カテゴリ</p>
+									<p class="c-card__title">基本カードのタイトルが入ります</p>
+									<time class="c-card__date">2026.01.01</time>
+								</div>
+							</a>
+						</div>
+						<div class="c-card -lg">
+							<a href="#" class="c-card__link">
+								<div class="c-card__header">
+									<div class="c-card__thumb">
+										<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" width="400" height="225">
+									</div>
+									<span class="c-card__new">NEW</span>
+								</div>
+								<div class="c-card__body">
+									<p class="c-card__category">カテゴリ</p>
+									<p class="c-card__title">.-lg カード（NEWバッジ付き）</p>
+									<time class="c-card__date">2026.02.01</time>
+								</div>
+							</a>
+						</div>
+						<div class="c-card -cover">
+							<a href="#" class="c-card__link">
+								<div class="c-card__header">
+									<div class="c-card__thumb">
+										<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" width="400" height="225">
+									</div>
+								</div>
+								<div class="c-card__body">
+									<p class="c-card__category">カテゴリ</p>
+									<p class="c-card__title">.-cover（画像上にテキスト）</p>
+									<time class="c-card__date">2026.03.01</time>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">ランクカード（.-rank-1 〜 3）</h3>
+					<div class="p-catalog__card-grid">
+						<div class="c-card -rank-1">
+							<a href="#" class="c-card__link">
+								<div class="c-card__header">
+									<div class="c-card__thumb">
+										<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" width="400" height="225">
+									</div>
+									<span class="c-card__rank">1</span>
+								</div>
+								<div class="c-card__body">
+									<p class="c-card__title">.-rank-1（金色）</p>
+								</div>
+							</a>
+						</div>
+						<div class="c-card -rank-2">
+							<a href="#" class="c-card__link">
+								<div class="c-card__header">
+									<div class="c-card__thumb">
+										<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" width="400" height="225">
+									</div>
+									<span class="c-card__rank">2</span>
+								</div>
+								<div class="c-card__body">
+									<p class="c-card__title">.-rank-2（銀色）</p>
+								</div>
+							</a>
+						</div>
+						<div class="c-card -rank-3">
+							<a href="#" class="c-card__link">
+								<div class="c-card__header">
+									<div class="c-card__thumb">
+										<img src="/assets/images/dummy/cat.webp" alt="サンプル画像" width="400" height="225">
+									</div>
+									<span class="c-card__rank">3</span>
+								</div>
+								<div class="c-card__body">
+									<p class="c-card__title">.-rank-3（銅色）</p>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- c-pagination -->
+			<section class="p-catalog__section" id="section-pagination">
+				<h2 class="p-catalog__section-title">c-pagination（_pagination.scss）</h2>
+				<p class="p-catalog__desc">
+					ページネーションコンポーネント。現在ページは <code>.-current</code> クラスで示す。
+				</p>
+
+				<div class="p-catalog__demo">
+					<nav class="c-pagination" aria-label="ページネーション">
+						<div class="c-pagination__inner">
+							<ul class="c-pagination__list">
+								<li class="c-pagination__page">
+									<a href="#" class="c-pagination__page-link">1</a>
+								</li>
+								<li class="c-pagination__page">
+									<a href="#" class="c-pagination__page-link -current" aria-current="page">2</a>
+								</li>
+								<li class="c-pagination__page">
+									<a href="#" class="c-pagination__page-link">3</a>
+								</li>
+								<li class="c-pagination__page">
+									<span class="c-pagination__page-dots">…</span>
+								</li>
+								<li class="c-pagination__page">
+									<a href="#" class="c-pagination__page-link">10</a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				</div>
+			</section>
+
+			<!-- c-text-marquee -->
+			<section class="p-catalog__section" id="section-marquee">
+				<h2 class="p-catalog__section-title">c-text-marquee（_text-marquee.scss）</h2>
+				<p class="p-catalog__desc">
+					テキストが横に流れるアニメーションコンポーネント。
+					<code>--width</code> と <code>--duration</code> CSS変数でカスタマイズ可能。
+				</p>
+
+				<div class="p-catalog__demo" style="background-color: #121d59; overflow: hidden;">
+					<div class="c-text-marquee">
+						<span class="c-text-marquee__label">BOILERPLATE CATALOG</span>
+					</div>
+				</div>
+			</section>
+
+			<!-- l-two-column -->
+			<section class="p-catalog__section" id="section-two-column">
+				<h2 class="p-catalog__section-title">l-two-column / c-two-column（_two-column.scss）</h2>
+				<p class="p-catalog__desc">
+					メイン＋サイドバーの2カラムレイアウト。
+					<code>__main</code>・<code>__sub</code>・<code>__bottom</code> の3エリアで構成。
+					1024px 以上でグリッド（main: 1fr / sub: 350px）、以下では縦積み。
+				</p>
+
+				<div class="p-catalog__demo">
+					<div class="c-two-column">
+						<div class="c-two-column__inner">
+							<div class="c-two-column__main">
+								<div style="background: #e8f4fd; padding: 24px; border-radius: 6px;">
+									<strong>__main</strong>（メインコンテンツ）
+								</div>
+							</div>
+							<div class="c-two-column__sub">
+								<div style="background: #fce8d5; padding: 24px; border-radius: 6px;">
+									<strong>__sub</strong>（サイドバー）
+								</div>
+							</div>
+							<div class="c-two-column__bottom">
+								<div style="background: #e8fce8; padding: 24px; border-radius: 6px; margin-top: 24px;">
+									<strong>__bottom</strong>（全幅フッター）
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- フォームコンポーネント -->
+			<section class="p-catalog__section" id="section-form">
+				<h2 class="p-catalog__section-title">フォームコンポーネント（components/input/）</h2>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">c-input-text（テキスト入力）</h3>
+					<div class="p-catalog__demo">
+						<div class="c-input-text">
+							<input type="text" class="c-input-text__field" placeholder="テキストを入力">
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">c-input-textarea（テキストエリア）</h3>
+					<div class="p-catalog__demo">
+						<div class="c-input-textarea">
+							<textarea class="c-input-textarea__field" placeholder="複数行テキストを入力"></textarea>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">c-input-checkbox（チェックボックス）</h3>
+					<div class="p-catalog__demo">
+						<div class="c-input-checkbox__group">
+							<label class="c-input-checkbox">
+								<input type="checkbox" class="c-input-checkbox__icon">
+								<span class="c-input-checkbox__label">チェックボックス 1</span>
+							</label>
+							<label class="c-input-checkbox">
+								<input type="checkbox" class="c-input-checkbox__icon" checked>
+								<span class="c-input-checkbox__label">チェックボックス 2（チェック済み）</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">input-radio（ラジオボタン）</h3>
+					<div class="p-catalog__demo">
+						<label class="input-radio">
+							<input type="radio" class="input-radio__input" name="sample-radio" value="a">
+							<span class="input-radio__label">ラジオ A</span>
+						</label>
+						<label class="input-radio" style="margin-left: 8px;">
+							<input type="radio" class="input-radio__input" name="sample-radio" value="b">
+							<span class="input-radio__label">ラジオ B</span>
+						</label>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">input-select（セレクトボックス）</h3>
+					<div class="p-catalog__demo">
+						<div class="input-select">
+							<select class="input-select__field">
+								<option value="">選択してください</option>
+								<option value="a">選択肢 A</option>
+								<option value="b">選択肢 B</option>
+								<option value="c">選択肢 C</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- LiquidJSコンポーネント -->
+			<section class="p-catalog__section" id="section-liquid">
+				<h2 class="p-catalog__section-title">LiquidJS コンポーネント（_components/）</h2>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">_icon.liquid</h3>
+					<p class="p-catalog__desc">
+						SVGスプライトアイコン。<code>icon</code>（必須）・<code>size</code>（デフォルト24）・<code>class</code>・<code>label</code> を渡す。
+					</p>
+					<div class="p-catalog__demo">
+						{% render "_icon", icon: 'external' %}
+						{% render "_icon", icon: 'external', size: '32' %}
+						{% render "_icon", icon: 'external', size: '48', label: 'external link' %}
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">_template.liquid（汎用コンポーネント雛形）</h3>
+					<div class="p-catalog__demo">
+						{% render "_template" %}
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">_breadcrumb.liquid</h3>
+					<div class="p-catalog__demo" style="background-color: #121d59; padding: 16px; border-radius: 6px;">
+						{% assign sample_breadcrumbs = '[
+						{"text": "ホーム", "url": "/"},
+						{"text": "カタログ", "url": "/sample/"}
+						]' | parse_json %}
+						{% render "_breadcrumb", data: sample_breadcrumbs %}
+					</div>
+				</div>
+			</section>
+
+			<!-- ユーティリティ -->
+			<section class="p-catalog__section" id="section-utility">
+				<h2 class="p-catalog__section-title">その他ユーティリティ</h2>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">check-scrolled.ts / utility.ts</h3>
+					<p class="p-catalog__desc">
+						<code>addLoadedClass()</code>: ページロード後 <code>&lt;html&gt;</code> に <code>.is-loaded</code> を付与。<br>
+						<code>addDeviceClass()</code>: UA に応じて <code>.is-laptop</code> / <code>.is-mobile</code> を付与。<br>
+						<code>initScrollbarWidth()</code>: <code>--scrollbar-width</code> CSS変数を設定。<br>
+						<code>initScrolledClass()</code>: スクロール検知で <code>.is-scrolled</code> を付与。<br>
+						いずれも <code>app.ts</code> で初期化済みのためマークアップ不要。
+					</p>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">swipe（.swipe / .swipe__inner）</h3>
+					<p class="p-catalog__desc">
+						SP でテーブルなどを横スクロールさせるラッパー。<code>SwipeFigure</code> クラスは <code>.js-swipe</code> に付けると自動で <code>.swipe</code> クラスを追加する。手動で使う場合は以下の構造。
+					</p>
+					<div class="p-catalog__demo">
+						<div class="swipe">
+							<div class="swipe__inner">
+								<table style="border-collapse: collapse; min-width: 600px;">
+									<thead>
+										<tr>
+											<th style="border: 1px solid #ddd; padding: 8px;">列 A</th>
+											<th style="border: 1px solid #ddd; padding: 8px;">列 B</th>
+											<th style="border: 1px solid #ddd; padding: 8px;">列 C</th>
+											<th style="border: 1px solid #ddd; padding: 8px;">列 D</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td style="border: 1px solid #ddd; padding: 8px;">データ 1</td>
+											<td style="border: 1px solid #ddd; padding: 8px;">データ 2</td>
+											<td style="border: 1px solid #ddd; padding: 8px;">データ 3</td>
+											<td style="border: 1px solid #ddd; padding: 8px;">データ 4</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">c-skip-link</h3>
+					<p class="p-catalog__desc">
+						<code>&lt;a href="#main" class="c-skip-link"&gt;</code> がレイアウト（default.liquid）に組み込み済み。フォーカス時に表示される。
+					</p>
+				</div>
+			</section>
+
 		</div>
 	</div>
 </div>

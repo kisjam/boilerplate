@@ -1,0 +1,147 @@
+@use "global" as *;
+
+@layer components {
+	.p-catalog {
+		padding-block: 60px;
+
+		&__section {
+			& + & {
+				margin-top: 80px;
+				padding-top: 80px;
+				border-top: 1px solid #e0e0e0;
+			}
+		}
+
+		&__section-title {
+			font-size: rem(22);
+			font-weight: $fw-bold;
+			margin-bottom: 32px;
+			padding-left: 12px;
+			border-left: 4px solid $color-assort;
+		}
+
+		&__subsection {
+			& + & {
+				margin-top: 48px;
+			}
+		}
+
+		&__subsection-title {
+			font-size: rem(16);
+			font-weight: $fw-bold;
+			margin-bottom: 16px;
+			color: #444;
+		}
+
+		&__desc {
+			font-size: rem(14);
+			color: #666;
+			margin-bottom: 16px;
+			line-height: $lh;
+		}
+
+		&__demo {
+			padding: 24px;
+			border: 1px solid #e0e0e0;
+			border-radius: $radius;
+			background-color: #fafafa;
+		}
+
+		&__button-group {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 16px;
+			align-items: flex-start;
+		}
+
+		&__tab-list {
+			display: flex;
+			gap: 8px;
+			flex-wrap: wrap;
+			margin-bottom: 0;
+		}
+
+		&__tab-btn {
+			padding: 8px 20px;
+			border: 2px solid $color-assort;
+			border-radius: $radius;
+			background: transparent;
+			color: $color-assort;
+			cursor: pointer;
+			font-size: rem(14);
+			font-weight: $fw-medium;
+			transition: background-color $duration ease, color $duration ease;
+
+			&.is-selected {
+				background-color: $color-assort;
+				color: $color-white;
+			}
+		}
+
+		&__tab-panel {
+			padding: 16px;
+			background-color: #fff;
+			border: 1px solid #e0e0e0;
+			border-radius: $radius;
+			margin-top: 12px;
+		}
+
+		&__accordion-btn {
+			width: 100%;
+			text-align: left;
+			padding: 14px 16px;
+			background-color: #f5f5f5;
+			border: 1px solid #ddd;
+			border-radius: $radius;
+			cursor: pointer;
+			font-size: rem(15);
+			font-weight: $fw-medium;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+
+			&::after {
+				content: "+";
+				flex-shrink: 0;
+				font-size: rem(20);
+				line-height: 1;
+				transition: transform $duration ease;
+			}
+
+			&.is-expanded::after {
+				transform: rotate(45deg);
+			}
+		}
+
+		&__accordion-panel {
+			padding: 16px;
+			background-color: #fff;
+			border: 1px solid #ddd;
+			border-top: none;
+			border-radius: 0 0 $radius $radius;
+		}
+
+		&__toggle-target {
+			padding: 16px;
+			background-color: #e8f4fd;
+			border: 1px solid #b3d9f7;
+			border-radius: $radius;
+			margin-top: 12px;
+
+			&.is-collapsed {
+				display: none;
+			}
+		}
+
+		&__card-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 24px;
+
+			@include mq(md) {
+				grid-template-columns: 1fr;
+			}
+		}
+	}
+}
