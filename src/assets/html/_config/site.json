@@ -9,7 +9,7 @@
 	},
 	"social": {
 		"og": {
-			"image": "",
+			"image": "/assets/images/common/ogp.png",
 			"type": "website"
 		},
 		"twitter": {
