@@ -172,122 +172,117 @@ export const addDeviceClass = (): void => {
 	document.body.classList.add(className);
 };
 
+const EASE_OUT_QUART = "cubic-bezier(0.165, 0.84, 0.44, 1)"; // easeOutQuart
+
 /**
- * 要素をスライドアップ（非表示）
+ * スライドアニメーションの共通実装
  */
-export const slideUp = (element: HTMLElement, options: SlideOptions = {}): void => {
+const slide = (element: HTMLElement, expand: boolean, options: SlideOptions): void => {
 	const { duration = ANIMATION_DURATION_DEFAULT, onComplete } = options;
 
-	// 既に非表示の場合は何もしない
-	if (element.style.display === "none") {
-		onComplete?.();
-		return;
-	}
+	if (expand) {
+		// 既に表示されている場合は何もしない
+		if (element.style.display !== "none" && element.offsetHeight > 0) {
+			onComplete?.();
+			return;
+		}
 
-	// 現在の高さを取得して設定
-	const height = element.offsetHeight;
-	element.style.height = `${height}px`;
-	element.offsetHeight; // リフローを強制
+		// display設定
+		element.style.removeProperty("display");
+		let display = window.getComputedStyle(element).display;
+		if (display === "none") display = "block";
+		element.style.display = display;
 
-	// トランジション設定
-	element.style.overflow = "hidden";
-	element.style.transitionProperty = "height, margin, padding";
-	element.style.transitionDuration = `${duration}ms`;
-	element.style.transitionTimingFunction = "cubic-bezier(0.165, 0.84, 0.44, 1)"; // easeOutQuart
+		// 目標の高さを取得
+		const height = element.offsetHeight;
 
-	// 値を0に設定
-	requestAnimationFrame(() => {
+		// 初期状態を設定
+		element.style.overflow = "hidden";
 		element.style.height = "0";
 		element.style.paddingTop = "0";
 		element.style.paddingBottom = "0";
 		element.style.marginTop = "0";
 		element.style.marginBottom = "0";
-	});
+		element.offsetHeight; // リフローを強制
+
+		// トランジション設定
+		element.style.transitionProperty = "height, margin, padding";
+		element.style.transitionDuration = `${duration}ms`;
+		element.style.transitionTimingFunction = EASE_OUT_QUART;
+
+		// 値を設定
+		requestAnimationFrame(() => {
+			element.style.height = `${height}px`;
+			element.style.removeProperty("padding-top");
+			element.style.removeProperty("padding-bottom");
+			element.style.removeProperty("margin-top");
+			element.style.removeProperty("margin-bottom");
+		});
+	} else {
+		// 既に非表示の場合は何もしない
+		if (element.style.display === "none") {
+			onComplete?.();
+			return;
+		}
+
+		// 現在の高さを取得して設定
+		const height = element.offsetHeight;
+		element.style.height = `${height}px`;
+		element.offsetHeight; // リフローを強制
+
+		// トランジション設定
+		element.style.overflow = "hidden";
+		element.style.transitionProperty = "height, margin, padding";
+		element.style.transitionDuration = `${duration}ms`;
+		element.style.transitionTimingFunction = EASE_OUT_QUART;
+
+		// 値を0に設定
+		requestAnimationFrame(() => {
+			element.style.height = "0";
+			element.style.paddingTop = "0";
+			element.style.paddingBottom = "0";
+			element.style.marginTop = "0";
+			element.style.marginBottom = "0";
+		});
+	}
+
+	let finished = false;
+	const finish = (): void => {
+		if (finished) return;
+		finished = true;
+
+		element.removeEventListener("transitionend", handleTransitionEnd);
+		if (!expand) {
+			element.style.display = "none";
+		}
+		cleanupStyles(element);
+		onComplete?.();
+	};
 
 	// トランジション終了処理
 	const handleTransitionEnd = (e: TransitionEvent): void => {
 		if (e.target !== element || e.propertyName !== "height") return;
-
-		element.style.display = "none";
-		cleanupStyles(element);
-		element.removeEventListener("transitionend", handleTransitionEnd);
-		onComplete?.();
+		finish();
 	};
 
 	element.addEventListener("transitionend", handleTransitionEnd);
 
 	// タイムアウト処理（トランジションが発火しない場合の保険）
-	setTimeout(() => {
-		if (element.style.display !== "none") {
-			element.style.display = "none";
-			cleanupStyles(element);
-			element.removeEventListener("transitionend", handleTransitionEnd);
-			onComplete?.();
-		}
-	}, duration + 50);
+	setTimeout(finish, duration + 50);
+};
+
+/**
+ * 要素をスライドアップ（非表示）
+ */
+export const slideUp = (element: HTMLElement, options: SlideOptions = {}): void => {
+	slide(element, false, options);
 };
 
 /**
  * 要素をスライドダウン（表示）
  */
 export const slideDown = (element: HTMLElement, options: SlideOptions = {}): void => {
-	const { duration = ANIMATION_DURATION_DEFAULT, onComplete } = options;
-
-	// 既に表示されている場合は何もしない
-	if (element.style.display !== "none" && element.offsetHeight > 0) {
-		onComplete?.();
-		return;
-	}
-
-	// display設定
-	element.style.removeProperty("display");
-	let display = window.getComputedStyle(element).display;
-	if (display === "none") display = "block";
-	element.style.display = display;
-
-	// 目標の高さを取得
-	const height = element.offsetHeight;
-
-	// 初期状態を設定
-	element.style.overflow = "hidden";
-	element.style.height = "0";
-	element.style.paddingTop = "0";
-	element.style.paddingBottom = "0";
-	element.style.marginTop = "0";
-	element.style.marginBottom = "0";
-	element.offsetHeight; // リフローを強制
-
-	// トランジション設定
-	element.style.transitionProperty = "height, margin, padding";
-	element.style.transitionDuration = `${duration}ms`;
-	element.style.transitionTimingFunction = "cubic-bezier(0.165, 0.84, 0.44, 1)"; // easeOutQuart
-
-	// 値を設定
-	requestAnimationFrame(() => {
-		element.style.height = `${height}px`;
-		element.style.removeProperty("padding-top");
-		element.style.removeProperty("padding-bottom");
-		element.style.removeProperty("margin-top");
-		element.style.removeProperty("margin-bottom");
-	});
-
-	// トランジション終了処理
-	const handleTransitionEnd = (e: TransitionEvent): void => {
-		if (e.target !== element || e.propertyName !== "height") return;
-
-		cleanupStyles(element);
-		element.removeEventListener("transitionend", handleTransitionEnd);
-		onComplete?.();
-	};
-
-	element.addEventListener("transitionend", handleTransitionEnd);
-
-	// タイムアウト処理（トランジションが発火しない場合の保険）
-	setTimeout(() => {
-		cleanupStyles(element);
-		element.removeEventListener("transitionend", handleTransitionEnd);
-		onComplete?.();
-	}, duration + 50);
+	slide(element, true, options);
 };
 
 /**
