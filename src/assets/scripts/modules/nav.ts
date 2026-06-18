@@ -193,8 +193,6 @@ export const createNav = (
 	return new Nav(navSelector, toggleSelector, options);
 };
 
-// ---------- MegaMenu ----------
-
 interface MegaMenuItem {
 	item: HTMLElement;
 	trigger: HTMLButtonElement;
@@ -221,7 +219,6 @@ export class MegaMenu {
 	private boundHandleOutsideClick: (e: MouseEvent) => void;
 
 	constructor(navSelector: string, options: MegaMenuOptions | number = {}) {
-		// 後方互換: 第2引数が数値の場合は closeDelay として扱う
 		const opts: MegaMenuOptions = typeof options === "number" ? { closeDelay: options } : options;
 		const navEl = document.querySelector(navSelector) as HTMLElement;
 		if (!navEl) throw new Error(`MegaMenu: element not found: ${navSelector}`);

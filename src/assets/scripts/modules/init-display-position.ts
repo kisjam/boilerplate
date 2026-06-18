@@ -10,7 +10,6 @@ export const init = (): void => {
 	const { hash } = window.location;
 	if (!hash) return;
 
-	// ブラウザ任せのスクロール復元を切り、自前で位置を制御する
 	if ("scrollRestoration" in history) {
 		history.scrollRestoration = "manual";
 	}
@@ -20,15 +19,12 @@ export const init = (): void => {
 		try {
 			target = document.querySelector<HTMLElement>(hash);
 		} catch {
-			// 不正なセレクタ（CSS.escape が必要なハッシュ等）は対象外
 			return;
 		}
 		if (target === null) return;
 
-		// smooth はロード時のレイアウト変動とレースするため auto で確実に飛ばす
 		target.scrollIntoView({ behavior: "auto", block: "start" });
 
-		// フォーカスもアンカーへ移す（キーボード／スクリーンリーダー対応）
 		target.setAttribute("tabindex", "-1");
 		target.focus({ preventScroll: true });
 	};

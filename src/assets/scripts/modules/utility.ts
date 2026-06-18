@@ -2,7 +2,6 @@
  * ウィンドウ情報とメディアクエリを管理するユーティリティ
  */
 
-// 定数定義
 const BREAKPOINT_DESKTOP = 1024;
 const SCROLL_HEADER_HEIGHT_DESKTOP = 120;
 const SCROLL_HEADER_HEIGHT_MOBILE = 80;
@@ -82,5 +81,4 @@ class Utility {
 	}
 }
 
-// シングルトンインスタンス
 export const u = new Utility();

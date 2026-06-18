@@ -4,8 +4,8 @@
  */
 
 export interface MessageOptions {
-	duration?: number; // メッセージ表示時間（ミリ秒）
-	autoHide?: boolean; // 自動で非表示にするか
+	duration?: number;
+	autoHide?: boolean;
 }
 
 const DEFAULT_OPTIONS: Required<MessageOptions> = {
@@ -22,21 +22,17 @@ let hideTimeout: number | null = null;
 export function showMessage(text: string, options: MessageOptions = {}): void {
 	const config = { ...DEFAULT_OPTIONS, ...options };
 
-	// 既存のメッセージがある場合は削除
 	hideMessage();
 
-	// メッセージ要素を作成
 	const messageElement = createMessageElement(text);
 	document.body.appendChild(messageElement);
 
-	// DOM挿入後にアニメーションを開始
 	requestAnimationFrame(() => {
 		messageElement.classList.add("-show");
 	});
 
 	currentMessage = messageElement;
 
-	// 自動非表示の設定
 	if (config.autoHide) {
 		hideTimeout = window.setTimeout(() => {
 			hideMessage();
@@ -50,24 +46,21 @@ export function showMessage(text: string, options: MessageOptions = {}): void {
 export function hideMessage(): void {
 	if (!currentMessage) return;
 
-	// タイムアウトをクリア
 	if (hideTimeout) {
 		clearTimeout(hideTimeout);
 		hideTimeout = null;
 	}
 
-	// アニメーション終了後に要素を削除
 	currentMessage.classList.remove("-show");
 
 	const messageToRemove = currentMessage;
 	currentMessage = null;
 
-	// トランジション終了後に要素を削除
 	setTimeout(() => {
 		if (messageToRemove?.parentNode) {
 			messageToRemove.parentNode.removeChild(messageToRemove);
 		}
-	}, 300); // CSSのtransition時間と合わせる
+	}, 300);
 }
 
 /**
@@ -78,7 +71,6 @@ function createMessageElement(text: string): HTMLElement {
 	messageElement.className = "c-message";
 	messageElement.textContent = text;
 
-	// クリックで非表示
 	messageElement.addEventListener("click", hideMessage);
 
 	return messageElement;

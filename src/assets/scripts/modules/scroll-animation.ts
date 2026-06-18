@@ -31,11 +31,9 @@ export class ScrollAnimation {
 
 		if (elems.length === 0) return;
 
-		// Use Intersection Observer if available
 		if ("IntersectionObserver" in window) {
 			this.initIntersectionObserver(elems);
 		} else {
-			// Fallback to scroll event
 			elems.forEach((elem) => {
 				this.registerScrollHandler(elem);
 			});
@@ -75,7 +73,6 @@ export class ScrollAnimation {
 
 		this.scrollHandlers.set(elem, handler);
 		window.addEventListener("scroll", handler);
-		// Initial check
 		handler();
 	}
 

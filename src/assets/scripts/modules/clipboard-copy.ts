@@ -26,10 +26,8 @@ async function handleCopyClick(event: Event): Promise<void> {
 
 	try {
 		if (navigator.clipboard && window.isSecureContext) {
-			// モダンなClipboard APIを使用
 			await navigator.clipboard.writeText(textToCopy);
 		} else {
-			// フォールバック: 旧来の方法
 			await copyTextFallback(textToCopy);
 		}
 
@@ -61,7 +59,6 @@ function showToast(message: string): void {
 
 function copyTextFallback(text: string): Promise<void> {
 	return new Promise((resolve, reject) => {
-		// 一時的なtextarea要素を作成
 		const textarea = document.createElement("textarea");
 		textarea.value = text;
 		textarea.style.position = "fixed";

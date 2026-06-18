@@ -28,13 +28,10 @@ export const initScrollbarWidth = (): void => {
 		updateScrollbarWidth();
 	};
 
-	// 初期設定
 	updateScrollbarWidth();
 
-	// イベントリスナー設定（重複防止のため一度だけ登録）
 	window.addEventListener("resize", handleResize, { passive: true });
 
-	// loadイベントは一度だけ実行
 	window.addEventListener(
 		"load",
 		() => {
@@ -49,7 +46,6 @@ export const initScrollbarWidth = (): void => {
  */
 export const addLoadedClass = (): void => {
 	const addLoadedClassToBody = (): void => {
-		// 2フレーム後に実行（より滑らかなアニメーションのため）
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
 				document.body.classList.add("is-loaded");
@@ -57,7 +53,6 @@ export const addLoadedClass = (): void => {
 		});
 	};
 
-	// DOMContentLoadedか既に読み込み済みかチェック
 	if (document.readyState === "loading") {
 		document.addEventListener("DOMContentLoaded", addLoadedClassToBody, {
 			once: true,
@@ -73,13 +68,11 @@ export const addLoadedClass = (): void => {
 export const addDeviceClass = (): void => {
 	const ua = navigator.userAgent.toLowerCase();
 
-	// より正確なモバイル検出正規表現
 	const mobileRegex =
 		/iphone|ipad|ipod|android|mobile|blackberry|iemobile|kindle|silk|opera mini|opera mobi|tablet|webos|windows phone|phone/i;
 
 	const isMobile = mobileRegex.test(ua) || "ontouchstart" in window;
 
-	// クラスを追加
 	const className = isMobile ? "is-mobile" : "is-laptop";
 	document.body.classList.add(className);
 };
@@ -135,10 +128,8 @@ export const initScrolledClass = (): void => {
 		}
 	};
 
-	// 初期状態をチェック
 	handleScroll();
 
-	// スクロールイベントをスロットル処理
-	const throttledScroll = throttle(handleScroll, 16); // ~60fps
+	const throttledScroll = throttle(handleScroll, 16);
 	window.addEventListener("scroll", throttledScroll, { passive: true });
 };
