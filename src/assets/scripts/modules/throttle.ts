@@ -1,13 +1,19 @@
-// biome-ignore lint/suspicious/noExplicitAny: Generic function type requires flexible parameter types
-export function throttle<T extends (...args: any[]) => any>(
+/**
+ * タイミング制御ユーティリティ
+ * throttle / debounce / rafThrottle を提供
+ */
+
+/**
+ * スロットル関数（trailing-edge 対応）
+ */
+export function throttle<T extends (...args: unknown[]) => void>(
 	func: T,
 	wait: number,
 ): (...args: Parameters<T>) => void {
 	let timeout: number | null = null;
 	let lastCallTime = 0;
 
-	// biome-ignore lint/suspicious/noExplicitAny: Function context type needs to be flexible
-	return function (this: any, ...args: Parameters<T>) {
+	return (...args: Parameters<T>): void => {
 		const now = Date.now();
 		const remaining = wait - (now - lastCallTime);
 
@@ -17,52 +23,54 @@ export function throttle<T extends (...args: any[]) => any>(
 				timeout = null;
 			}
 			lastCallTime = now;
-			func.apply(this, args);
+			func(...args);
 		} else if (!timeout) {
 			timeout = window.setTimeout(() => {
 				lastCallTime = Date.now();
 				timeout = null;
-				func.apply(this, args);
+				func(...args);
 			}, remaining);
 		}
 	};
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: Generic function type requires flexible parameter types
-export function debounce<T extends (...args: any[]) => any>(
+/**
+ * デバウンス関数
+ */
+export function debounce<T extends (...args: unknown[]) => void>(
 	func: T,
 	wait: number,
 	immediate = false,
 ): (...args: Parameters<T>) => void {
 	let timeout: number | null = null;
 
-	// biome-ignore lint/suspicious/noExplicitAny: Function context type needs to be flexible
-	return function (this: any, ...args: Parameters<T>) {
+	return (...args: Parameters<T>): void => {
 		const later = () => {
 			timeout = null;
-			if (!immediate) func.apply(this, args);
+			if (!immediate) func(...args);
 		};
 
 		const callNow = immediate && !timeout;
 		if (timeout) window.clearTimeout(timeout);
 		timeout = window.setTimeout(later, wait);
 
-		if (callNow) func.apply(this, args);
+		if (callNow) func(...args);
 	};
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: Generic function type requires flexible parameter types
-export function rafThrottle<T extends (...args: any[]) => any>(
+/**
+ * requestAnimationFrame ベースのスロットル
+ */
+export function rafThrottle<T extends (...args: unknown[]) => void>(
 	func: T,
 ): (...args: Parameters<T>) => void {
 	let rafId: number | null = null;
 
-	// biome-ignore lint/suspicious/noExplicitAny: Function context type needs to be flexible
-	return function (this: any, ...args: Parameters<T>) {
+	return (...args: Parameters<T>): void => {
 		if (rafId !== null) return;
 
 		rafId = requestAnimationFrame(() => {
-			func.apply(this, args);
+			func(...args);
 			rafId = null;
 		});
 	};

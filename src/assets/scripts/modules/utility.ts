@@ -1,3 +1,5 @@
+import { throttle } from "./throttle";
+
 /**
  * ユーティリティ関数とクラスの定義
  * ウィンドウ情報、DOM操作、アニメーション機能を提供
@@ -298,47 +300,6 @@ const cleanupStyles = (element: HTMLElement): void => {
 	element.style.removeProperty("transition-duration");
 	element.style.removeProperty("transition-property");
 	element.style.removeProperty("transition-timing-function");
-};
-
-/**
- * デバウンス関数
- */
-export const debounce = <T extends (...args: unknown[]) => void>(
-	func: T,
-	wait: number,
-): ((...args: Parameters<T>) => void) => {
-	let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-	return (...args: Parameters<T>): void => {
-		if (timeoutId !== null) {
-			clearTimeout(timeoutId);
-		}
-
-		timeoutId = setTimeout(() => {
-			func(...args);
-			timeoutId = null;
-		}, wait);
-	};
-};
-
-/**
- * スロットル関数
- */
-export const throttle = <T extends (...args: unknown[]) => void>(
-	func: T,
-	limit: number,
-): ((...args: Parameters<T>) => void) => {
-	let inThrottle = false;
-
-	return (...args: Parameters<T>): void => {
-		if (!inThrottle) {
-			func(...args);
-			inThrottle = true;
-			setTimeout(() => {
-				inThrottle = false;
-			}, limit);
-		}
-	};
 };
 
 /**
