@@ -25,6 +25,22 @@ function runTask(command) {
 }
 
 /**
+ * 短時間に連続したイベントをまとめ、最後の1回だけタスクを実行する
+ * @param {string} command
+ * @param {number} delay
+ */
+function debounceTask(command, delay = 150) {
+	let timer = null;
+	return () => {
+		if (timer) clearTimeout(timer);
+		timer = setTimeout(() => {
+			timer = null;
+			runTask(command);
+		}, delay);
+	};
+}
+
+/**
  * @param {string} watchPath
  * @param {object} options
  * @param {object} handlers
@@ -80,6 +96,10 @@ buildChild.on("exit", async (code) => {
 
 	const designTokensPath = path.resolve(projectRoot, "design-tokens.js");
 
+	// sass-glob やトークン生成が複数の scss を一斉出力すると change が多発するため、
+	// build-css をデバウンスして短時間の連続変更を1回のコンパイルに束ねる。
+	const buildCss = debounceTask("node scripts/tasks/build-css.js");
+
 	const watchers = [
 		createWatcher(
 			designTokensPath,
@@ -105,24 +125,28 @@ buildChild.on("exit", async (code) => {
 		createWatcher(
 			paths.css,
 			{
-				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".scss"),
+				ignored: (filePath, stats) => stats?.isFile() && !filePath.endsWith(".scss"),
 				persistent: true,
 				usePolling: true,
 				interval: 100,
 				binaryInterval: 300,
+				awaitWriteFinish: {
+					stabilityThreshold: 100,
+					pollInterval: 100,
+				},
 			},
 			{
 				change: (filePath) => {
 					logger.info(`CSS: Changed ${path.basename(filePath)}`);
-					runTask("node scripts/tasks/build-css.js");
+					buildCss();
 				},
 				add: (_filePath) => {
 					runTask("node scripts/tasks/sass-glob.js");
-					runTask("node scripts/tasks/build-css.js");
+					buildCss();
 				},
 				unlink: (_filePath) => {
 					runTask("node scripts/tasks/sass-glob.js");
-					runTask("node scripts/tasks/build-css.js");
+					buildCss();
 				},
 				error: (error) => logger.error(`CSS watcher error: ${error}`),
 				ready: () => logger.success(`CSS watcher ready: ${paths.css} (*.scss, *.sass)`),
