@@ -20,7 +20,7 @@ export default {
 		icons: "assets/icons",
 	},
 	sassGlob: {
-		directories: ["global", "components", "layouts", "pages", "utilities", "sample"],
+		directories: ["global", "components", "layouts", "pages", "utilities", "catalog"],
 	},
 	tailwind: {
 		outputFile: "utilities/_tailwind.scss",
@@ -29,6 +29,6 @@ export default {
 		globPattern: "**/*.svg",
 	},
 	sitemap: {
-		exclude: ["sample/**"],
+		exclude: ["catalog/**"],
 	},
 };
