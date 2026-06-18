@@ -3,18 +3,18 @@ import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 
 import { init as accordion } from "./modules/accordion";
+import {
+	addDeviceClass,
+	addLoadedClass,
+	initScrollbarWidth,
+	initScrolledClass,
+} from "./modules/body-class";
 import { init as clipboardCopy } from "./modules/clipboard-copy";
 import { init as displayPosition } from "./modules/init-display-position";
 import { init as modal } from "./modules/modal";
 import { createMegaMenu, createNav } from "./modules/nav";
 import { init as tab } from "./modules/tab";
 import { init as toggle } from "./modules/toggle";
-import {
-	addDeviceClass,
-	addLoadedClass,
-	initScrollbarWidth,
-	initScrolledClass,
-} from "./modules/utility";
 
 modal();
 

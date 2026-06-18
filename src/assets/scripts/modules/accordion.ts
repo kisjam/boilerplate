@@ -1,4 +1,4 @@
-import { slideDown, slideUp } from "./utility";
+import { slideDown, slideUp } from "./slide";
 
 export function init(): void {
 	for (const el of document.querySelectorAll("[data-accordion]")) {
