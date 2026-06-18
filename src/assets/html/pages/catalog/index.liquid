@@ -1,8 +1,7 @@
 {% layout "_layouts/default.liquid" %}
 {% assign breadcrumbs = '[
 {"text": "ホーム", "url": "/"},
-{"text": "サンプル", "url": "/sample/"},
-{"text": "コンポーネントカタログ", "url": "/sample/"}
+{"text": "コンポーネントカタログ", "url": "/catalog/"}
 ]' | parse_json %}
 
 {% block contents %}
@@ -40,12 +39,7 @@
 				<div class="p-catalog__subsection">
 					<h3 class="p-catalog__subsection-title">基本</h3>
 					<div class="p-catalog__demo">
-						<button
-							class="p-catalog__accordion-btn"
-							id="accordion-btn-01"
-							data-accordion="accordion-panel-01"
-							aria-expanded="false"
-						>
+						<button class="p-catalog__accordion-btn" id="accordion-btn-01" data-accordion="accordion-panel-01" aria-expanded="false">
 							アコーディオン 1
 						</button>
 						<div id="accordion-panel-01">
@@ -54,13 +48,7 @@
 							</div>
 						</div>
 
-						<button
-							class="p-catalog__accordion-btn"
-							id="accordion-btn-02"
-							data-accordion="accordion-panel-02"
-							aria-expanded="false"
-							style="margin-top: 8px;"
-						>
+						<button class="p-catalog__accordion-btn" id="accordion-btn-02" data-accordion="accordion-panel-02" aria-expanded="false" style="margin-top: 8px;">
 							アコーディオン 2
 						</button>
 						<div id="accordion-panel-02">
@@ -70,13 +58,7 @@
 							</div>
 						</div>
 
-						<button
-							class="p-catalog__accordion-btn"
-							id="accordion-btn-03"
-							data-accordion="accordion-panel-03"
-							aria-expanded="true"
-							style="margin-top: 8px;"
-						>
+						<button class="p-catalog__accordion-btn" id="accordion-btn-03" data-accordion="accordion-panel-03" aria-expanded="true" style="margin-top: 8px;">
 							デフォルトで開いているアコーディオン（aria-expanded="true"）
 						</button>
 						<div id="accordion-panel-03">
@@ -103,26 +85,13 @@
 					<div class="p-catalog__demo">
 						<div data-tab>
 							<div class="p-catalog__tab-list" data-tab-list>
-								<button
-									class="p-catalog__tab-btn"
-									id="tab-cat-all"
-									data-tab-controls="panel-cat-all"
-									data-tab-default
-								>
+								<button class="p-catalog__tab-btn" id="tab-cat-all" data-tab-controls="panel-cat-all" data-tab-default>
 									すべて
 								</button>
-								<button
-									class="p-catalog__tab-btn"
-									id="tab-cat-news"
-									data-tab-controls="panel-cat-news"
-								>
+								<button class="p-catalog__tab-btn" id="tab-cat-news" data-tab-controls="panel-cat-news">
 									お知らせ
 								</button>
-								<button
-									class="p-catalog__tab-btn"
-									id="tab-cat-blog"
-									data-tab-controls="panel-cat-blog"
-								>
+								<button class="p-catalog__tab-btn" id="tab-cat-blog" data-tab-controls="panel-cat-blog">
 									ブログ
 								</button>
 							</div>
@@ -204,10 +173,7 @@
 				<div class="p-catalog__subsection">
 					<h3 class="p-catalog__subsection-title">基本トグル</h3>
 					<div class="p-catalog__demo">
-						<button
-							class="c-button__link"
-							data-toggle="#toggle-target-01"
-						>
+						<button class="c-button__link" data-toggle="#toggle-target-01">
 							<span class="c-button__label">トグル</span>
 						</button>
 						<div class="p-catalog__toggle-target is-collapsed" id="toggle-target-01">
@@ -219,11 +185,7 @@
 				<div class="p-catalog__subsection">
 					<h3 class="p-catalog__subsection-title">外クリックで閉じる</h3>
 					<div class="p-catalog__demo">
-						<button
-							class="c-button__link"
-							data-toggle="#toggle-target-02"
-							data-toggle-outside-close
-						>
+						<button class="c-button__link" data-toggle="#toggle-target-02" data-toggle-outside-close>
 							<span class="c-button__label">外クリックで閉じる</span>
 						</button>
 						<div class="p-catalog__toggle-target is-collapsed" id="toggle-target-02">
@@ -245,16 +207,10 @@
 					<h3 class="p-catalog__subsection-title">基本</h3>
 					<div class="p-catalog__demo">
 						<div class="p-catalog__button-group">
-							<button
-								class="c-button__link"
-								data-copy-clipboard="https://example.com"
-							>
+							<button class="c-button__link" data-copy-clipboard="https://example.com">
 								<span class="c-button__label">URLをコピー</span>
 							</button>
-							<button
-								class="c-button__link"
-								data-copy-clipboard="Hello, World!"
-							>
+							<button class="c-button__link" data-copy-clipboard="Hello, World!">
 								<span class="c-button__label">テキストをコピー</span>
 							</button>
 						</div>
@@ -274,10 +230,7 @@
 				<div class="p-catalog__subsection">
 					<h3 class="p-catalog__subsection-title">デモ要素（スクロールで .-run が付く）</h3>
 					<div class="p-catalog__demo">
-						<div
-							class="js-sa"
-							style="padding: 20px; background: #eee; border-radius: 6px; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; transform: translateY(20px);"
-						>
+						<div class="js-sa" style="padding: 20px; background: #eee; border-radius: 6px; opacity: 0; transition: opacity 0.6s ease, transform 0.6s ease; transform: translateY(20px);">
 							スクロールアニメーション対象要素（.js-sa）。<br>
 							ビューポートに入ると .-run が付与され、CSSでアニメーションが発火します。
 						</div>
@@ -521,7 +474,7 @@
 
 			<!-- c-card -->
 			<section class="p-catalog__section" id="section-card">
-				<h2 class="p-catalog__section-title">c-card（sample/_card.scss）</h2>
+				<h2 class="p-catalog__section-title">c-card（catalog/_card.scss）</h2>
 				<p class="p-catalog__desc">
 					記事・ランキングカードのコンポーネント。モディファイア: <code>.-lg</code>（大きめ）、<code>.-md-row</code>（SP横並び）、<code>.-cover</code>（画像覆い被せ）、<code>.-rank-1〜3</code>（ランク色）。
 				</p>
@@ -794,18 +747,11 @@
 				</div>
 
 				<div class="p-catalog__subsection">
-					<h3 class="p-catalog__subsection-title">_template.liquid（汎用コンポーネント雛形）</h3>
-					<div class="p-catalog__demo">
-						{% render "_template" %}
-					</div>
-				</div>
-
-				<div class="p-catalog__subsection">
 					<h3 class="p-catalog__subsection-title">_breadcrumb.liquid</h3>
 					<div class="p-catalog__demo" style="background-color: #121d59; padding: 16px; border-radius: 6px;">
 						{% assign sample_breadcrumbs = '[
 						{"text": "ホーム", "url": "/"},
-						{"text": "カタログ", "url": "/sample/"}
+						{"text": "カタログ", "url": "/catalog/"}
 						]' | parse_json %}
 						{% render "_breadcrumb", data: sample_breadcrumbs %}
 					</div>
