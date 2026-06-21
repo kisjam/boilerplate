@@ -33,6 +33,26 @@ export default {
 	},
 
 	async incremental(ctx, opts) {
+		const srcDir = ctx.paths.public;
+		const distDir = ctx.paths.distBase;
+
+		if (opts.event === "unlink") {
+			const relativePath = path.relative(srcDir, opts.path);
+			const distPath = path.join(distDir, relativePath);
+			await fs.rm(distPath, { force: true });
+			ctx.log.success(`Deleted: ${path.basename(relativePath)}`);
+			return;
+		}
+
+		if (opts.event === "add" || opts.event === "change") {
+			const relativePath = path.relative(srcDir, opts.path);
+			const distPath = path.join(distDir, relativePath);
+			await fs.mkdir(path.dirname(distPath), { recursive: true });
+			await fs.copyFile(opts.path, distPath);
+			ctx.log.success(`Copied: ${path.basename(relativePath)}`);
+			return;
+		}
+
 		await this.run(ctx, opts);
 	},
 };

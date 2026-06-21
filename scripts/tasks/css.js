@@ -23,7 +23,7 @@ export default {
 		await fs.mkdir(outputDir, { recursive: true });
 
 		const files = await fs.readdir(srcDir);
-		const scssFiles = files.filter((f) => f.endsWith(".scss") && !f.startsWith("_"));
+		const scssFiles = files.filter((f) => f.endsWith(".scss") && !f.startsWith("_")).sort();
 		if (scssFiles.length === 0) {
 			ctx.log.info("No SCSS files found");
 			return;

@@ -3,6 +3,19 @@ import path from "node:path";
 import sharp from "sharp";
 import { glob, processInParallel } from "../utils.js";
 
+async function convertFile(inputPath, outDir, baseName, log) {
+	const outputWebP = path.join(outDir, `${baseName}.webp`);
+	const outputAvif = path.join(outDir, `${baseName}.avif`);
+
+	await fs.mkdir(outDir, { recursive: true });
+
+	await Promise.all([
+		sharp(inputPath).webp({ quality: 80 }).toFile(outputWebP),
+		sharp(inputPath).avif({ quality: 50 }).toFile(outputAvif),
+	]);
+	log.success(`Converted: ${baseName}.webp, ${baseName}.avif`);
+}
+
 export default {
 	name: "webp",
 	deps: [],
@@ -22,30 +35,25 @@ export default {
 			return;
 		}
 
-		const convertFile = async (file) => {
+		const convert = async (file) => {
 			const inputPath = path.join(srcDir, file);
 			const ext = path.extname(inputPath).toLowerCase();
-			const basename = path.basename(inputPath, ext);
-			const outputDir = path.join(distDir, path.dirname(file));
-			const outputWebP = path.join(outputDir, `${basename}.webp`);
-			const outputAvif = path.join(outputDir, `${basename}.avif`);
-
-			await fs.mkdir(outputDir, { recursive: true });
+			const baseName = path.basename(inputPath, ext);
+			const outDir = path.join(distDir, path.dirname(file));
 
 			try {
-				await Promise.all([
-					sharp(inputPath).webp({ quality: 80 }).toFile(outputWebP),
-					sharp(inputPath).avif({ quality: 50 }).toFile(outputAvif),
-				]);
-				ctx.log.success(`Converted: ${basename}.webp, ${basename}.avif`);
-				return { webp: outputWebP, avif: outputAvif };
+				await convertFile(inputPath, outDir, baseName, ctx.log);
+				return {
+					webp: path.join(outDir, `${baseName}.webp`),
+					avif: path.join(outDir, `${baseName}.avif`),
+				};
 			} catch (error) {
 				ctx.log.error(`Failed: ${file} - ${error.message}`);
 				return null;
 			}
 		};
 
-		const results = await processInParallel(files, convertFile);
+		const results = await processInParallel(files, convert);
 		const converted = results.filter((r) => r !== null).length;
 		ctx.log.success(`WebP + AVIF: ${converted} files`);
 	},
@@ -64,21 +72,11 @@ export default {
 		const srcDir = ctx.paths.assets.images;
 		const distDir = ctx.paths.output.images;
 		const relativePath = path.relative(srcDir, opts.path);
-		const inputPath = opts.path;
-		const extName = path.extname(inputPath).toLowerCase();
-		const basename = path.basename(inputPath, extName);
-		const outputDir = path.join(distDir, path.dirname(relativePath));
-		const outputWebP = path.join(outputDir, `${basename}.webp`);
-		const outputAvif = path.join(outputDir, `${basename}.avif`);
-
-		await fs.mkdir(outputDir, { recursive: true });
+		const baseName = path.basename(opts.path, ext);
+		const outDir = path.join(distDir, path.dirname(relativePath));
 
 		try {
-			await Promise.all([
-				sharp(inputPath).webp({ quality: 80 }).toFile(outputWebP),
-				sharp(inputPath).avif({ quality: 50 }).toFile(outputAvif),
-			]);
-			ctx.log.success(`Converted: ${basename}.webp, ${basename}.avif`);
+			await convertFile(opts.path, outDir, baseName, ctx.log);
 		} catch (error) {
 			ctx.log.error(`Failed: ${relativePath} - ${error.message}`);
 		}
