@@ -34,6 +34,8 @@ ${breakpointLines}
 			`;
 
 		const outputPath = path.join(ctx.paths.assets.css, ctx.config.tailwind.outputFile);
+		// utilities/ は生成物のみで git に空ディレクトリが残らず、fresh clone では存在しない
+		await fs.mkdir(path.dirname(outputPath), { recursive: true });
 		const processed = await ctx.engines.tailwindProcessor().process(tailwindCSS, {
 			from: path.join(ctx.paths.assets.css, "style.scss"),
 			to: outputPath,
