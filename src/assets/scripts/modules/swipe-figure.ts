@@ -1,3 +1,5 @@
+import { onReady } from "./dom-ready";
+
 interface Option {
 	selector: string;
 	scrolledClass: string;
@@ -8,7 +10,7 @@ interface CustomOption {
 	scrolledClass?: string;
 }
 
-export default class SwipeFigure {
+export class SwipeFigure {
 	option: Option;
 
 	constructor(customOption?: CustomOption) {
@@ -19,7 +21,7 @@ export default class SwipeFigure {
 
 		this.option = { ...defaultOption, ...customOption };
 
-		document.addEventListener("DOMContentLoaded", () => {
+		onReady(() => {
 			const elems = document.querySelectorAll<HTMLElement>(this.option.selector);
 
 			elems.forEach((elem) => {
@@ -37,4 +39,9 @@ export default class SwipeFigure {
 
 		elem.addEventListener("scroll", scrollEvent);
 	}
+}
+
+/** SwipeFigure を生成して返す。DOM 構築後に自動で対象要素へハンドラを登録する。 */
+export function createSwipeFigure(customOption?: CustomOption): SwipeFigure {
+	return new SwipeFigure(customOption);
 }

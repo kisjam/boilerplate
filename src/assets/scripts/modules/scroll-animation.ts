@@ -1,3 +1,4 @@
+import { onReady } from "./dom-ready";
 import { rafThrottle } from "./throttle";
 import { u } from "./utility";
 
@@ -21,7 +22,7 @@ export class ScrollAnimation {
 
 		this.option = { ...defaultOption, ...customOption };
 
-		document.addEventListener("DOMContentLoaded", () => {
+		onReady(() => {
 			this.init();
 		});
 	}
@@ -87,4 +88,9 @@ export class ScrollAnimation {
 		});
 		this.scrollHandlers.clear();
 	}
+}
+
+/** ScrollAnimation を生成して返す。DOM 構築後に自動で初期化される。 */
+export function createScrollAnimation(options?: Partial<ScrollAnimationOptions>): ScrollAnimation {
+	return new ScrollAnimation(options);
 }

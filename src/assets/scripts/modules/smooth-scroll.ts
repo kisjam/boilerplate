@@ -1,3 +1,4 @@
+import { onReady } from "./dom-ready";
 import { u } from "./utility";
 
 interface Option {
@@ -20,7 +21,7 @@ export class SmoothScroll {
 
 		this.option = { ...defaultOption, ...customOption };
 
-		document.addEventListener("DOMContentLoaded", () => {
+		onReady(() => {
 			const anchors = document.querySelectorAll<HTMLAnchorElement>(
 				this.option.selector + this.option.ignoreSelector,
 			);
@@ -49,4 +50,9 @@ export class SmoothScroll {
 			});
 		});
 	}
+}
+
+/** SmoothScroll を生成して返す。DOM 構築後に自動でアンカーへハンドラを登録する。 */
+export function createSmoothScroll(customOption?: CustomOption): SmoothScroll {
+	return new SmoothScroll(customOption);
 }
