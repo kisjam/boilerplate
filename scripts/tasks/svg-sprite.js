@@ -47,7 +47,7 @@ export default {
 			await fs.writeFile(path.join(outputDir, path.basename(file)), content);
 		}
 
-		let sassContent = "// [AUTO-GENERATED] This file is managed by build-svg-sprite.js\n";
+		let sassContent = "// [AUTO-GENERATED] This file is managed by svg-sprite.js\n";
 		sassContent += "// Individual SVG file paths for smart-svg\n";
 		for (const name of iconNames) {
 			const varValue = `${ctx.config.basePath || ""}/${ctx.config.output.icons}/${name}.svg`;

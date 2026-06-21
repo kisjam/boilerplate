@@ -42,7 +42,7 @@
 ```bash
 # ✅ 良い例 - 関連ファイルのみを明示的に指定
 git add package.json build.config.js
-git add scripts/tasks/build-css.js
+git add scripts/tasks/css.js
 ```
 
 ### タスク管理
