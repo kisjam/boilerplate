@@ -3,7 +3,7 @@ interface Option {
 	scrolledClass: string;
 }
 
-interface CustonOption {
+interface CustomOption {
 	selector?: string;
 	scrolledClass?: string;
 }
@@ -11,7 +11,7 @@ interface CustonOption {
 export default class SwipeFigure {
 	option: Option;
 
-	constructor(customOption?: CustonOption) {
+	constructor(customOption?: CustomOption) {
 		const defaultOption: Option = {
 			selector: ".js-swipe",
 			scrolledClass: "-scrolled",
@@ -22,14 +22,12 @@ export default class SwipeFigure {
 		document.addEventListener("DOMContentLoaded", () => {
 			const elems = document.querySelectorAll<HTMLElement>(this.option.selector);
 
-			if (elems === null) return;
-
 			elems.forEach((elem) => {
-				this.registEventHandler(elem);
+				this.registerEventHandler(elem);
 			});
 		});
 	}
-	registEventHandler(elem: HTMLElement) {
+	registerEventHandler(elem: HTMLElement) {
 		elem.classList.add("swipe");
 
 		const scrollEvent = () => {

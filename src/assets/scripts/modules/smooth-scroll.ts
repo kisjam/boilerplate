@@ -4,7 +4,7 @@ interface Option {
 	selector: string;
 	ignoreSelector: string;
 }
-interface CustonOption {
+interface CustomOption {
 	selector?: string;
 	ignoreSelector?: string;
 }
@@ -12,7 +12,7 @@ interface CustonOption {
 export class SmoothScroll {
 	option: Option;
 
-	constructor(customOption?: CustonOption) {
+	constructor(customOption?: CustomOption) {
 		const defaultOption: Option = {
 			selector: 'a[href^="#"]:not(.js-ignore-smooth)',
 			ignoreSelector: "",
@@ -25,14 +25,12 @@ export class SmoothScroll {
 				this.option.selector + this.option.ignoreSelector,
 			);
 
-			if (anchors === null) return;
-
 			anchors.forEach((anchor) => {
-				this.registEventHandler(anchor);
+				this.registerEventHandler(anchor);
 			});
 		});
 	}
-	registEventHandler(elem: HTMLAnchorElement): void {
+	registerEventHandler(elem: HTMLAnchorElement): void {
 		elem.addEventListener("click", (e) => {
 			e.preventDefault();
 
