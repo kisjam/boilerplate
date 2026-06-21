@@ -69,7 +69,9 @@ function generateRecursive(sassDir, dirPath, force, log) {
 /** SCSS ディレクトリを再帰走査して _index.scss を自動生成 */
 export default {
 	name: "sass-glob",
-	deps: [],
+	// tokens/tailwind/svg-sprite が生成するパーシャル(_breakpoints/_tailwind/_icons)を
+	// _index に @forward するため、それらの後に実行する
+	deps: ["tokens", "tailwind", "svg-sprite"],
 	// 生成パーシャルは無視（自身が書く _index 等で再トリガしないように）
 	watch: (ctx) => ({
 		paths: [ctx.paths.assets.css],
