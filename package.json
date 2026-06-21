@@ -9,9 +9,10 @@
 		"build": "node scripts/build.js",
 		"build:prod": "node scripts/build.js --prod",
 		"serve": "node scripts/tasks/serve.js",
-		"clean": "node scripts/tasks/clean.js",
+		"clean": "node scripts/cli.js clean",
 		"lint": "biome check --write .",
 		"typecheck": "tsc --noEmit",
+		"test": "node --test",
 		"check": "biome check . && tsc --noEmit",
 		"start": "npm run dev"
 	},

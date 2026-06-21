@@ -1,5 +1,4 @@
 import fs from "node:fs";
-import path from "node:path";
 import pc from "picocolors";
 
 const fsPromises = fs.promises;
@@ -21,14 +20,6 @@ async function readJSON(filePath) {
 			return null;
 		}
 		throw new Error(`Failed to read JSON file ${filePath}: ${err.message}`);
-	}
-}
-
-async function writeJSON(filePath, data) {
-	try {
-		await fsPromises.writeFile(filePath, JSON.stringify(data, null, 2));
-	} catch (err) {
-		throw new Error(`Failed to write JSON file ${filePath}: ${err.message}`);
 	}
 }
 
@@ -75,17 +66,4 @@ async function processInParallel(items, processor, concurrency = 5) {
 	return Promise.all(results);
 }
 
-async function fileExists(filePath) {
-	try {
-		await fsPromises.access(filePath);
-		return true;
-	} catch {
-		return false;
-	}
-}
-
-function getRelativePath(from, to) {
-	return path.relative(from, to).replace(/\\/g, "/");
-}
-
-export { ensureDir, fileExists, getRelativePath, logger, processInParallel, readJSON, writeJSON };
+export { ensureDir, logger, processInParallel, readJSON };

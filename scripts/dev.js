@@ -1,320 +1,93 @@
 #!/usr/bin/env node
-import { spawn } from "node:child_process";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import chokidar from "chokidar";
-import config from "../build.config.js";
+import { createContext } from "./core/context.js";
+import { runIncremental, runTasks } from "./core/runner.js";
+import { buildTasks, clean } from "./registry.js";
 import { startServer } from "./tasks/serve.js";
-import { logger } from "./utils.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "..");
+// Dropbox 等で fsevents が不安定なため polling + awaitWriteFinish（意図的）
+const WATCH_OPTIONS = {
+	ignoreInitial: true,
+	usePolling: true,
+	interval: 100,
+	binaryInterval: 300,
+	awaitWriteFinish: { stabilityThreshold: 100, pollInterval: 100 },
+};
+const DEBOUNCE_MS = 150;
 
-/**
- * @param {string} command
- */
-function runTask(command) {
-	const child = spawn(command, { shell: true, stdio: "inherit" });
-
-	child.on("exit", (code) => {
-		if (code !== 0) {
-			logger.error(`Task failed: ${command}`);
-		}
-	});
-}
-
-/**
- * 短時間に連続したイベントをまとめ、最後の1回だけタスクを実行する
- * @param {string} command
- * @param {number} delay
- */
-function debounceTask(command, delay = 150) {
-	let timer = null;
-	return () => {
-		if (timer) clearTimeout(timer);
-		timer = setTimeout(() => {
-			timer = null;
-			runTask(command);
-		}, delay);
-	};
-}
-
-/**
- * @param {string} watchPath
- * @param {object} options
- * @param {object} handlers
- * @returns {chokidar.FSWatcher}
- */
-function createWatcher(watchPath, options, handlers) {
-	const watcher = chokidar.watch(watchPath, {
-		ignoreInitial: true,
-		...options,
-	});
-
-	if (handlers.change) watcher.on("change", handlers.change);
-	if (handlers.add) watcher.on("add", handlers.add);
-	if (handlers.unlink) watcher.on("unlink", handlers.unlink);
-	if (handlers.error) watcher.on("error", handlers.error);
-	if (handlers.ready) watcher.on("ready", handlers.ready);
-
-	return watcher;
-}
+const ctx = await createContext();
 
 console.log("🚀 Starting development environment...");
-
 console.log("📦 Initial build...");
-const buildChild = spawn("node scripts/build.js", {
-	shell: true,
-	stdio: "inherit",
-});
+try {
+	await clean.run(ctx);
+	await runTasks(buildTasks, ctx, { prod: false });
+	ctx.log.success("Initial build completed");
+} catch (error) {
+	ctx.log.error(`Initial build failed: ${error.message}`);
+}
 
-buildChild.on("exit", async (code) => {
-	if (code !== 0) {
-		logger.error("Initial build failed - continuing with development server");
-	} else {
-		logger.success("Initial build completed");
-	}
+await startServer(ctx);
+console.log("👀 Watching for changes...");
 
-	try {
-		await startServer();
-	} catch (_err) {
-		logger.error("Failed to start development server");
-		process.exit(1);
-	}
+// 各タスクの watch 宣言からウォッチ仕様を組み立て（build/dev のドリフトを防ぐ単一ソース）
+const specs = buildTasks
+	.filter((t) => typeof t.watch === "function")
+	.map((t) => ({ task: t, ...t.watch(ctx) }));
 
-	console.log("👀 Watching for changes...");
+const watchPaths = [...new Set(specs.flatMap((s) => s.paths))];
 
-	const paths = {
-		css: path.resolve(projectRoot, config.assets.css),
-		js: path.resolve(projectRoot, config.assets.js),
-		html: path.resolve(projectRoot, config.assets.html),
-		images: path.resolve(projectRoot, config.assets.images),
-		icons: path.resolve(projectRoot, config.assets.icons),
-		public: path.resolve(projectRoot, config.public),
-	};
+/** 変更ファイルにマッチするタスク一覧 */
+function matchTasks(filePath) {
+	return specs
+		.filter((s) => {
+			const inScope = s.paths.some((p) => filePath === p || filePath.startsWith(p + path.sep));
+			if (!inScope) return false;
+			if (s.match?.test(filePath) === false) return false;
+			if (s.ignore?.test(filePath)) return false;
+			return true;
+		})
+		.map((s) => s.task);
+}
 
-	const designTokensPath = path.resolve(projectRoot, "design-tokens.js");
+// 単一ディスパッチャ: イベントを束ね(debounce)、影響タスクを DAG 順で再実行
+let pending = new Map();
+let timer = null;
 
-	// sass-glob やトークン生成が複数の scss を一斉出力すると change が多発するため、
-	// build-css をデバウンスして短時間の連続変更を1回のコンパイルに束ねる。
-	const buildCss = debounceTask("node scripts/tasks/build-css.js");
-
-	const watchers = [
-		createWatcher(
-			designTokensPath,
-			{
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (_filePath) => {
-					logger.info("design-tokens.js: Changed");
-					runTask("node scripts/tasks/build-tokens.js");
-					runTask("node scripts/tasks/build-tailwind.js");
-				},
-				ready: () => logger.success(`Design tokens watcher ready: ${designTokensPath}`),
-			},
-		),
-
-		createWatcher(
-			paths.css,
-			{
-				ignored: (filePath, stats) => stats?.isFile() && !filePath.endsWith(".scss"),
-				persistent: true,
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (filePath) => {
-					logger.info(`CSS: Changed ${path.basename(filePath)}`);
-					buildCss();
-				},
-				add: (_filePath) => {
-					runTask("node scripts/tasks/sass-glob.js");
-					buildCss();
-				},
-				unlink: (_filePath) => {
-					runTask("node scripts/tasks/sass-glob.js");
-					buildCss();
-				},
-				error: (error) => logger.error(`CSS watcher error: ${error}`),
-				ready: () => logger.success(`CSS watcher ready: ${paths.css} (*.scss, *.sass)`),
-			},
-		),
-
-		createWatcher(
-			paths.js,
-			{
-				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".js") && !path.endsWith(".ts"),
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (_filePath) => {
-					runTask("node scripts/tasks/build-js.js");
-					runTask("node scripts/tasks/build-tailwind.js");
-				},
-				add: (_filePath) => {
-					runTask("node scripts/tasks/build-js.js");
-					runTask("node scripts/tasks/build-tailwind.js");
-				},
-				unlink: (_filePath) => {
-					runTask("node scripts/tasks/build-js.js");
-				},
-				ready: () => logger.success(`JS watcher ready: ${paths.js} (*.ts, *.js)`),
-			},
-		),
-
-		createWatcher(
-			paths.html,
-			{
-				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".liquid"),
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (filePath) => {
-					const relativePath = path.relative(paths.html, filePath);
-					const isShared =
-						relativePath.startsWith("_components/") ||
-						relativePath.startsWith("_layouts/") ||
-						relativePath.startsWith("_config/");
-
-					if (isShared) {
-						runTask("node scripts/tasks/build-html.js");
-					} else {
-						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
-					}
-					runTask("node scripts/tasks/build-tailwind.js");
-				},
-				add: (filePath) => {
-					const relativePath = path.relative(paths.html, filePath);
-					const isShared =
-						relativePath.startsWith("_components/") || relativePath.startsWith("_layouts/");
-
-					if (isShared) {
-						runTask("node scripts/tasks/build-html.js");
-					} else {
-						runTask(`node scripts/tasks/build-html.js --single ${filePath}`);
-					}
-					runTask("node scripts/tasks/build-tailwind.js");
-				},
-				unlink: (_filePath) => {
-					runTask("node scripts/tasks/build-html.js");
-				},
-				ready: () => {
-					logger.success(`HTML watcher ready: ${paths.html} (*.liquid)`);
-				},
-			},
-		),
-
-		createWatcher(
-			paths.images,
-			{
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (filePath) => {
-					runTask(`node scripts/tasks/build-images.js --single "${filePath}"`);
-					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
-						runTask(`node scripts/tasks/build-images-webp.js --single "${filePath}"`);
-					}
-				},
-				add: (filePath) => {
-					runTask(`node scripts/tasks/build-images.js --single "${filePath}"`);
-					if (/\.(jpg|jpeg|png)$/i.test(filePath)) {
-						runTask(`node scripts/tasks/build-images-webp.js --single "${filePath}"`);
-					}
-				},
-				unlink: (_filePath) => {
-					runTask("node scripts/tasks/build-images.js");
-				},
-				ready: () => logger.success(`Image watcher ready: ${paths.images}`),
-			},
-		),
-
-		createWatcher(
-			paths.public,
-			{
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (_filePath) => {
-					runTask("node scripts/tasks/build-copy.js");
-				},
-				add: (_filePath) => {
-					runTask("node scripts/tasks/build-copy.js");
-				},
-				unlink: (_filePath) => {
-					runTask("node scripts/tasks/build-copy.js");
-				},
-				ready: () => logger.success(`Static file watcher ready: ${paths.public}`),
-			},
-		),
-
-		createWatcher(
-			paths.icons,
-			{
-				ignored: (path, stats) => stats?.isFile() && !path.endsWith(".svg"),
-				usePolling: true,
-				interval: 100,
-				binaryInterval: 300,
-				awaitWriteFinish: {
-					stabilityThreshold: 100,
-					pollInterval: 100,
-				},
-			},
-			{
-				change: (_filePath) => {
-					runTask("node scripts/tasks/build-svg-sprite.js");
-				},
-				add: (_filePath) => {
-					runTask("node scripts/tasks/build-svg-sprite.js");
-				},
-				unlink: (_filePath) => {
-					runTask("node scripts/tasks/build-svg-sprite.js");
-				},
-				ready: () => logger.success(`Icon watcher ready: ${paths.icons} (*.svg)`),
-			},
-		),
-	];
-
-	process.on("SIGINT", () => {
-		logger.info("\n🍺 Shutting down...");
-		for (const watcher of watchers) watcher.close();
-		process.exit(0);
+function flush() {
+	timer = null;
+	const batch = pending;
+	pending = new Map();
+	if (batch.size === 0) return;
+	runIncremental(buildTasks, ctx, batch).catch((error) => {
+		ctx.log.error(`Rebuild failed: ${error.message}`);
 	});
+}
+
+function onEvent(event, filePath) {
+	const tasks = matchTasks(filePath);
+	if (tasks.length === 0) return;
+	for (const t of tasks) {
+		const entry = pending.get(t.name) ?? { event, paths: new Set() };
+		entry.event = event;
+		entry.paths.add(filePath);
+		pending.set(t.name, entry);
+	}
+	ctx.log.info(`Changed: ${path.basename(filePath)} → [${tasks.map((t) => t.name).join(", ")}]`);
+	if (timer) clearTimeout(timer);
+	timer = setTimeout(flush, DEBOUNCE_MS);
+}
+
+const watcher = chokidar.watch(watchPaths, WATCH_OPTIONS);
+watcher.on("change", (p) => onEvent("change", p));
+watcher.on("add", (p) => onEvent("add", p));
+watcher.on("unlink", (p) => onEvent("unlink", p));
+watcher.on("error", (error) => ctx.log.error(`Watcher error: ${error}`));
+watcher.on("ready", () => ctx.log.success(`Watching ${watchPaths.length} paths`));
+
+process.on("SIGINT", () => {
+	ctx.log.info("\n🍺 Shutting down...");
+	watcher.close();
+	process.exit(0);
 });

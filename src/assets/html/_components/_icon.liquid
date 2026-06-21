@@ -1,15 +1,15 @@
 {%- comment -%}
 Icon Component
-Usage: {% include "icon", name: "arrow", size: "24" %}
+Usage: {% render "_icon", name: "arrow", iconSize: "24" %}
 
 Parameters:
 - name: アイコン名（必須）
-- size: サイズ（デフォルト: 24）
+- iconSize: サイズ（デフォルト: 24）※ Liquid 予約語 size との衝突を避けるため iconSize
 - class: 追加のCSSクラス
 - label: アクセシビリティ用のラベル
 {%- endcomment -%}
 
-{%- assign icon_size = size -%}
+{%- assign icon_size = iconSize -%}
 {%- unless icon_size -%}
 {%- assign icon_size = "24" -%}
 {%- endunless -%}
