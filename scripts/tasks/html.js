@@ -1,7 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import * as prettier from "prettier";
-import { processImageSizes } from "../lib/image-size.js";
+import { clearCache, processImageSizes } from "../lib/image-size.js";
 import { ensureDir, glob, processInParallel, readJSON } from "../utils.js";
 
 const SELF_CLOSING =
@@ -45,6 +45,8 @@ async function loadSiteData(ctx) {
 }
 
 async function buildAll(ctx) {
+	// dev で画像が差し替わった際に旧寸法が残らないよう、ビルドごとにキャッシュを破棄
+	clearCache();
 	const siteData = await loadSiteData(ctx);
 	const files = await glob("pages/**/*.liquid", { cwd: ctx.paths.assets.html });
 	if (files.length === 0) {
