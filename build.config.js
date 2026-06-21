@@ -29,7 +29,7 @@ export default {
 		globPattern: "**/*.svg",
 	},
 	html: {
-		// 生成 HTML の prettier 整形オプション（parser は固定）
-		prettier: { printWidth: 120, tabWidth: 2, useTabs: true },
+		// 生成 HTML の prettier 整形オプション（parser は固定）。幅は biome(lineWidth:100) と統一
+		prettier: { printWidth: 100, tabWidth: 2, useTabs: true },
 	},
 };
