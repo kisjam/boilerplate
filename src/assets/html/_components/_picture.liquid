@@ -10,6 +10,7 @@ Parameters:
 - width: 幅
 - height: 高さ
 - loading: "lazy" | "eager"（省略時 "lazy"）
+- fetchpriority: "high" | "low" | "auto"（省略時 出力なし。LCP 画像は loading:"eager" と high を併用）
 - class: 追加の CSS クラス
 {%- endcomment -%}
 
@@ -28,5 +29,5 @@ Parameters:
 
 <picture>
 	<source srcset="{{ picture_avif }}" type="image/avif">
-	<img src="{{ picture_webp }}" alt="{{ picture_alt }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} loading="{{ picture_loading }}" decoding="async"{% if class %} class="{{ class }}"{% endif %}>
+	<img src="{{ picture_webp }}" alt="{{ picture_alt }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} loading="{{ picture_loading }}" decoding="async"{% if fetchpriority %} fetchpriority="{{ fetchpriority }}"{% endif %}{% if class %} class="{{ class }}"{% endif %}>
 </picture>
