@@ -1,15 +1,15 @@
-#!/usr/bin/env node
 import bs from "browser-sync";
-import config from "../../build.config.js";
-import { logger } from "../utils.js";
+import { createContext } from "../core/context.js";
 
 const browserSync = bs.create();
 
-// コマンドライン引数の処理
-const _args = process.argv.slice(2);
-
-// APIとして使える形に変更
-export function startServer(customOptions = {}) {
+/**
+ * BrowserSync 開発サーバーを起動
+ * @param {any} ctx
+ * @param {object} [customOptions]
+ */
+export function startServer(ctx, customOptions = {}) {
+	const { config, log } = ctx;
 	const finalOptions = {
 		...(config.proxy ? { proxy: config.proxy } : { server: { baseDir: config.dist } }),
 		...(config.basePath ? { startPath: config.basePath } : {}),
@@ -21,21 +21,20 @@ export function startServer(customOptions = {}) {
 	};
 
 	return new Promise((resolve, reject) => {
-		browserSync.init(finalOptions, (err, bs) => {
+		browserSync.init(finalOptions, (err, instance) => {
 			if (err) {
-				logger.error(`BrowserSync failed to start: ${err}`);
+				log.error(`BrowserSync failed to start: ${err}`);
 				reject(err);
 			} else {
-				logger.success("Development server started");
-				resolve(bs);
+				log.success("Development server started");
+				resolve(instance);
 			}
 		});
 	});
 }
 
-// CLIとして直接実行された場合
+// CLI 実行（npm run serve）
 if (import.meta.url === `file://${process.argv[1]}`) {
-	startServer().catch(() => process.exit(1));
+	const ctx = await createContext();
+	startServer(ctx).catch(() => process.exit(1));
 }
-
-export default browserSync;

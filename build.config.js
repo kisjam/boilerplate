@@ -28,7 +28,8 @@ export default {
 	svgSprite: {
 		globPattern: "**/*.svg",
 	},
-	sitemap: {
-		exclude: ["catalog/**"],
+	html: {
+		// 生成 HTML の prettier 整形オプション（parser は固定）。幅は biome(lineWidth:100) と統一
+		prettier: { printWidth: 100, tabWidth: 2, useTabs: true },
 	},
 };

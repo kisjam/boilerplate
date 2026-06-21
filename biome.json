@@ -41,6 +41,6 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/dist", "!**/node_modules", "!**/.git", "!**/*.log"]
+		"includes": ["**", "!**/dist", "!**/node_modules", "!**/.git", "!**/.claude", "!**/*.log"]
 	}
 }

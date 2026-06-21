@@ -1,12 +1,12 @@
-#!/usr/bin/env node
 import { rmSync } from "node:fs";
-import config from "../../build.config.js";
-import { logger } from "../utils.js";
 
-try {
-	rmSync(config.dist, { recursive: true, force: true });
-	logger.success(`Cleaned ${config.dist} directory`);
-} catch (error) {
-	logger.error(`Failed to clean ${config.dist}: ${error.message}`);
-	process.exit(1);
-}
+/** dist ディレクトリを削除（DAG 外、build の最初に明示実行） */
+export default {
+	name: "clean",
+	deps: [],
+
+	async run(ctx) {
+		rmSync(ctx.paths.dist, { recursive: true, force: true });
+		ctx.log.success(`Cleaned ${ctx.config.dist} directory`);
+	},
+};

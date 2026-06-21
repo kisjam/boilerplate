@@ -462,10 +462,10 @@
 						</div>
 						<div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 16px; position: relative;">
 							<button class="c-carousel-horizontal-3__prev" aria-label="前へ">
-								{% render "_icon", icon: 'external' %}
+								{% render "_icon", name: 'external' %}
 							</button>
 							<button class="c-carousel-horizontal-3__next" aria-label="次へ">
-								{% render "_icon", icon: 'external' %}
+								{% render "_icon", name: 'external' %}
 							</button>
 						</div>
 					</div>
@@ -730,9 +730,9 @@
 						SVGスプライトアイコン。<code>icon</code>（必須）・<code>size</code>（デフォルト24）・<code>class</code>・<code>label</code> を渡す。
 					</p>
 					<div class="p-catalog__demo">
-						{% render "_icon", icon: 'external' %}
-						{% render "_icon", icon: 'external', size: '32' %}
-						{% render "_icon", icon: 'external', size: '48', label: 'external link' %}
+						{% render "_icon", name: 'external' %}
+						{% render "_icon", name: 'external', iconSize: '32' %}
+						{% render "_icon", name: 'external', iconSize: '48', label: 'external link' %}
 					</div>
 				</div>
 
@@ -809,6 +809,18 @@
 					<p class="p-catalog__desc">
 						<code>&lt;a href="#main" class="c-skip-link"&gt;</code> がレイアウト（default.liquid）に組み込み済み。フォーカス時に表示される。
 					</p>
+				</div>
+
+				<div class="p-catalog__subsection">
+					<h3 class="p-catalog__subsection-title">Smart-svg</h3>
+					<p class="p-catalog__desc">
+						CSSで設定するアイコン。子孫などに一括で指定したい時便利
+					</p>
+					<ul class="p-catalog__icon-list">
+						<li>ばなな</li>
+						<li>りんご</li>
+						<li>ブドウ</li>
+					</ul>
 				</div>
 			</section>
 

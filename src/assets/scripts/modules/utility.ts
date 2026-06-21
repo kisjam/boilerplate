@@ -2,7 +2,9 @@
  * ウィンドウ情報とメディアクエリを管理するユーティリティ
  */
 
-const BREAKPOINT_DESKTOP = 1024;
+import { breakpoints } from "@/config/breakpoints";
+
+const BREAKPOINT_DESKTOP = breakpoints.lg;
 const SCROLL_HEADER_HEIGHT_DESKTOP = 120;
 const SCROLL_HEADER_HEIGHT_MOBILE = 80;
 

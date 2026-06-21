@@ -2,6 +2,7 @@ import Swiper from "swiper";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 
+import { breakpoints as bp } from "@/config/breakpoints";
 import { init as accordion } from "./modules/accordion";
 import {
 	addDeviceClass,
@@ -40,7 +41,7 @@ for (const swiperEl of carousels) {
 		enabled: false,
 
 		breakpoints: {
-			769: {
+			[bp.md + 1]: {
 				enabled: true,
 				slidesPerView: "auto",
 				spaceBetween: 24,
