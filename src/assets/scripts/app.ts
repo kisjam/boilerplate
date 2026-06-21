@@ -1,7 +1,3 @@
-import Swiper from "swiper";
-import { Navigation, Pagination } from "swiper/modules";
-import "swiper/css";
-
 import { breakpoints as bp } from "@/config/breakpoints";
 import { init as accordion } from "./modules/accordion";
 import {
@@ -34,24 +30,31 @@ tab();
 toggle();
 clipboardCopy();
 
+// Swiper はカルーセルが存在するページでのみ動的ロード（非使用ページの JS を削減）
 const carousels = document.querySelectorAll(".c-carousel-horizontal-3");
-for (const swiperEl of carousels) {
-	new Swiper(swiperEl as HTMLElement, {
-		modules: [Navigation, Pagination],
-		enabled: false,
+if (carousels.length > 0) {
+	void (async () => {
+		const { Swiper, Navigation, Pagination } = await import("./swiper-bundle");
 
-		breakpoints: {
-			[bp.md + 1]: {
-				enabled: true,
-				slidesPerView: "auto",
-				spaceBetween: 24,
-				navigation: {
-					nextEl: swiperEl.querySelector(".c-carousel-horizontal-3__next") as HTMLElement,
-					prevEl: swiperEl.querySelector(".c-carousel-horizontal-3__prev") as HTMLElement,
+		for (const swiperEl of carousels) {
+			new Swiper(swiperEl as HTMLElement, {
+				modules: [Navigation, Pagination],
+				enabled: false,
+
+				breakpoints: {
+					[bp.md + 1]: {
+						enabled: true,
+						slidesPerView: "auto",
+						spaceBetween: 24,
+						navigation: {
+							nextEl: swiperEl.querySelector(".c-carousel-horizontal-3__next") as HTMLElement,
+							prevEl: swiperEl.querySelector(".c-carousel-horizontal-3__prev") as HTMLElement,
+						},
+					},
 				},
-			},
-		},
-	});
+			});
+		}
+	})();
 }
 
 displayPosition();
