@@ -1,3 +1,5 @@
+import { breakpoints } from "@/config/breakpoints";
+
 interface NavOptions {
 	preventScroll?: boolean;
 	closeOnLinkClick?: boolean;
@@ -11,7 +13,7 @@ interface NavOptions {
 const DEFAULT_OPTIONS: Required<NavOptions> = {
 	preventScroll: true,
 	closeOnLinkClick: true,
-	desktopMinWidth: "769px",
+	desktopMinWidth: `${breakpoints.md + 1}px`,
 	beforeOpen: () => {},
 	afterOpen: () => {},
 	beforeClose: () => {},
@@ -226,7 +228,7 @@ export class MegaMenu {
 		this.navElement = navEl;
 		this.closeDelay = opts.closeDelay ?? 200;
 		this.desktopTrigger = opts.desktopTrigger ?? "hover";
-		this.mq = window.matchMedia("(min-width: 769px)");
+		this.mq = window.matchMedia(`(min-width: ${breakpoints.md + 1}px)`);
 		this.boundHandleEscape = this.handleEscapeKey.bind(this);
 		this.boundHandleMediaChange = this.handleMediaChange.bind(this);
 		this.boundHandleOutsideClick = this.handleOutsideClick.bind(this);

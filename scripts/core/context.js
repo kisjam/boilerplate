@@ -40,8 +40,8 @@ export async function createContext(overrides = {}) {
 		},
 	};
 
-	const tokensPath = abs(config.designTokens ?? "design-tokens.js");
-	const tokens = (await import(pathToFileURL(tokensPath).href)).default;
+	const breakpointsPath = abs(config.breakpoints ?? "src/config/breakpoints.js");
+	const { breakpoints } = await import(pathToFileURL(breakpointsPath).href);
 
 	// 共有エンジンは遅延生成して使い回す（dev セッション中は一度だけロード）
 	let cssProcessor;
@@ -77,5 +77,5 @@ export async function createContext(overrides = {}) {
 		},
 	};
 
-	return { config, root, paths, tokens, tokensPath, engines, log: logger };
+	return { config, root, paths, breakpoints, breakpointsPath, engines, log: logger };
 }

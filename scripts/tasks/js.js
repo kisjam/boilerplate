@@ -12,6 +12,9 @@ export default {
 
 		await build({
 			root: ctx.root,
+			resolve: {
+				alias: { "@": path.join(ctx.root, "src") },
+			},
 			build: {
 				rollupOptions: {
 					input: path.join(ctx.paths.assets.js, "app.ts"),
