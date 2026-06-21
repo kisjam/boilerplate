@@ -1,8 +1,7 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { glob } from "glob";
 import sharp from "sharp";
-import { processInParallel } from "../utils.js";
+import { glob, processInParallel } from "../utils.js";
 
 export default {
 	name: "webp",

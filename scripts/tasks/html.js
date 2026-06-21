@@ -1,9 +1,8 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { glob } from "glob";
 import * as prettier from "prettier";
 import { processImageSizes } from "../lib/image-size.js";
-import { ensureDir, processInParallel, readJSON } from "../utils.js";
+import { ensureDir, glob, processInParallel, readJSON } from "../utils.js";
 
 const SELF_CLOSING =
 	/<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)([^>]*?)\s*\/>/gi;
@@ -22,7 +21,7 @@ async function renderOne(ctx, siteData, file) {
 	};
 
 	let html = await ctx.engines.liquid().parseAndRender(templateContent, data);
-	html = processImageSizes(html, ctx.paths.dist);
+	html = await processImageSizes(html, ctx.paths.dist);
 
 	try {
 		html = await prettier.format(html, { parser: "html", ...ctx.config.html.prettier });

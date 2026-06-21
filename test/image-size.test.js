@@ -17,43 +17,43 @@ function tmpDistWithImage() {
 	return dir;
 }
 
-test("ローカル画像に width/height を補完", () => {
+test("ローカル画像に width/height を補完", async () => {
 	clearCache();
 	const dist = tmpDistWithImage();
-	const out = processImageSizes('<img src="/x.png" alt="a">', dist);
+	const out = await processImageSizes('<img src="/x.png" alt="a">', dist);
 	assert.match(out, /width="1"/);
 	assert.match(out, /height="1"/);
 });
 
-test("外部 URL はスキップ", () => {
+test("外部 URL はスキップ", async () => {
 	clearCache();
 	const html = '<img src="https://example.com/y.png">';
-	assert.equal(processImageSizes(html, tmpDistWithImage()), html);
+	assert.equal(await processImageSizes(html, tmpDistWithImage()), html);
 });
 
-test("protocol-relative URL はスキップ", () => {
+test("protocol-relative URL はスキップ", async () => {
 	clearCache();
 	const html = '<img src="//cdn.example.com/y.png">';
-	assert.equal(processImageSizes(html, tmpDistWithImage()), html);
+	assert.equal(await processImageSizes(html, tmpDistWithImage()), html);
 });
 
-test("width/height 両方ある場合はそのまま", () => {
+test("width/height 両方ある場合はそのまま", async () => {
 	clearCache();
 	const html = '<img src="/x.png" width="10" height="20">';
-	assert.equal(processImageSizes(html, tmpDistWithImage()), html);
+	assert.equal(await processImageSizes(html, tmpDistWithImage()), html);
 });
 
-test("存在しない画像はそのまま（属性追加しない）", () => {
+test("存在しない画像はそのまま（属性追加しない）", async () => {
 	clearCache();
 	const html = '<img src="/missing.png">';
-	assert.equal(processImageSizes(html, tmpDistWithImage()), html);
+	assert.equal(await processImageSizes(html, tmpDistWithImage()), html);
 });
 
-test("相対パスと絶対パスで同じ画像を解決（分岐バグ回帰）", () => {
+test("相対パスと絶対パスで同じ画像を解決（分岐バグ回帰）", async () => {
 	clearCache();
 	const dist = tmpDistWithImage();
-	const abs = processImageSizes('<img src="/x.png">', dist);
-	const rel = processImageSizes('<img src="x.png">', dist);
+	const abs = await processImageSizes('<img src="/x.png">', dist);
+	const rel = await processImageSizes('<img src="x.png">', dist);
 	assert.match(abs, /width="1"/);
 	assert.match(rel, /width="1"/);
 });

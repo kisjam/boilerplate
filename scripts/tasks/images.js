@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { glob } from "glob";
+import { glob } from "../utils.js";
 
 export default {
 	name: "images",
@@ -19,7 +19,7 @@ export default {
 		const files = await glob("**/*", {
 			cwd: srcDir,
 			nodir: true,
-			ignore: ["**/*.jpg", "**/*.jpeg", "**/*.png"],
+			reject: (f) => /\.(jpe?g|png)$/i.test(f),
 		});
 
 		if (files.length === 0) {

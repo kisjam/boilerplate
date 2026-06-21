@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { glob } from "glob";
+import { glob } from "../utils.js";
 
 export default {
 	name: "copy",

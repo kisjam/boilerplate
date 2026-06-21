@@ -1,7 +1,34 @@
 import fs from "node:fs";
-import pc from "picocolors";
+import path from "node:path";
+import { styleText } from "node:util";
 
 const fsPromises = fs.promises;
+
+/**
+ * glob パッケージ互換の薄いラッパ（Node24 native fs.glob）。
+ * @param {string} pattern
+ * @param {{cwd?: string, nodir?: boolean, reject?: (relPath: string) => boolean}} [opts]
+ * @returns {Promise<string[]>} cwd 相対（cwd 指定時）のパス配列。決定的にソート済み。
+ */
+async function glob(pattern, { cwd, nodir = false, reject } = {}) {
+	const out = [];
+	if (nodir) {
+		for await (const d of fsPromises.glob(pattern, { cwd, withFileTypes: true })) {
+			if (!d.isFile()) continue;
+			const rel = cwd
+				? path.relative(cwd, path.join(d.parentPath, d.name))
+				: path.join(d.parentPath, d.name);
+			if (reject?.(rel)) continue;
+			out.push(rel);
+		}
+	} else {
+		for await (const f of fsPromises.glob(pattern, { cwd })) {
+			if (reject?.(f)) continue;
+			out.push(f);
+		}
+	}
+	return out.sort();
+}
 
 async function ensureDir(dir) {
 	try {
@@ -24,13 +51,13 @@ async function readJSON(filePath) {
 }
 
 const logger = {
-	info: (message) => console.log(pc.blue("ℹ"), message),
-	success: (message) => console.log(pc.green("✓"), message),
-	warning: (message) => console.log(pc.yellow("⚠"), message),
-	error: (message) => console.error(pc.red("✗"), pc.red(message)),
+	info: (message) => console.log(styleText("blue", "ℹ"), message),
+	success: (message) => console.log(styleText("green", "✓"), message),
+	warning: (message) => console.log(styleText("yellow", "⚠"), message),
+	error: (message) => console.error(styleText("red", "✗"), styleText("red", message)),
 	debug: (message) => {
 		if (process.env.DEBUG) {
-			console.log(pc.gray("▸"), message);
+			console.log(styleText("gray", "▸"), message);
 		}
 	},
 };
@@ -66,4 +93,4 @@ async function processInParallel(items, processor, concurrency = 5) {
 	return Promise.all(results);
 }
 
-export { ensureDir, logger, processInParallel, readJSON };
+export { ensureDir, glob, logger, processInParallel, readJSON };

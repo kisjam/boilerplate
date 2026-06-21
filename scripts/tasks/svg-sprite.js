@@ -1,6 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { glob } from "glob";
+import { glob } from "../utils.js";
 
 /** SVG をスプライト化し、個別 SVG のコピーと smart-svg 用 SCSS 変数を生成 */
 export default {
