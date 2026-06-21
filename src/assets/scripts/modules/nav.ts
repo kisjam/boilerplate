@@ -1,5 +1,8 @@
 import { breakpoints } from "@/config/breakpoints";
 
+// id 未設定の nav に一意な id を振るためのカウンタ（aria-controls の参照先を保証する）
+let navAutoId = 0;
+
 interface NavOptions {
 	preventScroll?: boolean;
 	closeOnLinkClick?: boolean;
@@ -59,7 +62,11 @@ export class Nav {
 	}
 
 	private init(): void {
-		this.toggleButton.setAttribute("aria-controls", this.navElement.id || "navigation");
+		if (!this.navElement.id) {
+			navAutoId += 1;
+			this.navElement.id = `js-nav-${navAutoId}`;
+		}
+		this.toggleButton.setAttribute("aria-controls", this.navElement.id);
 		this.applyViewportState();
 		this.setupEventListeners();
 	}

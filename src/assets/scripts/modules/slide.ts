@@ -35,7 +35,7 @@ const slide = (element: HTMLElement, expand: boolean, options: SlideOptions): vo
 		element.style.paddingBottom = "0";
 		element.style.marginTop = "0";
 		element.style.marginBottom = "0";
-		element.offsetHeight;
+		void element.offsetHeight; // 強制リフロー（トランジションを確実に発火させる）
 
 		element.style.transitionProperty = "height, margin, padding";
 		element.style.transitionDuration = `${duration}ms`;
@@ -56,7 +56,7 @@ const slide = (element: HTMLElement, expand: boolean, options: SlideOptions): vo
 
 		const height = element.offsetHeight;
 		element.style.height = `${height}px`;
-		element.offsetHeight;
+		void element.offsetHeight; // 強制リフロー（トランジションを確実に発火させる）
 
 		element.style.overflow = "hidden";
 		element.style.transitionProperty = "height, margin, padding";

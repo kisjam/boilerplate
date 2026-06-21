@@ -88,8 +88,9 @@ export class Modal {
 	private trapFocus(e: KeyboardEvent, dialog: HTMLElement): void {
 		const selectors =
 			'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
+		// getClientRects() は position:fixed でも可視なら矩形を返す（offsetParent は fixed で null になり誤判定）
 		const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(selectors)).filter(
-			(el) => el.offsetParent !== null,
+			(el) => el.getClientRects().length > 0,
 		);
 
 		if (focusable.length === 0) return;

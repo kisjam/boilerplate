@@ -29,7 +29,7 @@ export class Accordion {
 		this.buttonEl.setAttribute("aria-expanded", isExpanded);
 		this.buttonEl.setAttribute("aria-controls", panelId);
 
-		const panelEl = document.querySelector(`#${panelId}`);
+		const panelEl = document.getElementById(panelId);
 		if (!panelEl) {
 			throw new Error(`Element with ID "${panelId}" was not found.`);
 		}
