@@ -4,7 +4,7 @@
 	.c-page-header {
 		$this: &;
 		position: relative;
-		margin-top: calc(var(--height-header) * -1);
+		margin-top: calc(var(--header-height, 100px) * -1);
 		margin-bottom: 72px;
 		padding: 217px var(--page-gutter) 64px;
 		color: $color-white;
