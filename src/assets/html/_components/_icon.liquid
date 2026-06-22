@@ -18,6 +18,6 @@ Parameters:
 {%- assign icon_class = "" -%}
 {%- endunless -%}
 
-<svg class="icon -{{ name }} {{ icon_class }}" width="{{ icon_size }}" height="{{ icon_size }}" {%- if label %} aria-label="{{ label }}" {% else %} aria-hidden="true" {% endif -%}>
+<svg class="c-icon -{{ name }} {{ icon_class }}" width="{{ icon_size }}" height="{{ icon_size }}" {%- if label %} aria-label="{{ label }}" {% else %} aria-hidden="true" {% endif -%}>
 	<use href="/assets/icons/sprite.svg#icon-{{ name }}"></use>
 </svg>

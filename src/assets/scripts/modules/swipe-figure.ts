@@ -30,7 +30,7 @@ export class SwipeFigure {
 		});
 	}
 	registerEventHandler(elem: HTMLElement) {
-		elem.classList.add("swipe");
+		elem.classList.add("c-swipe");
 
 		const scrollEvent = () => {
 			elem.removeEventListener("scroll", scrollEvent);
